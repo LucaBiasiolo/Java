@@ -17,4 +17,8 @@ public class DiningReviewService {
     public List<DiningReview> findAllByRestaurantIdAndStatusApproved(Long restaurantId, DiningReviewStatus status){
         return diningReviewRepository.findAllByRestaurantIdAndStatus(restaurantId, status);
     }
+
+    public DiningReview save(DiningReview diningReview) {
+        return diningReviewRepository.save(diningReview);
+    }
 }

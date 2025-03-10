@@ -39,5 +39,6 @@ public class DiningReview {
 
     @Setter
     @Column(name="status")
+    @Enumerated(EnumType.STRING)
     private DiningReviewStatus status;
 }

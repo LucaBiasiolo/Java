@@ -6,8 +6,6 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-import java.util.List;
-
 @Getter
 @Entity
 @Table(name="restaurants")
@@ -20,9 +18,15 @@ public class Restaurant {
     @Column(name="id")
     private Long id;
 
+    @Column(name="name")
+    private String name;
+
+    @Column(name="zipcode")
+    private String zipCode;
+
     @Setter
     @Column(name="overall_score")
-    private Long overallScore;
+    private Double overallScore;
 
     @Setter
     @Column(name="peanuts_score")

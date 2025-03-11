@@ -24,13 +24,16 @@ public class User {
 
     @Id
     @GeneratedValue
-    @Column(name="id")
+    @Column(name="id", nullable = false)
     private Long id;
 
-    @Column(name="username")
-    // TODO: this should be unique
+    @Column(name="username", unique = true, nullable = false)
     @Setter
     private String username;
+
+    @Column(name="password", nullable = false, unique = true)
+    @Setter
+    private String password;
 
     @Column(name="city")
     @Setter
@@ -55,4 +58,8 @@ public class User {
     @Column(name="interest_dairy_allergy")
     @Setter
     private Boolean interestDairyAllergy;
+
+    @Column(name="is_admin", nullable = false, columnDefinition = "boolean default false")
+    @Setter
+    private Boolean isAdmin = false;
 }

@@ -6,8 +6,6 @@ import lombok.*;
 @Getter
 @Entity
 @Table(name="restaurants")
-@AllArgsConstructor
-@NoArgsConstructor
 @ToString
 public class Restaurant {
 

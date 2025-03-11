@@ -1,15 +1,13 @@
 package com.diningreview.entities;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 @Getter
 @Entity
 @Table(name="restaurants")
 @AllArgsConstructor
+@NoArgsConstructor
 @ToString
 public class Restaurant {
 

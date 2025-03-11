@@ -1,0 +1,6 @@
+
+// TODO: create curl requests for admin user
+// TODO: create frontend using javascript
+// TODO: craete frontend using Angular
+// TODO: test create user and create restaurant API
+// TODO: change base path from / to /diningreview

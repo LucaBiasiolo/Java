@@ -21,4 +21,6 @@ I want to verify that the user exists, based on the user display name associated
 public interface UserRepository extends CrudRepository<User, Long> {
 
     User findByUsername(String username);
+
+    User findByUsernameAndPassword(String username, String password);
 }

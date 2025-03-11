@@ -21,4 +21,14 @@ public class UserController {
     public Iterable<User> findAll(){
         return userService.findAll();
     }
+
+    @GetMapping("/{username}")
+    public User findUserByUsername(@PathVariable String username){
+        return userService.findByUsername(username);
+    }
+
+    @PostMapping("/login")
+    public void login(@RequestParam String username, @RequestParam String password){
+        User user = userService.findByUsernameAndPassword(username, password);
+    }
 }

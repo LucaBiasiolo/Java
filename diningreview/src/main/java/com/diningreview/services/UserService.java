@@ -22,4 +22,8 @@ public class UserService {
     public Iterable<User> findAll() {
         return userRepository.findAll();
     }
+
+    public User findByUsernameAndPassword(String username, String password) {
+        return userRepository.findByUsernameAndPassword(username, password);
+    }
 }

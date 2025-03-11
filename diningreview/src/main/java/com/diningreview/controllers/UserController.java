@@ -13,12 +13,12 @@ public class UserController {
     private UserService userService;
 
     @PostMapping
-    public User createUser(User user){
+    public User createUser(@RequestBody User user){
         return userService.save(user);
     }
 
     @GetMapping
-    public User findByUsername(@RequestParam String username){
-        return userService.findByUsername(username);
+    public Iterable<User> findAll(){
+        return userService.findAll();
     }
 }

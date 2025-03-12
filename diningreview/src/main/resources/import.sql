@@ -1,0 +1,2 @@
+insert into restaurants (id, name, zipcode) values (1,'La Moma', 36043);
+insert into users (id, username, password, zipcode, city, interest_dairy_allergy, interest_egg_allergy, interest_peanut_allergy) values (1,'admin', 'password', 36043, 'Camisano Vicentino', true, true, true);

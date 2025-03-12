@@ -1,5 +1,7 @@
 // TODO: create frontend using javascript
 // TODO: create frontend using Angular
-// TODO: add login functionality
 // TODO: add relational database
 // TODO: add non-relational database (MongoDB)
+
+// TODO: add login functionality
+// TODO: don't delete database tables and schema every time

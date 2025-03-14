@@ -15,10 +15,20 @@ public class Restaurant {
     private Long id;
 
     @Column(name="name")
+    @Setter
     private String name;
 
     @Column(name="zipcode")
+    @Setter
     private String zipCode;
+
+    @Column(name="state")
+    @Setter
+    private String state;
+
+    @Column(name="city")
+    @Setter
+    private String city;
 
     @Setter
     @Column(name="overall_score")

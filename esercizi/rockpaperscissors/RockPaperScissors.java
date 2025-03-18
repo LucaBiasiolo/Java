@@ -1,40 +1,13 @@
 package esercizi.rockpaperscissors;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
-import java.util.Scanner;
+import java.util.*;
 
 //This is a simple implementation of Rock-Paper-Scissors game in Java
 public class RockPaperScissors {
 
-    private static String getWordFromLetter(String letter){
-        Map<String, String> mapLetterToWord = new HashMap<>(3);
-        mapLetterToWord.put("r", "Rock");
-        mapLetterToWord.put("p", "Paper");
-        mapLetterToWord.put("s", "Scissors");
-        return mapLetterToWord.get(letter);
-    }
-
-    private static String getLetterFromNumber(Integer number){
-        Map<Integer, String> mapIntegerToWord = new HashMap<>();
-        mapIntegerToWord.put(0, "r");
-        mapIntegerToWord.put(1, "p");
-        mapIntegerToWord.put(2, "s");
-        return mapIntegerToWord.get(number);
-    }
-
-    private static Integer getNumberFromLetter(String letter){
-        Map<String, Integer> mapLetterToNumber = new HashMap<>();
-        mapLetterToNumber.put("r",0);
-        mapLetterToNumber.put("p",1);
-        mapLetterToNumber.put("s",2);
-        return mapLetterToNumber.get(letter);
-    }
-
-    private static Integer getWinner(String userPick, String computerPick){
+    private static Integer getWinner(int userPick, int computerPick){
         int[][] winnerMatrix = {{0,2,1},{1,0,2},{2,1,0}}; // 0=tie, 1=human player wins, 2=computer wins
-        return winnerMatrix[getNumberFromLetter(userPick)][getNumberFromLetter(computerPick)];
+        return winnerMatrix[userPick][computerPick];
     }
 
     private static String getPhraseFromWinner(int winner, String userWord, String computerWord){
@@ -45,26 +18,38 @@ public class RockPaperScissors {
         return mapWinnerToPhrase.get(winner);
     }
 
+    private static String getWordFromNumber(int number){
+        Map<Integer, String> mapNumberToWord = new HashMap<>();
+        mapNumberToWord.put(0,"Rock");
+        mapNumberToWord.put(1,"Paper");
+        mapNumberToWord.put(2,"Scissors");
+        return mapNumberToWord.get(number);
+    }
+
     public static void main(String[] args) {
         System.out.println("Welcome to Java Rock-Paper-Scissors game!");
         while (true){
-            System.out.println("Please type r for rock, p for paper and s for scissors");
+            System.out.println("Please type 1 for rock, 2 for paper and 3 for scissors");
             Scanner scanner = new Scanner(System.in);
-            String userPick = scanner.nextLine().toLowerCase();
-            while (!userPick.equals("r") && !userPick.equals("p") && !userPick.equals("s")){
-                System.out.println("Please insert r, p or s");
-                userPick = scanner.nextLine();
+            int userPick;
+            try {
+                userPick = scanner.nextInt() - 1;
+            } catch (InputMismatchException exception){
+                System.out.println("Please insert an integer");
+                continue;
             }
-            System.out.println("You chose " + getWordFromLetter(userPick));
+            while (userPick != 0 && userPick != 1 && userPick != 2){
+                System.out.println("Please insert 1,2 or 3");
+                userPick = scanner.nextInt();
+            }
+            System.out.println("You chose " + getWordFromNumber(userPick));
 
             Random random = new Random();
-            int randomInt = random.nextInt(0, 3);
-
-            String computerPick = getLetterFromNumber(randomInt);
-            System.out.println("Computer chose " + getWordFromLetter(computerPick));
+            int computerPick = random.nextInt(0, 3);
+            System.out.println("Computer chose " + getWordFromNumber(computerPick));
 
             int winner = getWinner(userPick, computerPick);
-            System.out.println(getPhraseFromWinner(winner, getWordFromLetter(userPick), getWordFromLetter(computerPick)));
+            System.out.println(getPhraseFromWinner(winner, getWordFromNumber(userPick), getWordFromNumber(computerPick)));
             System.out.println("Do you wish to play again? y/n");
             String userContinue = scanner.nextLine().toLowerCase();
             while (!userContinue.equals("n") && !userContinue.equals("y")) {

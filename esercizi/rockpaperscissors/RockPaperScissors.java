@@ -16,12 +16,33 @@ public class RockPaperScissors {
         return mapLetterToWord.get(letter);
     }
 
-    private static String getLetterFromInteger(Integer number){
+    private static String getLetterFromNumber(Integer number){
         Map<Integer, String> mapIntegerToWord = new HashMap<>();
         mapIntegerToWord.put(0, "r");
         mapIntegerToWord.put(1, "p");
         mapIntegerToWord.put(2, "s");
         return mapIntegerToWord.get(number);
+    }
+
+    private static Integer getNumberFromLetter(String letter){
+        Map<String, Integer> mapLetterToNumber = new HashMap<>();
+        mapLetterToNumber.put("r",0);
+        mapLetterToNumber.put("p",1);
+        mapLetterToNumber.put("s",2);
+        return mapLetterToNumber.get(letter);
+    }
+
+    private static Integer getWinner(String userPick, String computerPick){
+        int[][] winnerMatrix = {{0,2,1},{1,0,2},{2,1,0}}; // 0=tie, 1=human player wins, 2=computer wins
+        return winnerMatrix[getNumberFromLetter(userPick)][getNumberFromLetter(computerPick)];
+    }
+
+    private static String getPhraseFromWinner(int winner, String userWord, String computerWord){
+        Map<Integer, String> mapWinnerToPhrase = new HashMap<>();
+        mapWinnerToPhrase.put(0, "It's a tie!");
+        mapWinnerToPhrase.put(1, String.format("You won! %s beats %s", userWord, computerWord));
+        mapWinnerToPhrase.put(2, String.format("You lost! %s is beaten by %s", userWord, computerWord));
+        return mapWinnerToPhrase.get(winner);
     }
 
     public static void main(String[] args) {
@@ -34,27 +55,16 @@ public class RockPaperScissors {
                 System.out.println("Please insert r, p or s");
                 userPick = scanner.nextLine();
             }
-
             System.out.println("You chose " + getWordFromLetter(userPick));
 
             Random random = new Random();
             int randomInt = random.nextInt(0, 3);
 
-            String computerPick = getLetterFromInteger(randomInt);
+            String computerPick = getLetterFromNumber(randomInt);
             System.out.println("Computer chose " + getWordFromLetter(computerPick));
 
-            if (userPick.equals(computerPick)) {
-                System.out.println("It's a tie!");
-            } else if (userPick.equals("r")){
-                if(computerPick.equals("p")) System.out.println("You lost! Rock is beaten by Paper");
-                if(computerPick.equals("s")) System.out.println("You won! Rock beats Scissors");
-            } else if (userPick.equals("p")){
-                if(computerPick.equals("r")) System.out.println("You won! Paper beats Rock");
-                if(computerPick.equals("s")) System.out.println("You lost! Paper is beaten by scissors");
-            } else {
-                if(computerPick.equals("r")) System.out.println("You lost! Scissors is beaten by Rock");
-                if(computerPick.equals("p")) System.out.println("You won! Scissors beats paper");
-            }
+            int winner = getWinner(userPick, computerPick);
+            System.out.println(getPhraseFromWinner(winner, getWordFromLetter(userPick), getWordFromLetter(computerPick)));
             System.out.println("Do you wish to play again? y/n");
             String userContinue = scanner.nextLine().toLowerCase();
             while (!userContinue.equals("n") && !userContinue.equals("y")) {

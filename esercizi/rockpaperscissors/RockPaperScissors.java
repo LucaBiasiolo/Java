@@ -1,6 +1,8 @@
 package esercizi.rockpaperscissors;
 
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 //This is a simple implementation of Rock-Paper-Scissors game in Java
 public class RockPaperScissors {
@@ -31,12 +33,16 @@ public class RockPaperScissors {
         while (true){
             System.out.println("Please type 1 for rock, 2 for paper and 3 for scissors");
             Scanner scanner = new Scanner(System.in);
+
+            Pattern pattern = Pattern.compile("[1,2,3]");
+            String userInput = scanner.nextLine();
             int userPick;
-            try {
-                userPick = scanner.nextInt() - 1;
-            } catch (InputMismatchException exception){
+            Matcher matcher = pattern.matcher(userInput);
+            if (!matcher.matches()){
                 System.out.println("Please insert an integer");
                 continue;
+            } else{
+                userPick = Integer.parseInt(userInput) -1;
             }
             while (userPick != 0 && userPick != 1 && userPick != 2){
                 System.out.println("Please insert 1,2 or 3");

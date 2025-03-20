@@ -1,8 +1,8 @@
-package esercizi.tictactoe;
+package esercizi;
 
 public class MatrixUtil {
 
-    static int findMinimumInMatrix(int[][] gameMatrix) {
+    public static int findMinimumInMatrix(int[][] gameMatrix) {
         int min = Integer.MAX_VALUE;
 
         for (int[] matrixRow : gameMatrix) {
@@ -15,13 +15,24 @@ public class MatrixUtil {
         return min;
     }
 
-    static int[][] transposeMatrix(int[][] gameMatrix) {
-        int[][] transposedMatrix = new int[3][3];
+    public static int[][] transposeMatrix(int[][] gameMatrix) {
+        int[][] transposedMatrix = new int[gameMatrix.length][gameMatrix.length];
         for (int i = 0; i < gameMatrix.length; i++) {
             for (int j = 0; j < gameMatrix.length; j++) {
                 transposedMatrix[i][j] = gameMatrix[j][i];
             }
         }
         return transposedMatrix;
+    }
+
+    public static boolean checkMatrixAllZeroes(int[][] subMatrix) {
+        for (int[] row : subMatrix) {
+            for (int j = 0; j < subMatrix.length; j++) {
+                if (row[j] != 0) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 }

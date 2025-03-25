@@ -1,4 +1,4 @@
-package esercizi;
+package games;
 
 public class MatrixUtil {
 

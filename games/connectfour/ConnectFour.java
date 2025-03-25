@@ -1,11 +1,11 @@
-package esercizi.connectfour;
+package games.connectfour;
 
 import java.util.Arrays;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static esercizi.MatrixUtil.*;
+import static games.MatrixUtil.*;
 
 public class ConnectFour {
 
@@ -62,12 +62,13 @@ public class ConnectFour {
         }
     }
 
+    // todo: test method with random matrices
     private static int checkGameMatrixForWinner(int[][] gameMatrix){
         if (findMinimumInMatrix(gameMatrix) != 0) { // if the matrix doesn't have zeros
             return 0; // the game is in draw condition
         }
 
-        // use 4x4 sub-matrices and apply them the algorithm developed for tic-tac-toe, just extended. Move the submatrix around to cover all the board
+        // use 4x4 sub-matrices and apply them the algorithm developed for tic-tac-toe, just extended. Move the submatrix around to cover all the board with offset
         int[][] subMatrix = new int[4][4];
         for (int k=0; k<=2; k++){ // row offset
             for (int l = 0; l <= 3; l++) { // column offset
@@ -119,7 +120,8 @@ public class ConnectFour {
 
     private static void printGameMatrix(int[][] gameMatrix){
         for (int i = 0; i < 6; i++) {
-            System.out.println(Arrays.toString(gameMatrix[i]));
+            // todo: print '' instead of zeros
+            System.out.println(Arrays.toString(gameMatrix[i]).replaceAll("0", "").replaceAll(",", "|"));
         }
     }
 }

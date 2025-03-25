@@ -1,9 +1,9 @@
-package esercizi.tictactoe;
+package games.tictactoe;
 
 import java.util.Arrays;
 
-import static esercizi.MatrixUtil.findMinimumInMatrix;
-import static esercizi.MatrixUtil.transposeMatrix;
+import static games.MatrixUtil.findMinimumInMatrix;
+import static games.MatrixUtil.transposeMatrix;
 
 public class TicTacToeUtil {
 

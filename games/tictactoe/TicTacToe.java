@@ -1,11 +1,11 @@
-package esercizi.tictactoe;
+package games.tictactoe;
 
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static esercizi.tictactoe.TicTacToeUtil.checkGameMatrixForWinner;
-import static esercizi.tictactoe.TicTacToeUtil.printGameMatrix;
+import static games.tictactoe.TicTacToeUtil.checkGameMatrixForWinner;
+import static games.tictactoe.TicTacToeUtil.printGameMatrix;
 
 public class TicTacToe {
 

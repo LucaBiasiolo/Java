@@ -44,9 +44,20 @@ public class SudokuSolver {
     public static void main(String[] args) {
         System.out.println("Welcome to Java Sudoku Solver");
         System.out.println("You inputted the sudoku: ");
-        System.out.println(sudoku);
+        printSudoku(sudoku);
         System.out.println("The solved sudoku is: ");
-        System.out.println(solve(sudoku));
+        printSudoku(solve(sudoku));
+    }
+
+    private static void printSudoku(List<List<Integer>> sudoku){
+        StringBuilder printableSudoku = new StringBuilder();
+        for (List<Integer> sudokuRow : sudoku){
+            for (Integer value : sudokuRow){
+                printableSudoku.append(" ").append(value).append(" ");
+            }
+            printableSudoku.append("\n");
+        }
+        System.out.println(printableSudoku);
     }
 
     private static List<List<Integer>> solve(List<List<Integer>> sudoku) {

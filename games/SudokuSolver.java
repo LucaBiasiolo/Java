@@ -19,28 +19,6 @@ public class SudokuSolver {
             List.of(0,7,1,8,4,3,0,0,6),
             List.of(0,3,5,1,0,0,0,8,4)));
 
-    private static final List<List<List<Integer>>> submatrices = List.of(
-            List.of(List.of(8,9,0),List.of(0,4,0),List.of(7,0,3)),
-            List.of(List.of(7,3,0),List.of(2,0,8),List.of(0,0,0)),
-            List.of(List.of(4,6,0),List.of(3,5,7),List.of(8,9,2)),
-            List.of(List.of(4,6,9),List.of(0,0,0),List.of(5,1,0)),
-            List.of(List.of(3,5,7),List.of(9,8,0),List.of(4,0,0)),
-            List.of(List.of(2,0,8),List.of(0,0,5),List.of(0,3,9)),
-            List.of(List.of(6,8,0),List.of(0,7,1),List.of(0,3,5)),
-            List.of(List.of(0,0,9),List.of(8,4,3),List.of(1,0,0)),
-            List.of(List.of(0,7,0),List.of(0,0,6),List.of(0,8,4)));
-
-    private static final List<List<Integer>> flattenedSubmatrices = List.of(
-            List.of(8, 9, 0, 0, 4, 0, 7, 0, 3),
-            List.of(7, 3, 0, 2, 0, 8, 0, 0, 0),
-            List.of(4, 6, 0, 3, 5, 7, 8, 9, 2),
-            List.of(4, 6, 9, 0, 0, 0, 5, 1, 0),
-            List.of(3, 5, 7, 9, 8, 0, 4, 0, 0),
-            List.of(2, 0, 8, 0, 0, 5, 0, 3, 9),
-            List.of(6, 8, 0, 0, 7, 1, 0, 3, 5),
-            List.of(0, 0, 9, 8, 4, 3, 1, 0, 0),
-            List.of(0, 7, 0, 0, 0, 6, 0, 8, 4));
-
     public static void main(String[] args) {
         System.out.println("Welcome to Java Sudoku Solver");
         System.out.println("You inputted the sudoku: ");
@@ -70,27 +48,7 @@ public class SudokuSolver {
                 for (int j = 0; j < sudoku.size(); j++) {
                     if (sudokuRow.get(j) == 0) {
                         // build arrayList with all possible numbers that can go here.
-                        List<Integer> cellPossibleValuesList = new ArrayList<>(Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9));
-
-                        for (Integer number = 1; number <= 9; number++) {
-                            // check row
-                            if (sudokuRow.contains(number)) {
-                                cellPossibleValuesList.remove(number);
-                                continue;
-                            }
-                            // check column using transposed sudoku
-
-                            if (transposedSudoku.get(j).contains(number)) {
-                                cellPossibleValuesList.remove(number);
-                                continue;
-                            }
-                            // build 3x3 submatrix associated with cell
-                            // check 3x3 submatrix
-                            List<Integer> flattenedSubmatrix = findFlattenedSubmatrixFromIndexes(i, j);
-                            if (flattenedSubmatrix.contains(number)) {
-                                cellPossibleValuesList.remove(number);
-                            }
-                        }
+                        List<Integer> cellPossibleValuesList = buildCellPossibleValuesList(sudokuRow, transposedSudoku, i, j);
 
                         // If list has just a value than that is the obvious value of the cell
                         if (cellPossibleValuesList.size() == 1) {
@@ -106,6 +64,45 @@ public class SudokuSolver {
             }
         }
         return sudoku;
+    }
+
+    private static List<Integer> buildCellPossibleValuesList(List<Integer> sudokuRow, List<List<Integer>> transposedSudoku, int i, int j) {
+        List<Integer> cellPossibleValuesList = new ArrayList<>(Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9));
+        for (Integer number = 1; number <= 9; number++) {
+            // check row
+            if (sudokuRow.contains(number)) {
+                cellPossibleValuesList.remove(number);
+                continue;
+            }
+            // check column using transposed sudoku
+
+            if (transposedSudoku.get(j).contains(number)) {
+                cellPossibleValuesList.remove(number);
+                continue;
+            }
+            // build 3x3 submatrix associated with cell
+            // check 3x3 submatrix
+            List<Integer> flattenedSubmatrix = findFlattenedSubmatrixFromIndexes(i, j);
+            if (flattenedSubmatrix.contains(number)) {
+                cellPossibleValuesList.remove(number);
+            }
+        }
+        return cellPossibleValuesList;
+    }
+
+    public static List<List<Integer>> buildFlattenedSubmatricesFromSudoku(List<List<Integer>> sudoku){
+        List<List<Integer>> flattenedSubmatricesList = new ArrayList<>(9);
+        int[][][] submatrices = buildSubmatricesFromSudoku(sudoku);
+        for (int[][] submatrix : submatrices) {
+            List<Integer> flattenedSubmatrix = new ArrayList<>(9);
+            for (int j = 0; j < 3; j++) {
+                for (int k = 0; k < 3; k++) {
+                    flattenedSubmatrix.add(submatrix[j][k]);
+                }
+            }
+            flattenedSubmatricesList.add(flattenedSubmatrix);
+        }
+        return flattenedSubmatricesList;
     }
 
     public static int[][][] buildSubmatricesFromSudoku(List<List<Integer>> sudoku){
@@ -127,6 +124,7 @@ public class SudokuSolver {
     }
 
     public static List<Integer> findFlattenedSubmatrixFromIndexes(int rowIndex, int columnIndex){
+        List<List<Integer>> flattenedSubmatrices = buildFlattenedSubmatricesFromSudoku(sudoku);
         if (List.of(0,1,2).contains(rowIndex)) {
             if (List.of(0, 1, 2).contains(columnIndex)) return flattenedSubmatrices.get(0);
             else if (List.of(3, 4, 5).contains(columnIndex)) return flattenedSubmatrices.get(1);
@@ -161,14 +159,8 @@ public class SudokuSolver {
         }
 
         // check if every submatrix contains numbers from 1 to 9
-        int[][][] submatrices = buildSubmatricesFromSudoku(sudoku);
-        for (int[][] submatrix : Arrays.stream(submatrices).toList()){
-            List<Integer> flatSubmatrix = new ArrayList<>(9);
-            for (int[] row : submatrix) {
-                for (int entry : row){
-                    flatSubmatrix.add(entry);
-                }
-            }
+        List<List<Integer>> flatSubmatrices = buildFlattenedSubmatricesFromSudoku(sudoku);
+        for (List<Integer> flatSubmatrix : flatSubmatrices){
             if (!flatSubmatrix.containsAll(sudokuValues)){
                 return false;
             }

@@ -1,5 +1,8 @@
 package games;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class MatrixUtil {
 
     public static int findMinimumInMatrix(int[][] gameMatrix) {
@@ -20,6 +23,17 @@ public class MatrixUtil {
         for (int i = 0; i < matrix.length; i++) {
             for (int j = 0; j < matrix.length; j++) {
                 transposedMatrix[i][j] = matrix[j][i];
+            }
+        }
+        return transposedMatrix;
+    }
+
+    public static List<List<Integer>> transposeMatrix(List<List<Integer>> matrix) {
+        List<List<Integer>> transposedMatrix = new ArrayList<>();
+        for (int i = 0; i < matrix.size(); i++) {
+            transposedMatrix.add(new ArrayList<>());
+            for (List<Integer> matrixRow : matrix) {
+                transposedMatrix.get(i).add(matrixRow.get(i));
             }
         }
         return transposedMatrix;

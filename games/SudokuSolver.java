@@ -51,44 +51,46 @@ public class SudokuSolver {
 
     private static List<List<Integer>> solve(List<List<Integer>> sudoku) {
         // todo: use depth-first-traversal if simpler approaches are not enough
-        List<List<Integer>> transposedSudoku = transposeMatrix(sudoku);
 
-        for (int i = 0; i < sudoku.size(); i++) {
-            List<Integer> sudokuRow = sudoku.get(i);
-            for (int j = 0; j < sudoku.size(); j++) {
-                if (sudokuRow.get(j) == 0) {
-                    // build arrayList with all possible numbers that can go here.
-                    List<Integer> cellPossibleValuesList = new ArrayList<>(Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9));
+        while(!checkSolvedSudoku(sudoku)) {
+            List<List<Integer>> transposedSudoku = transposeMatrix(sudoku);
+            for (int i = 0; i < sudoku.size(); i++) {
+                List<Integer> sudokuRow = sudoku.get(i);
+                for (int j = 0; j < sudoku.size(); j++) {
+                    if (sudokuRow.get(j) == 0) {
+                        // build arrayList with all possible numbers that can go here.
+                        List<Integer> cellPossibleValuesList = new ArrayList<>(Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9));
 
-                    for (Integer number = 1; number <= 9; number++) {
-                        // check row
-                        if (sudokuRow.contains(number)) {
-                            cellPossibleValuesList.remove(number);
-                            continue;
-                        }
-                        // check column using transposed sudoku
+                        for (Integer number = 1; number <= 9; number++) {
+                            // check row
+                            if (sudokuRow.contains(number)) {
+                                cellPossibleValuesList.remove(number);
+                                continue;
+                            }
+                            // check column using transposed sudoku
 
-                        if (transposedSudoku.get(j).contains(number)) {
-                            cellPossibleValuesList.remove(number);
-                            continue;
+                            if (transposedSudoku.get(j).contains(number)) {
+                                cellPossibleValuesList.remove(number);
+                                continue;
+                            }
+                            // build 3x3 submatrix associated with cell
+                            // check 3x3 submatrix
+                            List<Integer> flattenedSubmatrix = findFlattenedSubmatrixFromIndexes(i, j);
+                            if (flattenedSubmatrix.contains(number)) {
+                                cellPossibleValuesList.remove(number);
+                            }
                         }
-                        // build 3x3 submatrix associated with cell
-                        // check 3x3 submatrix
-                        List<Integer> flattenedSubmatrix = findFlattenedSubmatrixFromIndexes(i, j);
-                        if (flattenedSubmatrix.contains(number)){
-                            cellPossibleValuesList.remove(number);
+
+                        // If list has just a value than that is the obvious value of the cell
+                        if (cellPossibleValuesList.size() == 1) {
+                            System.out.printf("Inserting value %d in position %d,%d %n", cellPossibleValuesList.getFirst(), i, j);
+                            // Crea una nuova lista mutabile basata sulla lista immutabile
+                            List<Integer> mutableRow = new ArrayList<>(sudoku.get(i));
+                            mutableRow.set(j, cellPossibleValuesList.getFirst());
+                            sudoku.set(i, mutableRow);
                         }
+                        // todo: what happens if more values are possible inside the cell?
                     }
-
-                    // If list has just a value than that is the obvious value of the cell
-                    if (cellPossibleValuesList.size() == 1){
-                        System.out.printf("Inserting value %d in position %d,%d %n", cellPossibleValuesList.getFirst(),i,j);
-                        // Crea una nuova lista mutabile basata sulla lista immutabile
-                        List<Integer> mutableRow = new ArrayList<>(sudoku.get(i));
-                        mutableRow.set(j, cellPossibleValuesList.getFirst());
-                        sudoku.set(i, mutableRow);
-                    }
-                    // todo: what happens if more values are possible inside the cell?
                 }
             }
         }
@@ -135,16 +137,14 @@ public class SudokuSolver {
 
         // check if rows contain numbers from 1 to 9
         for (List<Integer> sudokuRow : sudoku){
-            sudokuRow.sort(Integer::compareTo);
-            if(!sudokuRow.equals(sudokuValues)){
+            if (!sudokuRow.containsAll(sudokuValues)){
                 return false;
             }
         }
 
         // check if columns contain numbers from 1 to 9
         for (List<Integer> sudokuColumns : transposeMatrix(sudoku)){
-            sudokuColumns.sort(Integer::compareTo);
-            if (!sudokuColumns.equals(sudokuValues)){
+            if (!sudokuColumns.containsAll(sudokuValues)){
                 return false;
             }
         }
@@ -158,8 +158,7 @@ public class SudokuSolver {
                     flatSubmatrix.add(entry);
                 }
             }
-            flatSubmatrix.sort(Integer::compareTo);
-            if (!flatSubmatrix.equals(sudokuValues)){
+            if (!flatSubmatrix.containsAll(sudokuValues)){
                 return false;
             }
         }

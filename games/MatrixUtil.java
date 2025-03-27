@@ -15,11 +15,11 @@ public class MatrixUtil {
         return min;
     }
 
-    public static int[][] transposeMatrix(int[][] gameMatrix) {
-        int[][] transposedMatrix = new int[gameMatrix.length][gameMatrix.length];
-        for (int i = 0; i < gameMatrix.length; i++) {
-            for (int j = 0; j < gameMatrix.length; j++) {
-                transposedMatrix[i][j] = gameMatrix[j][i];
+    public static int[][] transposeMatrix(int[][] matrix) {
+        int[][] transposedMatrix = new int[matrix.length][matrix.length];
+        for (int i = 0; i < matrix.length; i++) {
+            for (int j = 0; j < matrix.length; j++) {
+                transposedMatrix[i][j] = matrix[j][i];
             }
         }
         return transposedMatrix;

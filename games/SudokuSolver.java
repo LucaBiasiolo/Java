@@ -8,73 +8,76 @@ import static games.MatrixUtil.transposeMatrix;
 
 public class SudokuSolver {
 
-    private static final int[][] sudoku = {
-            {8,9,0,7,3,0,4,6,0},
-            {0,4,0,2,0,8,3,5,7},
-            {7,0,3,0,0,0,8,9,2},
-            {4,6,9,3,5,7,2,0,8},
-            {0,0,0,9,8,0,0,0,5},
-            {5,1,0,4,0,0,0,3,9},
-            {6,8,0,0,0,9,0,7,0},
-            {0,7,1,8,4,3,0,0,6},
-            {0,3,5,1,0,0,0,8,4}};
+    private static final List<List<Integer>> sudoku = new ArrayList<>(List.of(
+            List.of(8,9,0,7,3,0,4,6,0),
+            List.of(0,4,0,2,0,8,3,5,7),
+            List.of(7,0,3,0,0,0,8,9,2),
+            List.of(4,6,9,3,5,7,2,0,8),
+            List.of(0,0,0,9,8,0,0,0,5),
+            List.of(5,1,0,4,0,0,0,3,9),
+            List.of(6,8,0,0,0,9,0,7,0),
+            List.of(0,7,1,8,4,3,0,0,6),
+            List.of(0,3,5,1,0,0,0,8,4)));
 
-    private static final int[][][] submatrices = {
-            {{8,9,0},{0,4,0},{7,0,3}},
-            {{7,3,0},{2,0,8},{0,0,0}},
-            {{4,6,0},{3,5,7},{8,9,2}},
-            {{4,6,9},{0,0,0},{5,1,0}},
-            {{3,5,7},{9,8,0},{4,0,0}},
-            {{2,0,8},{0,0,5},{0,3,9}},
-            {{6,8,0},{0,7,1},{0,3,5}},
-            {{0,0,9},{8,4,3},{1,0,0}},
-            {{0,7,0},{0,0,6},{0,8,4}}
-    };
+    private static final List<List<List<Integer>>> submatrices = List.of(
+            List.of(List.of(8,9,0),List.of(0,4,0),List.of(7,0,3)),
+            List.of(List.of(7,3,0),List.of(2,0,8),List.of(0,0,0)),
+            List.of(List.of(4,6,0),List.of(3,5,7),List.of(8,9,2)),
+            List.of(List.of(4,6,9),List.of(0,0,0),List.of(5,1,0)),
+            List.of(List.of(3,5,7),List.of(9,8,0),List.of(4,0,0)),
+            List.of(List.of(2,0,8),List.of(0,0,5),List.of(0,3,9)),
+            List.of(List.of(6,8,0),List.of(0,7,1),List.of(0,3,5)),
+            List.of(List.of(0,0,9),List.of(8,4,3),List.of(1,0,0)),
+            List.of(List.of(0,7,0),List.of(0,0,6),List.of(0,8,4)));
 
     public static void main(String[] args) {
         System.out.println("Welcome to Java Sudoku Solver");
         System.out.println("You inputted the sudoku: ");
-        System.out.printf(Arrays.deepToString(sudoku));
+        System.out.println(sudoku);
         System.out.println("The solved sudoku is: ");
-        System.out.println(Arrays.deepToString(solve(sudoku)));
+        System.out.println(solve(sudoku));
     }
 
-    private static int[][] solve(int[][] sudoku) {
+    private static List<List<Integer>> solve(List<List<Integer>> sudoku) {
         // todo: use depth-first-traversal if simpler approaches are not enough
-        int[][] transposedSudoku = transposeMatrix(sudoku);
+        List<List<Integer>> transposedSudoku = transposeMatrix(sudoku);
 
-        for (int i = 0; i < sudoku.length; i++) {
-            int[] sudokuRow = sudoku[i];
-            for (int j = 0; j < sudoku.length; j++) {
-                if (sudokuRow[j] == 0) {
+        for (int i = 0; i < sudoku.size(); i++) {
+            List<Integer> sudokuRow = sudoku.get(i);
+            for (int j = 0; j < sudoku.size(); j++) {
+                if (sudokuRow.get(j) == 0) {
                     // build arrayList with all possible numbers that can go here.
-                    List<Integer> cellPossibleValuesList = new ArrayList<>(List.of(1, 2, 3, 4, 5, 6, 7, 8, 9));
+                    // Crea una nuova lista mutabile basata sulla lista immutabile
+                    List<Integer> cellPossibleValuesList = new ArrayList<>(Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9));
 
-                    for (int number = 1; number <= 9; number++) {
+                    for (Integer number = 1; number <= 9; number++) {
                         // check row
                         final int finalNumber = number;
-                        if (Arrays.stream(sudokuRow).anyMatch(cell -> cell == finalNumber)) {
-                            cellPossibleValuesList.remove(cellPossibleValuesList.indexOf(number));
+                        if (sudokuRow.stream().anyMatch(cell -> cell == finalNumber)) {
+                            cellPossibleValuesList.remove(number);
                             continue;
                         }
                         // check column using transposed sudoku
 
-                        if (Arrays.stream(transposedSudoku[j]).anyMatch(cell -> cell == finalNumber)) {
-                            cellPossibleValuesList.remove(cellPossibleValuesList.indexOf(number));
+                        if (transposedSudoku.get(j).stream().anyMatch(cell -> cell == finalNumber)) {
+                            cellPossibleValuesList.remove(number);
                             continue;
                         }
                         // build 3x3 submatrix associated with cell
                         // check 3x3 submatrix
-                        int[][] submatrix = findSubmatrixFromIndexes(i, j);
-                        if (Arrays.stream(submatrix).anyMatch(row -> Arrays.stream(row).anyMatch(value -> value == finalNumber))){
-                            cellPossibleValuesList.remove(cellPossibleValuesList.indexOf(number));
+                        List<List<Integer>> submatrix = findSubmatrixFromIndexes(i, j);
+                        if (submatrix.stream().anyMatch(row -> row.stream().anyMatch(value -> value == finalNumber))){
+                            cellPossibleValuesList.remove(number);
                         }
                     }
 
                     // If list has just a value than that is the obvious value of the cell
                     if (cellPossibleValuesList.size() == 1){
                         System.out.printf("Inserting value %d in position %d,%d %n", cellPossibleValuesList.getFirst(),i,j);
-                        sudoku[i][j] = cellPossibleValuesList.getFirst();
+                        // Crea una nuova lista mutabile basata sulla lista immutabile
+                        List<Integer> mutableRow = new ArrayList<>(sudoku.get(i));
+                        mutableRow.set(j, cellPossibleValuesList.getFirst());
+                        sudoku.set(i, mutableRow);
                     }
                     // todo: what happens if more values are possible inside the cell?
                 }
@@ -83,37 +86,75 @@ public class SudokuSolver {
         return sudoku;
     }
 
-    public static int[][][] buildSubmatricesFromSudoku(int[][]sudoku){
+    public static int[][][] buildSubmatricesFromSudoku(List<List<Integer>> sudoku){
         int[][][] submatrices = new int[9][3][3];
         for (int i = 0; i <= 2; i++) {
             for (int j = 0; j <= 2; j++) {
-                submatrices[0][i][j] = sudoku[i][j];
-                submatrices[1][i][j] = sudoku[i][j + 3];
-                submatrices[2][i][j] = sudoku[i][j + 6];
-                submatrices[3][i][j] = sudoku[i+3][j];
-                submatrices[4][i][j] = sudoku[i+3][j+3];
-                submatrices[5][i][j] = sudoku[i+3][j+6];
-                submatrices[6][i][j] = sudoku[i+6][j];
-                submatrices[7][i][j] = sudoku[i+6][j+3];
-                submatrices[8][i][j] = sudoku[i+6][j+6];
+                submatrices[0][i][j] = sudoku.get(i).get(j);
+                submatrices[1][i][j] = sudoku.get(i).get(j + 3);
+                submatrices[2][i][j] = sudoku.get(i).get(j + 6);
+                submatrices[3][i][j] = sudoku.get(i + 3).get(j);
+                submatrices[4][i][j] = sudoku.get(i + 3).get(j + 3);
+                submatrices[5][i][j] = sudoku.get(i + 3).get(j + 6);
+                submatrices[6][i][j] = sudoku.get(i + 6).get(j);
+                submatrices[7][i][j] = sudoku.get(i + 6).get(j + 3);
+                submatrices[8][i][j] = sudoku.get(i + 6).get(j + 6);
             }
         }
         return submatrices;
     }
 
-    public static int[][] findSubmatrixFromIndexes(int rowIndex, int columnIndex){
+    public static List<List<Integer>> findSubmatrixFromIndexes(int rowIndex, int columnIndex){
         if (List.of(0,1,2).contains(rowIndex)) {
-            if (List.of(0, 1, 2).contains(columnIndex)) return submatrices[0];
-            else if (List.of(3, 4, 5).contains(columnIndex)) return submatrices[1];
-            else return submatrices[2];
+            if (List.of(0, 1, 2).contains(columnIndex)) return submatrices.get(0);
+            else if (List.of(3, 4, 5).contains(columnIndex)) return submatrices.get(1);
+            else return submatrices.get(2);
         }else if (List.of(3,4,5).contains(rowIndex)){
-            if (List.of(0,1,2).contains(columnIndex)) return submatrices[3];
-            else if (List.of(3,4,5).contains(columnIndex)) return submatrices[4];
-            else return submatrices[5];
+            if (List.of(0,1,2).contains(columnIndex)) return submatrices.get(3);
+            else if (List.of(3,4,5).contains(columnIndex)) return submatrices.get(4);
+            else return submatrices.get(5);
         }else {
-            if (List.of(0, 1, 2).contains(columnIndex)) return submatrices[6];
-            else if (List.of(3, 4, 5).contains(columnIndex)) return submatrices[7];
-            else return submatrices[8];
+            if (List.of(0, 1, 2).contains(columnIndex)) return submatrices.get(6);
+            else if (List.of(3, 4, 5).contains(columnIndex)) return submatrices.get(7);
+            else return submatrices.get(8);
         }
+    }
+
+    public static boolean checkSolvedSudoku(List<List<Integer>> sudoku){
+        // check if found solution is correct
+        List<Integer> sudokuValues = List.of(1,2,3,4,5,6,7,8,9);
+
+        // check if rows contain numbers from 1 to 9
+        for (List<Integer> sudokuRow : sudoku){
+            sudokuRow.sort(Integer::compareTo);
+            if(!sudokuRow.equals(sudokuValues)){
+                return false;
+            }
+        }
+
+        // check if columns contain numbers from 1 to 9
+        for (List<Integer> sudokuColumns : transposeMatrix(sudoku)){
+            sudokuColumns.sort(Integer::compareTo);
+            if (!sudokuColumns.equals(sudokuValues)){
+                return false;
+            }
+        }
+
+        // check if every submatrix contains numbers from 1 to 9
+        int[][][] submatrices = buildSubmatricesFromSudoku(sudoku);
+        for (int[][] submatrix : Arrays.stream(submatrices).toList()){
+            List<Integer> flatSubmatrix = new ArrayList<>(9);
+            for (int[] row : submatrix) {
+                for (int entry : row){
+                    flatSubmatrix.add(entry);
+                }
+            }
+            flatSubmatrix.sort(Integer::compareTo);
+            if (!flatSubmatrix.equals(sudokuValues)){
+                return false;
+            }
+        }
+
+        return true;
     }
 }

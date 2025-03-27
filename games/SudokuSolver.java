@@ -3,7 +3,6 @@ package games;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.IntStream;
 
 import static games.MatrixUtil.transposeMatrix;
 
@@ -35,7 +34,7 @@ public class SudokuSolver {
     public static void main(String[] args) {
         System.out.println("Welcome to Java Sudoku Solver");
         System.out.println("You inputted the sudoku: ");
-        System.out.printf(Arrays.toString(sudoku));
+        System.out.printf(Arrays.deepToString(sudoku));
         System.out.println("The solved sudoku is: ");
         System.out.println(Arrays.deepToString(solve(sudoku)));
     }
@@ -44,31 +43,40 @@ public class SudokuSolver {
         // todo: use depth-first-traversal if simpler approaches are not enough
         int[][] transposedSudoku = transposeMatrix(sudoku);
 
-        for (int[] row : sudoku) {
-            for (int i = 0; i < sudoku.length; i++) {
-                if (row[i] == 0) {
-                    // build arrayList with all possible numbers that can go here. If list has just a value than that is the obvious value of the cell
-                    // build arrayList checking row, column and 3x3 submatrix
-                    List<Integer> cellPossibleValuesList = new ArrayList<>();
-                    IntStream.of(1, 2, 3, 4, 5, 6, 7, 8, 9).forEachOrdered(cellPossibleValuesList::add);
+        for (int i = 0; i < sudoku.length; i++) {
+            int[] sudokuRow = sudoku[i];
+            for (int j = 0; j < sudoku.length; j++) {
+                if (sudokuRow[j] == 0) {
+                    // build arrayList with all possible numbers that can go here.
+                    List<Integer> cellPossibleValuesList = new ArrayList<>(List.of(1, 2, 3, 4, 5, 6, 7, 8, 9));
 
                     for (int number = 1; number <= 9; number++) {
                         // check row
                         final int finalNumber = number;
-                        if (Arrays.stream(row).anyMatch(cell -> cell == finalNumber)) {
-                            cellPossibleValuesList.remove(number);
-                            break;
+                        if (Arrays.stream(sudokuRow).anyMatch(cell -> cell == finalNumber)) {
+                            cellPossibleValuesList.remove(cellPossibleValuesList.indexOf(number));
+                            continue;
                         }
                         // check column using transposed sudoku
 
-                        if (Arrays.stream(transposedSudoku[i]).anyMatch(cell -> cell == finalNumber)){
-                            cellPossibleValuesList.remove(number);
-                            break;
+                        if (Arrays.stream(transposedSudoku[j]).anyMatch(cell -> cell == finalNumber)) {
+                            cellPossibleValuesList.remove(cellPossibleValuesList.indexOf(number));
+                            continue;
                         }
                         // build 3x3 submatrix associated with cell
                         // check 3x3 submatrix
-
+                        int[][] submatrix = findSubmatrixFromIndexes(i, j);
+                        if (Arrays.stream(submatrix).anyMatch(row -> Arrays.stream(row).anyMatch(value -> value == finalNumber))){
+                            cellPossibleValuesList.remove(cellPossibleValuesList.indexOf(number));
+                        }
                     }
+
+                    // If list has just a value than that is the obvious value of the cell
+                    if (cellPossibleValuesList.size() == 1){
+                        System.out.printf("Inserting value %d in position %d,%d %n", cellPossibleValuesList.getFirst(),i,j);
+                        sudoku[i][j] = cellPossibleValuesList.getFirst();
+                    }
+                    // todo: what happens if more values are possible inside the cell?
                 }
             }
         }
@@ -91,5 +99,21 @@ public class SudokuSolver {
             }
         }
         return submatrices;
+    }
+
+    public static int[][] findSubmatrixFromIndexes(int rowIndex, int columnIndex){
+        if (List.of(0,1,2).contains(rowIndex)) {
+            if (List.of(0, 1, 2).contains(columnIndex)) return submatrices[0];
+            else if (List.of(3, 4, 5).contains(columnIndex)) return submatrices[1];
+            else return submatrices[2];
+        }else if (List.of(3,4,5).contains(rowIndex)){
+            if (List.of(0,1,2).contains(columnIndex)) return submatrices[3];
+            else if (List.of(3,4,5).contains(columnIndex)) return submatrices[4];
+            else return submatrices[5];
+        }else {
+            if (List.of(0, 1, 2).contains(columnIndex)) return submatrices[6];
+            else if (List.of(3, 4, 5).contains(columnIndex)) return submatrices[7];
+            else return submatrices[8];
+        }
     }
 }

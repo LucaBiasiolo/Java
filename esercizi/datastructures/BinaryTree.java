@@ -1,4 +1,4 @@
-package esercizi;
+package esercizi.datastructures;
 
 public class BinaryTree {
 

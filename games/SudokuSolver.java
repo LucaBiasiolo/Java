@@ -3,11 +3,13 @@ package games;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.IntStream;
 
 import static games.MatrixUtil.transposeMatrix;
 
 public class SudokuSolver {
 
+    // todo: test on medium and hard-difficulty sudokus
     private static final List<List<Integer>> sudoku = new ArrayList<>(List.of(
             List.of(8,9,0,7,3,0,4,6,0),
             List.of(0,4,0,2,0,8,3,5,7),
@@ -24,7 +26,7 @@ public class SudokuSolver {
         System.out.println("You inputted the sudoku: ");
         printSudoku(sudoku);
         System.out.println("The solved sudoku is: ");
-        printSudoku(solve(sudoku));
+        printSudoku(solveSudoku(sudoku));
     }
 
     private static void printSudoku(List<List<Integer>> sudoku){
@@ -38,9 +40,8 @@ public class SudokuSolver {
         System.out.println(printableSudoku);
     }
 
-    private static List<List<Integer>> solve(List<List<Integer>> sudoku) {
+    private static List<List<Integer>> solveSudoku(List<List<Integer>> sudoku) {
         // todo: use depth-first-traversal if simpler approaches are not enough
-
         while(!checkSolvedSudoku(sudoku)) {
             List<List<Integer>> transposedSudoku = transposeMatrix(sudoku);
             for (int i = 0; i < sudoku.size(); i++) {
@@ -91,33 +92,20 @@ public class SudokuSolver {
     }
 
     public static List<List<Integer>> buildFlattenedSubmatricesFromSudoku(List<List<Integer>> sudoku){
-        List<List<Integer>> flattenedSubmatricesList = new ArrayList<>(9);
-        int[][][] submatrices = buildSubmatricesFromSudoku(sudoku);
-        for (int[][] submatrix : submatrices) {
-            List<Integer> flattenedSubmatrix = new ArrayList<>(9);
-            for (int j = 0; j < 3; j++) {
-                for (int k = 0; k < 3; k++) {
-                    flattenedSubmatrix.add(submatrix[j][k]);
-                }
-            }
-            flattenedSubmatricesList.add(flattenedSubmatrix);
-        }
-        return flattenedSubmatricesList;
-    }
+        List<List<Integer>> submatrices = new ArrayList<>(9);
 
-    public static int[][][] buildSubmatricesFromSudoku(List<List<Integer>> sudoku){
-        int[][][] submatrices = new int[9][3][3];
+        IntStream.range(0,9).forEach(_ -> submatrices.add(new ArrayList<>(9)));
         for (int i = 0; i <= 2; i++) {
             for (int j = 0; j <= 2; j++) {
-                submatrices[0][i][j] = sudoku.get(i).get(j);
-                submatrices[1][i][j] = sudoku.get(i).get(j + 3);
-                submatrices[2][i][j] = sudoku.get(i).get(j + 6);
-                submatrices[3][i][j] = sudoku.get(i + 3).get(j);
-                submatrices[4][i][j] = sudoku.get(i + 3).get(j + 3);
-                submatrices[5][i][j] = sudoku.get(i + 3).get(j + 6);
-                submatrices[6][i][j] = sudoku.get(i + 6).get(j);
-                submatrices[7][i][j] = sudoku.get(i + 6).get(j + 3);
-                submatrices[8][i][j] = sudoku.get(i + 6).get(j + 6);
+                submatrices.get(0).add(sudoku.get(i).get(j));
+                submatrices.get(1).add(sudoku.get(i).get(j + 3));
+                submatrices.get(2).add(sudoku.get(i).get(j + 6));
+                submatrices.get(3).add(sudoku.get(i + 3).get(j));
+                submatrices.get(4).add(sudoku.get(i + 3).get(j + 3));
+                submatrices.get(5).add(sudoku.get(i + 3).get(j + 6));
+                submatrices.get(6).add(sudoku.get(i + 6).get(j));
+                submatrices.get(7).add(sudoku.get(i + 6).get(j + 3));
+                submatrices.get(8).add(sudoku.get(i + 6).get(j + 6));
             }
         }
         return submatrices;

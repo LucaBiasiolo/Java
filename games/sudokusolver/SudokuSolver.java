@@ -30,7 +30,7 @@ public class SudokuSolver {
 
     static List<List<Integer>> solveSudoku(List<List<Integer>> sudoku) {
         // todo: use depth-first-traversal if simpler approaches are not enough
-        while(!checkSolvedSudoku(sudoku)) {
+        while(!checkSolvedSudoku(sudoku)) { // todo: what if this loop never ends?
             List<List<Integer>> transposedSudoku = transposeMatrix(sudoku);
             for (int i = 0; i < sudoku.size(); i++) {
                 List<Integer> sudokuRow = sudoku.get(i);
@@ -39,15 +39,15 @@ public class SudokuSolver {
                         List<Integer> sudokuColumn = transposedSudoku.get(j);
                         List<List<Integer>> flattenedSubmatrices = buildFlattenedSubmatricesFromSudoku(sudoku);
                         List<Integer> cellSubmatrix = findFlattenedSubmatrixFromIndexes(flattenedSubmatrices,i,j);
-                        List<Integer> cellPossibleValuesList = buildCellPossibleValuesList(sudokuRow, sudokuColumn, cellSubmatrix);
 
+                        List<Integer> cellPossibleValues = buildCellPossibleValuesList(sudokuRow, sudokuColumn, cellSubmatrix);
                         // If list has just a value than that is the obvious value of the cell
-                        if (cellPossibleValuesList.size() == 1) {
-                            System.out.printf("Inserting value %d in position %d,%d %n", cellPossibleValuesList.getFirst(), i, j);
+                        if (cellPossibleValues.size() == 1) {
+                            System.out.printf("Inserting value %d in position %d,%d %n", cellPossibleValues.getFirst(), i, j);
                             // Crea una nuova lista mutabile basata sulla lista immutabile
-                            List<Integer> mutableRow = new ArrayList<>(sudoku.get(i));
-                            mutableRow.set(j, cellPossibleValuesList.getFirst());
-                            sudoku.set(i, mutableRow);
+                            List<Integer> newSudokuRow = new ArrayList<>(sudoku.get(i));
+                            newSudokuRow.set(j, cellPossibleValues.getFirst());
+                            sudoku.set(i, newSudokuRow);
                         }
                         // todo: what happens if more values are possible inside the cell?
                     }

@@ -1,7 +1,6 @@
 package games.sudokusolver;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.IntStream;
 
@@ -9,8 +8,7 @@ import static games.MatrixUtil.transposeMatrix;
 
 public class SudokuUtil {
     static boolean checkSolvedSudoku(List<List<Integer>> sudoku){
-        // check if found solution is correct
-        List<Integer> sudokuValues = List.of(1,2,3,4,5,6,7,8,9);
+        List<Integer> sudokuValues = IntStream.rangeClosed(1,9).boxed().toList();
 
         // check if rows contain numbers from 1 to 9
         for (List<Integer> sudokuRow : sudoku){
@@ -69,11 +67,8 @@ public class SudokuUtil {
     }
 
     static List<Integer> buildCellPossibleValuesList(List<Integer> sudokuRow, List<Integer> sudokuColumn, List<Integer> flattenedSubmatrix) {
-        List<Integer> cellPossibleValuesList = new ArrayList<>(Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9));
-        cellPossibleValuesList.removeIf( possibleNumber ->
-                sudokuRow.contains(possibleNumber) || sudokuColumn.contains(possibleNumber) || flattenedSubmatrix.contains(possibleNumber));
-
-        return cellPossibleValuesList;
+        return IntStream.rangeClosed(1,9).filter(possibleNumber ->
+                !sudokuRow.contains(possibleNumber) && !sudokuColumn.contains(possibleNumber) && !flattenedSubmatrix.contains(possibleNumber)).boxed().toList();
     }
 
     static List<Integer> findFlattenedSubmatrixFromIndexes(List<List<Integer>> flattenedSubmatrices, int rowIndex, int columnIndex){

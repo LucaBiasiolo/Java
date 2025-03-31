@@ -34,9 +34,9 @@ public class SudokuSolver {
     // todo: this is not solvable as of now
     private static final Sudoku hardSudoku = new Sudoku(new ArrayList<>(List.of(
             List.of(9, 0, 0, 4, 0, 2, 5, 0, 0),
-            List.of(0, 0, 0, 9, 0, 1, 0, 0, 0),
+            List.of(0, 0, 0, 9, 5, 1, 0, 0, 0),
             List.of(0, 5, 0, 0, 0, 0, 0, 0, 7),
-            List.of(4, 0, 0, 0, 2, 0, 0, 8, 0),
+            List.of(4, 0, 0, 0, 2, 0, 0, 8, 5),
             List.of(0, 0, 2, 0, 0, 0, 7, 3, 4),
             List.of(5, 0, 8, 0, 0, 6, 0, 0, 0),
             List.of(0, 0, 0, 8, 0, 0, 0, 2, 0),
@@ -47,9 +47,9 @@ public class SudokuSolver {
     public static void main(String[] args) {
         System.out.println("Welcome to Java Sudoku Solver");
         System.out.println("You inputted the sudoku: ");
-        SudokuService.printSudoku(hardSudoku.getSudoku());
-        List<List<Integer>> flattenedSubmatrices = buildFlattenedSubmatricesFromSudoku(hardSudoku.getSudoku());
+        SudokuService.printSudoku(hardSudoku.getGrid());
+        List<List<Integer>> flattenedSubmatrices = buildFlattenedSubmatricesFromSudoku(hardSudoku.getGrid());
         hardSudoku.setFlattenedSubmatrices(flattenedSubmatrices);
-        SudokuService.printSudoku(solveSudoku(hardSudoku).getSudoku());
+        SudokuService.printSudoku(solveSudoku(hardSudoku).getGrid());
     }
 }

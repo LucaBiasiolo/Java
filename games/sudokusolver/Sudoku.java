@@ -4,21 +4,21 @@ import java.util.List;
 
 public class Sudoku {
 
-    private List<List<Integer>> sudoku;
+    private List<List<Integer>> grid;
     private List<List<Integer>> flattenedSubmatrices;
     private SudokuDifficulty difficulty;
 
     public Sudoku(List<List<Integer>> sudoku, SudokuDifficulty difficulty) {
-        this.sudoku = sudoku;
+        this.grid = sudoku;
         this.difficulty = difficulty;
     }
 
-    public List<List<Integer>> getSudoku() {
-        return sudoku;
+    public List<List<Integer>> getGrid() {
+        return grid;
     }
 
-    public void setSudoku(List<List<Integer>> sudoku) {
-        this.sudoku = sudoku;
+    public void setGrid(List<List<Integer>> grid) {
+        this.grid = grid;
     }
 
     public List<List<Integer>> getFlattenedSubmatrices() {

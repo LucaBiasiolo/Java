@@ -11,10 +11,10 @@ public class SudokuService {
     static Sudoku solveSudoku(Sudoku sudoku) {
         // todo: use depth-first-traversal if simpler approaches are not enough
         int roundCounter = 0;
-        while(!checkSolvedSudoku(sudoku.getSudoku()) && roundCounter < 10) { // todo: what if this loop never ends?
-            List<List<Integer>> transposedSudoku = transposeMatrix(sudoku.getSudoku());
+        while(!checkSolvedSudoku(sudoku.getGrid()) && roundCounter < 10) { // todo: what if this loop never ends?
+            List<List<Integer>> transposedSudoku = transposeMatrix(sudoku.getGrid());
             for (int i = 0; i < 9; i++) {
-                List<Integer> sudokuRow = sudoku.getSudoku().get(i);
+                List<Integer> sudokuRow = sudoku.getGrid().get(i);
                 for (int j = 0; j < 9; j++) {
                     if (sudokuRow.get(j) == 0) {
                         List<Integer> sudokuColumn = transposedSudoku.get(j);
@@ -26,16 +26,19 @@ public class SudokuService {
                         if (cellPossibleValues.size() == 1) {
                             System.out.printf("Inserting value %d in position %d,%d %n", cellPossibleValues.getFirst(), i, j);
                             // Crea una nuova lista mutabile basata sulla lista immutabile
-                            List<Integer> newSudokuRow = new ArrayList<>(sudoku.getSudoku().get(i));
+                            List<Integer> newSudokuRow = new ArrayList<>(sudoku.getGrid().get(i));
                             newSudokuRow.set(j, cellPossibleValues.getFirst());
-                            sudoku.getSudoku().set(i, newSudokuRow);
+                            sudoku.getGrid().set(i, newSudokuRow);
+                        } else{
+                            // todo: what happens if more values are possible inside the cell?
+                            // last cell possible
+
                         }
-                        // todo: what happens if more values are possible inside the cell?
                     }
                 }
             }
             System.out.printf("End of round %d, the sudoku is as follows%n", roundCounter);
-            printSudoku(sudoku.getSudoku());
+            printSudoku(sudoku.getGrid());
             roundCounter++;
         }
         return sudoku;

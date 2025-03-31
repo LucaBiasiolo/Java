@@ -28,11 +28,11 @@ public class MatrixUtil {
         return transposedMatrix;
     }
 
-    public static List<List<Integer>> transposeMatrix(List<List<Integer>> matrix) {
-        List<List<Integer>> transposedMatrix = new ArrayList<>();
+    public static <T> List<List<T>> transposeMatrix(List<List<T>> matrix) {
+        List<List<T>> transposedMatrix = new ArrayList<>();
         for (int i = 0; i < matrix.size(); i++) {
             transposedMatrix.add(new ArrayList<>());
-            for (List<Integer> matrixRow : matrix) {
+            for (List<T> matrixRow : matrix) {
                 transposedMatrix.get(i).add(matrixRow.get(i));
             }
         }

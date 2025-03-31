@@ -48,6 +48,8 @@ public class SudokuSolver {
         System.out.println("Welcome to Java Sudoku Solver");
         System.out.println("You inputted the sudoku: ");
         SudokuService.printSudoku(hardSudoku.getSudoku());
-        SudokuService.printSudoku(solveSudoku(hardSudoku.getSudoku()));
+        List<List<Integer>> flattenedSubmatrices = buildFlattenedSubmatricesFromSudoku(hardSudoku.getSudoku());
+        hardSudoku.setFlattenedSubmatrices(flattenedSubmatrices);
+        SudokuService.printSudoku(solveSudoku(hardSudoku).getSudoku());
     }
 }

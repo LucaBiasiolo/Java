@@ -8,17 +8,17 @@ import static games.MatrixUtil.transposeMatrix;
 
 public class SudokuService {
 
-    static List<List<Integer>> solveSudoku(List<List<Integer>> sudoku) {
+    static Sudoku solveSudoku(Sudoku sudoku) {
         // todo: use depth-first-traversal if simpler approaches are not enough
         int roundCounter = 0;
-        while(!checkSolvedSudoku(sudoku) && roundCounter < 10) { // todo: what if this loop never ends?
-            List<List<Integer>> transposedSudoku = transposeMatrix(sudoku);
-            for (int i = 0; i < sudoku.size(); i++) {
-                List<Integer> sudokuRow = sudoku.get(i);
-                for (int j = 0; j < sudoku.size(); j++) {
+        while(!checkSolvedSudoku(sudoku.getSudoku()) && roundCounter < 10) { // todo: what if this loop never ends?
+            List<List<Integer>> transposedSudoku = transposeMatrix(sudoku.getSudoku());
+            for (int i = 0; i < 9; i++) {
+                List<Integer> sudokuRow = sudoku.getSudoku().get(i);
+                for (int j = 0; j < 9; j++) {
                     if (sudokuRow.get(j) == 0) {
                         List<Integer> sudokuColumn = transposedSudoku.get(j);
-                        List<List<Integer>> flattenedSubmatrices = buildFlattenedSubmatricesFromSudoku(sudoku);
+                        List<List<Integer>> flattenedSubmatrices = sudoku.getFlattenedSubmatrices();
                         List<Integer> cellSubmatrix = findFlattenedSubmatrixFromIndexes(flattenedSubmatrices,i,j);
 
                         List<Integer> cellPossibleValues = buildCellPossibleValuesList(sudokuRow, sudokuColumn, cellSubmatrix);
@@ -26,16 +26,16 @@ public class SudokuService {
                         if (cellPossibleValues.size() == 1) {
                             System.out.printf("Inserting value %d in position %d,%d %n", cellPossibleValues.getFirst(), i, j);
                             // Crea una nuova lista mutabile basata sulla lista immutabile
-                            List<Integer> newSudokuRow = new ArrayList<>(sudoku.get(i));
+                            List<Integer> newSudokuRow = new ArrayList<>(sudoku.getSudoku().get(i));
                             newSudokuRow.set(j, cellPossibleValues.getFirst());
-                            sudoku.set(i, newSudokuRow);
+                            sudoku.getSudoku().set(i, newSudokuRow);
                         }
                         // todo: what happens if more values are possible inside the cell?
                     }
                 }
             }
             System.out.printf("End of round %d, the sudoku is as follows%n", roundCounter);
-            printSudoku(sudoku);
+            printSudoku(sudoku.getSudoku());
             roundCounter++;
         }
         return sudoku;

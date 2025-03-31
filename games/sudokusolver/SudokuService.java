@@ -6,7 +6,41 @@ import java.util.stream.IntStream;
 
 import static games.MatrixUtil.transposeMatrix;
 
-public class SudokuUtil {
+public class SudokuService {
+
+    static List<List<Integer>> solveSudoku(List<List<Integer>> sudoku) {
+        // todo: use depth-first-traversal if simpler approaches are not enough
+        int roundCounter = 0;
+        while(!checkSolvedSudoku(sudoku) && roundCounter < 10) { // todo: what if this loop never ends?
+            List<List<Integer>> transposedSudoku = transposeMatrix(sudoku);
+            for (int i = 0; i < sudoku.size(); i++) {
+                List<Integer> sudokuRow = sudoku.get(i);
+                for (int j = 0; j < sudoku.size(); j++) {
+                    if (sudokuRow.get(j) == 0) {
+                        List<Integer> sudokuColumn = transposedSudoku.get(j);
+                        List<List<Integer>> flattenedSubmatrices = buildFlattenedSubmatricesFromSudoku(sudoku);
+                        List<Integer> cellSubmatrix = findFlattenedSubmatrixFromIndexes(flattenedSubmatrices,i,j);
+
+                        List<Integer> cellPossibleValues = buildCellPossibleValuesList(sudokuRow, sudokuColumn, cellSubmatrix);
+                        // If list has just a value than that is the obvious value of the cell
+                        if (cellPossibleValues.size() == 1) {
+                            System.out.printf("Inserting value %d in position %d,%d %n", cellPossibleValues.getFirst(), i, j);
+                            // Crea una nuova lista mutabile basata sulla lista immutabile
+                            List<Integer> newSudokuRow = new ArrayList<>(sudoku.get(i));
+                            newSudokuRow.set(j, cellPossibleValues.getFirst());
+                            sudoku.set(i, newSudokuRow);
+                        }
+                        // todo: what happens if more values are possible inside the cell?
+                    }
+                }
+            }
+            System.out.printf("End of round %d, the sudoku is as follows%n", roundCounter);
+            printSudoku(sudoku);
+            roundCounter++;
+        }
+        return sudoku;
+    }
+
     static boolean checkSolvedSudoku(List<List<Integer>> sudoku){
         List<Integer> sudokuValues = IntStream.rangeClosed(1,9).boxed().toList();
 

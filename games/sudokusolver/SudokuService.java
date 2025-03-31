@@ -8,27 +8,48 @@ import static games.MatrixUtil.transposeMatrix;
 
 public class SudokuService {
 
-    static Sudoku solveSudoku(Sudoku sudoku) {
+    static Sudoku createSudokuFromGrid(int[][] valuesMatrix, SudokuDifficulty difficulty) {
+        Sudoku sudoku = new Sudoku();
+        sudoku.setDifficulty(difficulty);
+
+        List<List<SudokuCell>> grid = new ArrayList<>(9);
+        for (int i = 0; i < 9; i++) {
+            List<SudokuCell> sudokuRow = new ArrayList<>(9);
+            for (int j = 0; j < 9; j++) {
+                sudokuRow.add(new SudokuCell(i,j,valuesMatrix[i][j]));
+            }
+            grid.add(sudokuRow);
+        }
+
+        sudoku.setGrid(grid);
+        sudoku.setTransposedGrid(transposeMatrix(grid));
+        sudoku.setFlattenedSubmatrices(buildFlattenedSubmatricesFromSudoku(grid));
+        return sudoku;
+    }
+
+    // this method inserts a number in a cell if it is the only possible value
+    static Sudoku solveWithLastPossibleNumber(Sudoku sudoku) {
         // todo: use depth-first-traversal if simpler approaches are not enough
         int roundCounter = 0;
-        while(!checkSolvedSudoku(sudoku.getGrid()) && roundCounter < 10) { // todo: what if this loop never ends?
-            List<List<Integer>> transposedSudoku = transposeMatrix(sudoku.getGrid());
-            for (int i = 0; i < 9; i++) {
-                List<Integer> sudokuRow = sudoku.getGrid().get(i);
-                for (int j = 0; j < 9; j++) {
-                    if (sudokuRow.get(j) == 0) {
-                        List<Integer> sudokuColumn = transposedSudoku.get(j);
-                        List<List<Integer>> flattenedSubmatrices = sudoku.getFlattenedSubmatrices();
-                        List<Integer> cellSubmatrix = findFlattenedSubmatrixFromIndexes(flattenedSubmatrices,i,j);
+        while(!checkSolvedSudoku(sudoku)) {
+            List<List<SudokuCell>> transposedSudoku = sudoku.getTransposedGrid();
+            for (List<SudokuCell> sudokuRow : sudoku.getGrid()) {
+                for (SudokuCell cell : sudokuRow) {
+                    if (cell.getValue() == 0) {
+                        List<SudokuCell> sudokuColumn = transposedSudoku.get(cell.getColumnIndex());
+                        List<List<SudokuCell>> flattenedSubmatrices = sudoku.getFlattenedSubmatrices();
+                        List<SudokuCell> cellSubmatrix = findFlattenedSubmatrixFromIndexes(flattenedSubmatrices,cell.getRowIndex(),cell.getColumnIndex());
 
                         List<Integer> cellPossibleValues = buildCellPossibleValuesList(sudokuRow, sudokuColumn, cellSubmatrix);
                         // If list has just a value than that is the obvious value of the cell
+                        // fixme: transposed grid is not updated as the algorithm progresses
                         if (cellPossibleValues.size() == 1) {
-                            System.out.printf("Inserting value %d in position %d,%d %n", cellPossibleValues.getFirst(), i, j);
+                            System.out.printf("Inserting value %d in position %d,%d %n", cellPossibleValues.getFirst(), cell.getRowIndex(), cell.getColumnIndex());
                             // Crea una nuova lista mutabile basata sulla lista immutabile
-                            List<Integer> newSudokuRow = new ArrayList<>(sudoku.getGrid().get(i));
-                            newSudokuRow.set(j, cellPossibleValues.getFirst());
-                            sudoku.getGrid().set(i, newSudokuRow);
+                            List<SudokuCell> newSudokuRow = new ArrayList<>(sudoku.getGrid().get(cell.getRowIndex()));
+                            newSudokuRow.set(cell.getColumnIndex(), new SudokuCell(cell.getRowIndex(), cell.getColumnIndex(),
+                                    cellPossibleValues.getFirst()));
+                            sudoku.getGrid().set(cell.getRowIndex(), newSudokuRow);
                         } else{
                             // todo: what happens if more values are possible inside the cell?
                             // last cell possible
@@ -44,27 +65,27 @@ public class SudokuService {
         return sudoku;
     }
 
-    static boolean checkSolvedSudoku(List<List<Integer>> sudoku){
+    static boolean checkSolvedSudoku(Sudoku sudoku){
         List<Integer> sudokuValues = IntStream.rangeClosed(1,9).boxed().toList();
 
         // check if rows contain numbers from 1 to 9
-        for (List<Integer> sudokuRow : sudoku){
-            if (!sudokuRow.containsAll(sudokuValues)){
+        for (List<SudokuCell> sudokuRow : sudoku.getGrid()){
+            if (!sudokuRow.stream().map(SudokuCell::getValue).toList().containsAll(sudokuValues)){
                 return false;
             }
         }
 
         // check if columns contain numbers from 1 to 9
-        for (List<Integer> sudokuColumns : transposeMatrix(sudoku)){
-            if (!sudokuColumns.containsAll(sudokuValues)){
+        for (List<SudokuCell> sudokuColumns : sudoku.getTransposedGrid()){
+            if (!sudokuColumns.stream().map(SudokuCell::getValue).toList().containsAll(sudokuValues)){
                 return false;
             }
         }
 
         // check if every submatrix contains numbers from 1 to 9
-        List<List<Integer>> flatSubmatrices = buildFlattenedSubmatricesFromSudoku(sudoku);
-        for (List<Integer> flatSubmatrix : flatSubmatrices){
-            if (!flatSubmatrix.containsAll(sudokuValues)){
+        List<List<SudokuCell>> flatSubmatrices = sudoku.getFlattenedSubmatrices();
+        for (List<SudokuCell> flatSubmatrix : flatSubmatrices){
+            if (!flatSubmatrix.stream().map(SudokuCell::getValue).toList().containsAll(sudokuValues)){
                 return false;
             }
         }
@@ -72,8 +93,8 @@ public class SudokuService {
         return true;
     }
 
-    public static List<List<Integer>> buildFlattenedSubmatricesFromSudoku(List<List<Integer>> sudoku){
-        List<List<Integer>> submatrices = new ArrayList<>(9);
+    public static List<List<SudokuCell>> buildFlattenedSubmatricesFromSudoku(List<List<SudokuCell>> sudoku){
+        List<List<SudokuCell>> submatrices = new ArrayList<>(9);
 
         IntStream.range(0,9).forEach(_ -> submatrices.add(new ArrayList<>(9)));
         for (int i = 0; i <= 2; i++) {
@@ -92,23 +113,26 @@ public class SudokuService {
         return submatrices;
     }
 
-    static void printSudoku(List<List<Integer>> sudoku){
+    static void printSudoku(List<List<SudokuCell>> sudoku){
         StringBuilder printableSudoku = new StringBuilder();
-        for (List<Integer> sudokuRow : sudoku){
-            for (Integer value : sudokuRow){
-                printableSudoku.append(" ").append(value).append(" ");
+        for (List<SudokuCell> sudokuRow : sudoku){
+            for (SudokuCell cell : sudokuRow){
+                printableSudoku.append(" ").append(cell.getValue()).append(" ");
             }
             printableSudoku.append("\n");
         }
         System.out.println(printableSudoku);
     }
 
-    static List<Integer> buildCellPossibleValuesList(List<Integer> sudokuRow, List<Integer> sudokuColumn, List<Integer> flattenedSubmatrix) {
+    static List<Integer> buildCellPossibleValuesList(List<SudokuCell> sudokuRow, List<SudokuCell> sudokuColumn, List<SudokuCell> flattenedSubmatrix) {
         return IntStream.rangeClosed(1,9).filter(possibleNumber ->
-                !sudokuRow.contains(possibleNumber) && !sudokuColumn.contains(possibleNumber) && !flattenedSubmatrix.contains(possibleNumber)).boxed().toList();
+                !sudokuRow.stream().map(SudokuCell::getValue).toList().contains(possibleNumber) &&
+                !sudokuColumn.stream().map(SudokuCell::getValue).toList().contains(possibleNumber) &&
+                !flattenedSubmatrix.stream().map(SudokuCell::getValue).toList().contains(possibleNumber))
+                .boxed().toList();
     }
 
-    static List<Integer> findFlattenedSubmatrixFromIndexes(List<List<Integer>> flattenedSubmatrices, int rowIndex, int columnIndex){
+    static List<SudokuCell> findFlattenedSubmatrixFromIndexes(List<List<SudokuCell>> flattenedSubmatrices, int rowIndex, int columnIndex){
         if (List.of(0,1,2).contains(rowIndex)) {
             if (List.of(0, 1, 2).contains(columnIndex)) return flattenedSubmatrices.get(0);
             else if (List.of(3, 4, 5).contains(columnIndex)) return flattenedSubmatrices.get(1);

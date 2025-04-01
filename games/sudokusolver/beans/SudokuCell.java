@@ -1,6 +1,7 @@
 package games.sudokusolver.beans;
 
 import java.util.List;
+import java.util.Objects;
 
 public class SudokuCell {
 
@@ -54,5 +55,24 @@ public class SudokuCell {
 
     public void setSubmatrixIndex(int submatrixIndex) {
         this.submatrixIndex = submatrixIndex;
+    }
+
+    @Override
+    public String toString() {
+        return "Cell (" + rowIndex +
+                "," +columnIndex +
+                "), possibleValues=" + possibleValues;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        SudokuCell that = (SudokuCell) o;
+        return rowIndex == that.rowIndex && columnIndex == that.columnIndex;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(rowIndex, columnIndex);
     }
 }

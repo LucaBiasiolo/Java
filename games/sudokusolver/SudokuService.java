@@ -111,6 +111,14 @@ public class SudokuService {
     static boolean checkSolvedSudoku(Sudoku sudoku){
         List<Integer> sudokuValues = IntStream.rangeClosed(1,9).boxed().toList();
 
+        for(List<SudokuCell> sudokuRow : sudoku.getGrid()){
+            for(SudokuCell cell : sudokuRow){
+                if (cell.getValue() == 0){
+                    return false;
+                }
+            }
+        }
+
         // check if rows contain numbers from 1 to 9
         for (List<SudokuCell> sudokuRow : sudoku.getGrid()){
             if (!sudokuRow.stream().map(SudokuCell::getValue).toList().containsAll(sudokuValues)){

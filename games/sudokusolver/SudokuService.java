@@ -45,9 +45,8 @@ public class SudokuService {
         return sudoku;
     }
 
-    static Sudoku solveWithLastRemainingCell(Sudoku sudoku){
-        List<List<List<SudokuCell>>> sudokuPartitions = List.of(sudoku.getGrid(), sudoku.getTransposedGrid(), sudoku.getFlattenedSubmatrices());
-        for (List<List<SudokuCell>> sudokuPartition : sudokuPartitions){
+    static void solveWithLastRemainingCell(Sudoku sudoku){
+        for (List<List<SudokuCell>> sudokuPartition : getSudokuPartitions(sudoku)){
             for (List<SudokuCell> rowColumnOrSubmatrix : sudokuPartition){
                 for (int number = 1; number <= 9; number++) {
                     List<SudokuCell> possibleCellsForNumber = new ArrayList<>();
@@ -70,11 +69,14 @@ public class SudokuService {
                 }
             }
         }
-        return sudoku;
+    }
+
+    private static List<List<List<SudokuCell>>> getSudokuPartitions(Sudoku sudoku) {
+        return List.of(sudoku.getGrid(), sudoku.getTransposedGrid(), sudoku.getFlattenedSubmatrices());
     }
 
     // this method inserts a number in a cell if it is the only possible value in the cell's list of possible values
-    static Sudoku solveWithLastPossibleNumber(Sudoku sudoku) {
+    static void solveWithLastPossibleNumber(Sudoku sudoku) {
         for (List<SudokuCell> sudokuRow : sudoku.getGrid()) {
             for (SudokuCell cell : sudokuRow) {
                 if (cell.getValue() == 0) {
@@ -86,7 +88,6 @@ public class SudokuService {
                 }
             }
         }
-        return sudoku;
     }
 
     private static void updateCellAndSudoku(Sudoku sudoku, SudokuCell cell, Integer valueToInsert) {
@@ -122,25 +123,12 @@ public class SudokuService {
             }
         }
 
-        // check if rows contain numbers from 1 to 9
-        for (List<SudokuCell> sudokuRow : sudoku.getGrid()){
-            if (!sudokuRow.stream().map(SudokuCell::getValue).toList().containsAll(sudokuValues)){
-                return false;
-            }
-        }
-
-        // check if columns contain numbers from 1 to 9
-        for (List<SudokuCell> sudokuColumns : sudoku.getTransposedGrid()){
-            if (!sudokuColumns.stream().map(SudokuCell::getValue).toList().containsAll(sudokuValues)){
-                return false;
-            }
-        }
-
-        // check if every submatrix contains numbers from 1 to 9
-        List<List<SudokuCell>> flatSubmatrices = sudoku.getFlattenedSubmatrices();
-        for (List<SudokuCell> flatSubmatrix : flatSubmatrices){
-            if (!flatSubmatrix.stream().map(SudokuCell::getValue).toList().containsAll(sudokuValues)){
-                return false;
+        // check if rows, columns and Submatrices contain numbers from 1 to 9
+        for (List<List<SudokuCell>> sudokuPartition : getSudokuPartitions(sudoku)) {
+            for (List<SudokuCell> rowColumnOrSubmatrix : sudokuPartition){
+                if(!rowColumnOrSubmatrix.stream().map(SudokuCell::getValue).toList().containsAll(sudokuValues)){
+                    return false;
+                }
             }
         }
 

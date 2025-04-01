@@ -41,8 +41,31 @@ public class SudokuService {
                 }
             }
         }
-
         return sudoku;
+    }
+
+    static void solveWithObviousPairs(Sudoku sudoku){
+        for(List<SudokuCell> submatrix : sudoku.getFlattenedSubmatrices()){
+            List<SudokuCell> cellsWith2PossibleValues = submatrix.stream().filter(cell ->
+                    cell.getPossibleValues() != null && cell.getPossibleValues().size() == 2).toList();
+
+            // fixme: delete duplicate passages
+            for(SudokuCell cell1 : cellsWith2PossibleValues){
+                for(SudokuCell cell2 : cellsWith2PossibleValues){
+                    if(!cell1.equals(cell2) && cell1.getPossibleValues().containsAll(cell2.getPossibleValues()) && cell2.getPossibleValues().containsAll(cell2.getPossibleValues())){
+                        // found obvious pair, now delete the pair from the other cells of the submatrix
+                        List<SudokuCell> otherCells = submatrix.stream().filter(cell ->
+                                cell.getPossibleValues() != null && cell.getPossibleValues().size() > 2).toList();
+                        for (SudokuCell cell : otherCells) {
+                            System.out.printf("Obvious pairs: %s %s %n", cell1, cell2);
+                            System.out.printf("Removing values %s from cell %s %n", cell1.getPossibleValues(), cell);
+                            cell.getPossibleValues().removeAll(cell1.getPossibleValues());
+                        }
+                    }
+                }
+            }
+
+        }
     }
 
     static void solveWithLastRemainingCell(Sudoku sudoku){

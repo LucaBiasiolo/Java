@@ -92,51 +92,33 @@ class SudokuTest {
             SudokuDifficulty.EXPERT
     );
 
+    private final Sudoku masterSudoku1 = createSudokuFromGrid(
+            new int[][]{
+                    {0,8,0,0,0,7,6,0,0},
+                    {0,0,1,6,5,0,0,0,2},
+                    {5,0,0,0,0,3,0,0,0},
+                    {4,0,0,5,2,0,8,0,0},
+                    {0,0,7,0,0,0,0,4,0},
+                    {0,0,0,0,3,0,0,0,0},
+                    {0,0,0,0,0,6,0,0,0},
+                    {0,9,0,0,0,0,0,0,1},
+                    {7,0,0,8,4,0,2,0,0},
+            },
+            SudokuDifficulty.MASTER
+    );
+
     @Test
-    void testEasySudoku(){
-        List<Sudoku> listOfEasySudoku = List.of(easySudoku1, easySudoku2);
-        for (Sudoku sudoku : listOfEasySudoku) {
+    void testSudoku(){
+        List<Sudoku> listOfSudoku = List.of(easySudoku1, easySudoku2, mediumSudoku1, hardSudoku1, hardSudoku2, expertSudoku1, masterSudoku1);
+        for (Sudoku sudoku : listOfSudoku) {
+            System.out.printf("Starting solving %s sudoku:%n", sudoku.getDifficulty());
             SudokuService.printSudoku(sudoku.getGrid());
-            while (!checkSolvedSudoku(sudoku)) {
+            int round = 0;
+            while (!checkSolvedSudoku(sudoku) && round<10) {
                 SudokuService.solveWithLastPossibleNumber(sudoku);
-                SudokuService.printSudoku(sudoku.getGrid());
-            }
-            assertTrue(checkSolvedSudoku(sudoku));
-        }
-    }
-
-    @Test
-    void testMediumSudoku(){
-        SudokuService.printSudoku(mediumSudoku1.getGrid());
-        while (!checkSolvedSudoku(mediumSudoku1)) {
-            SudokuService.solveWithLastPossibleNumber(mediumSudoku1);
-            SudokuService.printSudoku(mediumSudoku1.getGrid());
-        }
-        assertTrue(checkSolvedSudoku(mediumSudoku1));
-    }
-
-    @Test
-    void testHardSudoku(){
-        List<Sudoku> listOfHardSudoku = List.of(hardSudoku1, hardSudoku2);
-        for (Sudoku sudoku : listOfHardSudoku) {
-            SudokuService.printSudoku(sudoku.getGrid());
-            while (!checkSolvedSudoku(sudoku)) {
-                solveWithLastPossibleNumber(sudoku);
-                solveWithLastRemainingCell(sudoku);
-                SudokuService.printSudoku(sudoku.getGrid());
-            }
-            assertTrue(checkSolvedSudoku(sudoku));
-        }
-    }
-
-    @Test
-    void testExpertSudoku(){
-        List<Sudoku> listOfHardSudoku = List.of(expertSudoku1);
-        for (Sudoku sudoku : listOfHardSudoku) {
-            SudokuService.printSudoku(sudoku.getGrid());
-            while (!checkSolvedSudoku(sudoku)) {
-                solveWithLastPossibleNumber(sudoku);
-                solveWithLastRemainingCell(sudoku);
+                SudokuService.solveWithLastRemainingCell(sudoku);
+                SudokuService.solveWithObviousPairs(sudoku);
+                System.out.printf("After round %d, the sudoku is as follows:%n",++round);
                 SudokuService.printSudoku(sudoku.getGrid());
             }
             assertTrue(checkSolvedSudoku(sudoku));

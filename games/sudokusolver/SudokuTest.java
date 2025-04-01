@@ -63,6 +63,35 @@ class SudokuTest {
                     {0, 9, 0, 2, 6, 0, 0, 0, 0}},
             SudokuDifficulty.HARD);
 
+    private final Sudoku hardSudoku2 = createSudokuFromGrid(
+            new int[][]{
+                    {0,0,4,6,0,0,0,5,1},
+                    {0,0,7,8,1,0,0,0,0},
+                    {6,0,0,0,0,0,0,0,0},
+                    {0,0,0,0,7,0,9,0,6},
+                    {0,0,0,3,6,0,0,2,8},
+                    {1,9,6,0,0,0,5,0,3},
+                    {3,0,8,4,0,1,0,0,2},
+                    {0,0,0,0,0,0,0,1,0},
+                    {5,6,0,9,0,0,7,0,0}
+            },
+        SudokuDifficulty.HARD);
+
+    private final Sudoku expertSudoku1 = createSudokuFromGrid(
+            new int[][]{
+                    {0,0,3,0,0,7,0,8,0},
+                    {0,8,0,9,0,0,4,0,0},
+                    {0,0,0,6,0,3,0,7,1},
+                    {7,0,0,3,0,0,0,1,0},
+                    {0,4,0,8,0,1,0,6,9},
+                    {0,0,0,0,5,0,0,3,0},
+                    {0,0,0,1,0,0,0,0,6},
+                    {0,0,0,0,0,0,0,0,0},
+                    {0,6,2,0,9,0,0,0,0}
+            },
+            SudokuDifficulty.EXPERT
+    );
+
     @Test
     void testEasySudoku(){
         List<Sudoku> listOfEasySudoku = List.of(easySudoku1, easySudoku2);
@@ -88,12 +117,29 @@ class SudokuTest {
 
     @Test
     void testHardSudoku(){
-        SudokuService.printSudoku(hardSudoku1.getGrid());
-        while (!checkSolvedSudoku(hardSudoku1)) {
-            solveWithLastPossibleNumber(hardSudoku1);
-            solveWithLastRemainingCell(hardSudoku1);
-            SudokuService.printSudoku(hardSudoku1.getGrid());
+        List<Sudoku> listOfHardSudoku = List.of(hardSudoku1, hardSudoku2);
+        for (Sudoku sudoku : listOfHardSudoku) {
+            SudokuService.printSudoku(sudoku.getGrid());
+            while (!checkSolvedSudoku(sudoku)) {
+                solveWithLastPossibleNumber(sudoku);
+                solveWithLastRemainingCell(sudoku);
+                SudokuService.printSudoku(sudoku.getGrid());
+            }
+            assertTrue(checkSolvedSudoku(sudoku));
         }
-        assertTrue(checkSolvedSudoku(hardSudoku1));
+    }
+
+    @Test
+    void testExpertSudoku(){
+        List<Sudoku> listOfHardSudoku = List.of(expertSudoku1);
+        for (Sudoku sudoku : listOfHardSudoku) {
+            SudokuService.printSudoku(sudoku.getGrid());
+            while (!checkSolvedSudoku(sudoku)) {
+                solveWithLastPossibleNumber(sudoku);
+                solveWithLastRemainingCell(sudoku);
+                SudokuService.printSudoku(sudoku.getGrid());
+            }
+            assertTrue(checkSolvedSudoku(sudoku));
+        }
     }
 }

@@ -46,23 +46,26 @@ public class SudokuService {
     }
 
     static Sudoku solveWithLastRemainingCell(Sudoku sudoku){
-        for (List<SudokuCell> submatrix : sudoku.getFlattenedSubmatrices()){
-            for (int number = 1; number <= 9; number++) {
-                List<SudokuCell> possibleCellsForNumber = new ArrayList<>();
-                if (!submatrix.stream().map(SudokuCell::getValue).toList().contains(number)){ // if submatrix does not contain the number
-                    for (SudokuCell cell : submatrix) {
-                        if (cell.getValue() == 0) {
-                            // if the number appears only in a cell, that is the cell in which it has to be inserted
-                            List<Integer> cellPossibleValues = cell.getPossibleValues();
-                            if (cellPossibleValues.contains(number)){
-                                possibleCellsForNumber.add(cell);
+        List<List<List<SudokuCell>>> sudokuPartitions = List.of(sudoku.getGrid(), sudoku.getTransposedGrid(), sudoku.getFlattenedSubmatrices());
+        for (List<List<SudokuCell>> sudokuPartition : sudokuPartitions){
+            for (List<SudokuCell> rowColumnOrSubmatrix : sudokuPartition){
+                for (int number = 1; number <= 9; number++) {
+                    List<SudokuCell> possibleCellsForNumber = new ArrayList<>();
+                    if (!rowColumnOrSubmatrix.stream().map(SudokuCell::getValue).toList().contains(number)){ // if submatrix does not contain the number
+                        for (SudokuCell cell : rowColumnOrSubmatrix) {
+                            if (cell.getValue() == 0) {
+                                // if the number appears only in a cell, that is the cell in which it has to be inserted
+                                List<Integer> cellPossibleValues = cell.getPossibleValues();
+                                if (cellPossibleValues.contains(number)){
+                                    possibleCellsForNumber.add(cell);
+                                }
                             }
                         }
-                    }
-                    if (possibleCellsForNumber.size() == 1){
-                        SudokuCell cellToFill = possibleCellsForNumber.getFirst();
-                        System.out.printf("Solve with last remaining cell: Inserting value %d in position %d,%d %n", number, cellToFill.getRowIndex()+1, cellToFill.getColumnIndex()+1);
-                        updateCellAndSudoku(sudoku, cellToFill, number);
+                        if (possibleCellsForNumber.size() == 1){
+                            SudokuCell cellToFill = possibleCellsForNumber.getFirst();
+                            System.out.printf("Solve with last remaining cell: Inserting value %d in position %d,%d %n", number, cellToFill.getRowIndex()+1, cellToFill.getColumnIndex()+1);
+                            updateCellAndSudoku(sudoku, cellToFill, number);
+                        }
                     }
                 }
             }

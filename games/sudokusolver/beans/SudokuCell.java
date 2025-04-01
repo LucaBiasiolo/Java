@@ -1,4 +1,4 @@
-package games.sudokusolver;
+package games.sudokusolver.beans;
 
 import java.util.List;
 

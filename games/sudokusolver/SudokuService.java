@@ -1,5 +1,9 @@
 package games.sudokusolver;
 
+import games.sudokusolver.beans.Sudoku;
+import games.sudokusolver.beans.SudokuCell;
+import games.sudokusolver.beans.SudokuDifficulty;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -66,7 +70,7 @@ public class SudokuService {
         return sudoku;
     }
 
-    // this method inserts a number in a cell if it is the only possible value
+    // this method inserts a number in a cell if it is the only possible value in the cell's list of possible values
     static Sudoku solveWithLastPossibleNumber(Sudoku sudoku) {
         for (List<SudokuCell> sudokuRow : sudoku.getGrid()) {
             for (SudokuCell cell : sudokuRow) {

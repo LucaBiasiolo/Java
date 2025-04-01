@@ -1,5 +1,8 @@
 package games.sudokusolver;
 
+import games.sudokusolver.beans.Sudoku;
+import games.sudokusolver.beans.SudokuDifficulty;
+
 import static games.sudokusolver.SudokuService.*;
 
 public class SudokuSolver {

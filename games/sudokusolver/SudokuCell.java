@@ -6,6 +6,7 @@ public class SudokuCell {
 
     private int rowIndex;
     private int columnIndex;
+    private int submatrixIndex;
     private int value;
     private List<Integer> possibleValues;
 
@@ -45,5 +46,13 @@ public class SudokuCell {
 
     public void setPossibleValues(List<Integer> possibleValues) {
         this.possibleValues = possibleValues;
+    }
+
+    public int getSubmatrixIndex() {
+        return submatrixIndex;
+    }
+
+    public void setSubmatrixIndex(int submatrixIndex) {
+        this.submatrixIndex = submatrixIndex;
     }
 }

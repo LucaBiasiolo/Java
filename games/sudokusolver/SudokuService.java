@@ -31,6 +31,8 @@ public class SudokuService {
             for(SudokuCell cell : sudokuRow){
                 if (cell.getValue() == 0){
                     List<SudokuCell> cellSubmatrix = findFlattenedSubmatrixFromIndexes(sudoku.getFlattenedSubmatrices(), cell.getRowIndex(), cell.getColumnIndex());
+                    int submatrixIndex = sudoku.getFlattenedSubmatrices().indexOf(cellSubmatrix);
+                    cell.setSubmatrixIndex(submatrixIndex);
                     cell.setPossibleValues(buildCellPossibleValuesList(sudokuRow, sudoku.getTransposedGrid().get(cell.getColumnIndex()), cellSubmatrix));
                 }
             }
@@ -39,11 +41,15 @@ public class SudokuService {
         return sudoku;
     }
 
+    static Sudoku solveWithLastRemainingCell(Sudoku sudoku){
+        return null;
+    }
+
     // this method inserts a number in a cell if it is the only possible value
     static Sudoku solveWithLastPossibleNumber(Sudoku sudoku) {
         // todo: use depth-first-traversal if simpler approaches are not enough
         int roundCounter = 0;
-        while(!checkSolvedSudoku(sudoku)) {
+        while(!checkSolvedSudoku(sudoku) &&roundCounter <10) {
             for (List<SudokuCell> sudokuRow : sudoku.getGrid()) {
                 for (SudokuCell cell : sudokuRow) {
                     if (cell.getValue() == 0) {
@@ -63,7 +69,7 @@ public class SudokuService {
                                     cellInColumn.getPossibleValues().remove(cellPossibleValues.getFirst());
                                 }
                             }
-                            List<SudokuCell> submatrix = findFlattenedSubmatrixFromIndexes(sudoku.getFlattenedSubmatrices(), cell.getRowIndex(), cell.getColumnIndex());
+                            List<SudokuCell> submatrix = sudoku.getFlattenedSubmatrices().get(cell.getSubmatrixIndex());
                             for (SudokuCell cellInSubmatrix : submatrix){
                                 if (cellInSubmatrix.getPossibleValues() != null) {
                                     cellInSubmatrix.getPossibleValues().remove(cellPossibleValues.getFirst());
@@ -71,7 +77,6 @@ public class SudokuService {
                             }
                         } else{
                             // todo: what happens if more values are possible inside the cell?
-                            // last cell possible
                         }
                     }
                 }

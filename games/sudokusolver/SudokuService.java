@@ -56,9 +56,10 @@ public class SudokuService {
                         // found obvious pair, now delete the pair from the other cells of the submatrix
                         List<SudokuCell> otherCells = submatrix.stream().filter(cell ->
                                 cell.getPossibleValues() != null && cell.getPossibleValues().size() > 2).toList();
+                        // fixme: avoid to consider cells that do not have numbers in common with obvious pair
                         for (SudokuCell cell : otherCells) {
                             System.out.printf("Obvious pairs: %s %s %n", cell1, cell2);
-                            System.out.printf("Removing values %s from cell %s %n", cell1.getPossibleValues(), cell);
+                            System.out.printf("Removing values %s from %s %n", cell1.getPossibleValues(), cell);
                             cell.getPossibleValues().removeAll(cell1.getPossibleValues());
                         }
                     }

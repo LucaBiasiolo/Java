@@ -2,6 +2,7 @@ package games.sudokusolver;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import static games.MatrixUtil.transposeMatrix;
@@ -24,6 +25,17 @@ public class SudokuService {
         sudoku.setGrid(grid);
         sudoku.setTransposedGrid(transposeMatrix(grid));
         sudoku.setFlattenedSubmatrices(buildFlattenedSubmatricesFromSudoku(grid));
+
+        // for every cell, build its list of possible values
+        for(List<SudokuCell> sudokuRow : sudoku.getGrid()){
+            for(SudokuCell cell : sudokuRow){
+                if (cell.getValue() == 0){
+                    List<SudokuCell> cellSubmatrix = findFlattenedSubmatrixFromIndexes(sudoku.getFlattenedSubmatrices(), cell.getRowIndex(), cell.getColumnIndex());
+                    cell.setPossibleValues(buildCellPossibleValuesList(sudokuRow, sudoku.getTransposedGrid().get(cell.getColumnIndex()), cellSubmatrix));
+                }
+            }
+        }
+
         return sudoku;
     }
 
@@ -32,28 +44,34 @@ public class SudokuService {
         // todo: use depth-first-traversal if simpler approaches are not enough
         int roundCounter = 0;
         while(!checkSolvedSudoku(sudoku)) {
-            List<List<SudokuCell>> transposedSudoku = sudoku.getTransposedGrid();
             for (List<SudokuCell> sudokuRow : sudoku.getGrid()) {
                 for (SudokuCell cell : sudokuRow) {
                     if (cell.getValue() == 0) {
-                        List<SudokuCell> sudokuColumn = transposedSudoku.get(cell.getColumnIndex());
-                        List<List<SudokuCell>> flattenedSubmatrices = sudoku.getFlattenedSubmatrices();
-                        List<SudokuCell> cellSubmatrix = findFlattenedSubmatrixFromIndexes(flattenedSubmatrices,cell.getRowIndex(),cell.getColumnIndex());
-
-                        List<Integer> cellPossibleValues = buildCellPossibleValuesList(sudokuRow, sudokuColumn, cellSubmatrix);
-                        // If list has just a value than that is the obvious value of the cell
-                        // fixme: transposed grid is not updated as the algorithm progresses
+                        List<Integer> cellPossibleValues = cell.getPossibleValues();
                         if (cellPossibleValues.size() == 1) {
-                            System.out.printf("Inserting value %d in position %d,%d %n", cellPossibleValues.getFirst(), cell.getRowIndex(), cell.getColumnIndex());
-                            // Crea una nuova lista mutabile basata sulla lista immutabile
-                            List<SudokuCell> newSudokuRow = new ArrayList<>(sudoku.getGrid().get(cell.getRowIndex()));
-                            newSudokuRow.set(cell.getColumnIndex(), new SudokuCell(cell.getRowIndex(), cell.getColumnIndex(),
-                                    cellPossibleValues.getFirst()));
-                            sudoku.getGrid().set(cell.getRowIndex(), newSudokuRow);
+                            System.out.printf("Solve with last possible number: Inserting value %d in position %d,%d %n", cellPossibleValues.getFirst(), cell.getRowIndex(), cell.getColumnIndex());
+                            cell.setValue(cellPossibleValues.getFirst());
+                            cell.setPossibleValues(null);
+
+                            for (SudokuCell cellInRow : sudokuRow){
+                                if(cellInRow.getPossibleValues() != null){
+                                   cellInRow.getPossibleValues().remove(cellPossibleValues.getFirst());
+                                }
+                            }
+                            for (SudokuCell cellInColumn : sudoku.getTransposedGrid().get(cell.getColumnIndex())){
+                                if (cellInColumn.getPossibleValues() != null) {
+                                    cellInColumn.getPossibleValues().remove(cellPossibleValues.getFirst());
+                                }
+                            }
+                            List<SudokuCell> submatrix = findFlattenedSubmatrixFromIndexes(sudoku.getFlattenedSubmatrices(), cell.getRowIndex(), cell.getColumnIndex());
+                            for (SudokuCell cellInSubmatrix : submatrix){
+                                if (cellInSubmatrix.getPossibleValues() != null) {
+                                    cellInSubmatrix.getPossibleValues().remove(cellPossibleValues.getFirst());
+                                }
+                            }
                         } else{
                             // todo: what happens if more values are possible inside the cell?
                             // last cell possible
-
                         }
                     }
                 }
@@ -129,7 +147,7 @@ public class SudokuService {
                 !sudokuRow.stream().map(SudokuCell::getValue).toList().contains(possibleNumber) &&
                 !sudokuColumn.stream().map(SudokuCell::getValue).toList().contains(possibleNumber) &&
                 !flattenedSubmatrix.stream().map(SudokuCell::getValue).toList().contains(possibleNumber))
-                .boxed().toList();
+                .boxed().collect(Collectors.toList());
     }
 
     static List<SudokuCell> findFlattenedSubmatrixFromIndexes(List<List<SudokuCell>> flattenedSubmatrices, int rowIndex, int columnIndex){

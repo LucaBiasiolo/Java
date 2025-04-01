@@ -42,50 +42,66 @@ public class SudokuService {
     }
 
     static Sudoku solveWithLastRemainingCell(Sudoku sudoku){
-        return null;
+        for (List<SudokuCell> submatrix : sudoku.getFlattenedSubmatrices()){
+            for (int number = 1; number <= 9; number++) {
+                List<SudokuCell> possibleCellsForNumber = new ArrayList<>();
+                if (!submatrix.stream().map(SudokuCell::getValue).toList().contains(number)){ // if submatrix does not contain the number
+                    for (SudokuCell cell : submatrix) {
+                        if (cell.getValue() == 0) {
+                            // if the number appears only in a cell, that is the cell in which it has to be inserted
+                            List<Integer> cellPossibleValues = cell.getPossibleValues();
+                            if (cellPossibleValues.contains(number)){
+                                possibleCellsForNumber.add(cell);
+                            }
+                        }
+                    }
+                    if (possibleCellsForNumber.size() == 1){
+                        SudokuCell cellToFill = possibleCellsForNumber.getFirst();
+                        System.out.printf("Solve with last remaining cell: Inserting value %d in position %d,%d %n", number, cellToFill.getRowIndex()+1, cellToFill.getColumnIndex()+1);
+                        updateCellAndSudoku(sudoku, cellToFill, number);
+                    }
+                }
+            }
+        }
+        return sudoku;
     }
 
     // this method inserts a number in a cell if it is the only possible value
     static Sudoku solveWithLastPossibleNumber(Sudoku sudoku) {
-        // todo: use depth-first-traversal if simpler approaches are not enough
-        int roundCounter = 0;
-        while(!checkSolvedSudoku(sudoku) &&roundCounter <10) {
-            for (List<SudokuCell> sudokuRow : sudoku.getGrid()) {
-                for (SudokuCell cell : sudokuRow) {
-                    if (cell.getValue() == 0) {
-                        List<Integer> cellPossibleValues = cell.getPossibleValues();
-                        if (cellPossibleValues.size() == 1) {
-                            System.out.printf("Solve with last possible number: Inserting value %d in position %d,%d %n", cellPossibleValues.getFirst(), cell.getRowIndex(), cell.getColumnIndex());
-                            cell.setValue(cellPossibleValues.getFirst());
-                            cell.setPossibleValues(null);
-
-                            for (SudokuCell cellInRow : sudokuRow){
-                                if(cellInRow.getPossibleValues() != null){
-                                   cellInRow.getPossibleValues().remove(cellPossibleValues.getFirst());
-                                }
-                            }
-                            for (SudokuCell cellInColumn : sudoku.getTransposedGrid().get(cell.getColumnIndex())){
-                                if (cellInColumn.getPossibleValues() != null) {
-                                    cellInColumn.getPossibleValues().remove(cellPossibleValues.getFirst());
-                                }
-                            }
-                            List<SudokuCell> submatrix = sudoku.getFlattenedSubmatrices().get(cell.getSubmatrixIndex());
-                            for (SudokuCell cellInSubmatrix : submatrix){
-                                if (cellInSubmatrix.getPossibleValues() != null) {
-                                    cellInSubmatrix.getPossibleValues().remove(cellPossibleValues.getFirst());
-                                }
-                            }
-                        } else{
-                            // todo: what happens if more values are possible inside the cell?
-                        }
+        for (List<SudokuCell> sudokuRow : sudoku.getGrid()) {
+            for (SudokuCell cell : sudokuRow) {
+                if (cell.getValue() == 0) {
+                    List<Integer> cellPossibleValues = cell.getPossibleValues();
+                    if (cellPossibleValues.size() == 1) {
+                        System.out.printf("Solve with last possible number: Inserting value %d in position %d,%d %n", cellPossibleValues.getFirst()+1, cell.getRowIndex(), cell.getColumnIndex()+1);
+                        updateCellAndSudoku(sudoku, cell, cellPossibleValues.getFirst());
                     }
                 }
             }
-            System.out.printf("End of round %d, the sudoku is as follows%n", roundCounter);
-            printSudoku(sudoku.getGrid());
-            roundCounter++;
         }
         return sudoku;
+    }
+
+    private static void updateCellAndSudoku(Sudoku sudoku, SudokuCell cell, Integer valueToInsert) {
+        cell.setValue(valueToInsert);
+        cell.setPossibleValues(null);
+
+        for (SudokuCell cellInRow : sudoku.getGrid().get(cell.getRowIndex())){
+            if(cellInRow.getPossibleValues() != null){
+               cellInRow.getPossibleValues().remove(valueToInsert);
+            }
+        }
+        for (SudokuCell cellInColumn : sudoku.getTransposedGrid().get(cell.getColumnIndex())){
+            if (cellInColumn.getPossibleValues() != null) {
+                cellInColumn.getPossibleValues().remove(valueToInsert);
+            }
+        }
+        List<SudokuCell> submatrix = sudoku.getFlattenedSubmatrices().get(cell.getSubmatrixIndex());
+        for (SudokuCell cellInSubmatrix : submatrix){
+            if (cellInSubmatrix.getPossibleValues() != null) {
+                cellInSubmatrix.getPossibleValues().remove(valueToInsert);
+            }
+        }
     }
 
     static boolean checkSolvedSudoku(Sudoku sudoku){

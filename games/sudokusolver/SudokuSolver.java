@@ -47,7 +47,14 @@ public class SudokuSolver {
     public static void main(String[] args) {
         System.out.println("Welcome to Java Sudoku Solver");
         System.out.println("You inputted the sudoku: ");
-        SudokuService.printSudoku(easySudoku.getGrid());
-        SudokuService.printSudoku(solveWithLastPossibleNumber(easySudoku).getGrid());
+        SudokuService.printSudoku(hardSudoku.getGrid());
+
+        int round = 0;
+        while (!checkSolvedSudoku(hardSudoku) && round < 5) {
+            solveWithLastPossibleNumber(hardSudoku);
+            solveWithLastRemainingCell(hardSudoku);
+            System.out.printf("End of round %d, the sudoku is as follows:%n", ++round);
+            SudokuService.printSudoku(hardSudoku.getGrid());
+        }
     }
 }

@@ -5,7 +5,7 @@ import java.util.List;
 public class Sudoku {
 
     private List<List<SudokuCell>> grid;
-    private List<List<SudokuCell>> flattenedSubmatrices;
+    private List<List<SudokuCell>> blocks;
     private List<List<SudokuCell>> transposedGrid;
     private SudokuDifficulty difficulty;
 
@@ -19,12 +19,12 @@ public class Sudoku {
         this.grid = grid;
     }
 
-    public List<List<SudokuCell>> getFlattenedSubmatrices() {
-        return flattenedSubmatrices;
+    public List<List<SudokuCell>> getBlocks() {
+        return blocks;
     }
 
-    public void setFlattenedSubmatrices(List<List<SudokuCell>> flattenedSubmatrices) {
-        this.flattenedSubmatrices = flattenedSubmatrices;
+    public void setBlocks(List<List<SudokuCell>> blocks) {
+        this.blocks = blocks;
     }
 
     public List<List<SudokuCell>> getTransposedGrid() {

@@ -5,6 +5,7 @@ import games.sudokusolver.beans.SudokuCell;
 import games.sudokusolver.beans.SudokuDifficulty;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -49,23 +50,23 @@ public class SudokuService {
             List<SudokuCell> cellsWith2PossibleValues = submatrix.stream().filter(cell ->
                     cell.getPossibleValues() != null && cell.getPossibleValues().size() == 2).toList();
 
-            // fixme: delete duplicate passages
-            for(SudokuCell cell1 : cellsWith2PossibleValues){
-                for(SudokuCell cell2 : cellsWith2PossibleValues){
-                    if(!cell1.equals(cell2) && cell1.getPossibleValues().containsAll(cell2.getPossibleValues()) && cell2.getPossibleValues().containsAll(cell2.getPossibleValues())){
+            for (int i = 0; i < cellsWith2PossibleValues.size(); i++) {
+                for (int j = i+1; j < cellsWith2PossibleValues.size(); j++) {
+                    SudokuCell cell1 = cellsWith2PossibleValues.get(i);
+                    SudokuCell cell2 = cellsWith2PossibleValues.get(j);
+                    if(cell1.getPossibleValues().containsAll(cell2.getPossibleValues()) && cell2.getPossibleValues().containsAll(cell1.getPossibleValues())) {
                         // found obvious pair, now delete the pair from the other cells of the submatrix
                         List<SudokuCell> otherCells = submatrix.stream().filter(cell ->
                                 cell.getPossibleValues() != null && cell.getPossibleValues().size() > 2).toList();
                         // fixme: avoid to consider cells that do not have numbers in common with obvious pair
                         for (SudokuCell cell : otherCells) {
                             System.out.printf("Obvious pairs: %s %s %n", cell1, cell2);
-                            System.out.printf("Removing values %s from %s %n", cell1.getPossibleValues(), cell);
+                            System.out.printf("Removing possible values %s from %s %n", cell1.getPossibleValues(), cell);
                             cell.getPossibleValues().removeAll(cell1.getPossibleValues());
                         }
                     }
                 }
             }
-
         }
     }
 

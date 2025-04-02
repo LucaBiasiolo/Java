@@ -122,22 +122,55 @@ class SudokuTest {
             SudokuDifficulty.EXTREME
     );
 
+    private final Sudoku extremeSudok2 = createSudokuFromGrid(
+      new int[][]{
+              {0,0,5,0,0,0,0,0,0},
+              {6,0,0,3,4,0,1,0,0},
+              {0,0,1,0,6,0,2,0,0},
+              {3,0,4,9,2,0,0,0,0},
+              {0,0,0,0,0,0,0,0,9},
+              {0,0,0,0,0,0,5,0,6},
+              {4,0,0,6,8,0,0,0,0},
+              {1,2,0,0,0,4,9,0,0},
+              {0,8,0,0,0,0,0,7,0},
+      },
+      SudokuDifficulty.EXTREME
+    );
+
     @Test
     void testSudoku(){
         List<Sudoku> listOfSudoku = List.of(easySudoku1, easySudoku2, mediumSudoku1, hardSudoku1, hardSudoku2, expertSudoku1, masterSudoku1);
         for (Sudoku sudoku : listOfSudoku) {
             System.out.printf("Starting solving %s sudoku:%n", sudoku.getDifficulty());
-            SudokuService.printSudoku(sudoku.getGrid());
+            printSudoku(sudoku.getGrid());
             int round = 0;
             while (!checkSolvedSudoku(sudoku) && round<10) {
-                SudokuService.solveWithLastPossibleNumber(sudoku);
-                SudokuService.solveWithLastRemainingCell(sudoku);
-                SudokuService.solveWithObviousPairs(sudoku);
-                SudokuService.solveWithHiddenSingles(sudoku);
+                solveWithLastPossibleNumber(sudoku);
+                solveWithLastRemainingCell(sudoku);
+                solveWithObviousPairs(sudoku);
+                solveWithHiddenSingles(sudoku);
                 //SudokuService.solveWithHiddenPairs(sudoku);
                 System.out.printf("After round %d, the sudoku is as follows:%n",++round);
-                SudokuService.printSudoku(sudoku.getGrid());
+                printSudoku(sudoku.getGrid());
             }
+            assertTrue(checkSolvedSudoku(sudoku));
+        }
+    }
+
+    @Test
+    void testBruteForceMethod(){
+        List<Sudoku> listOfSudoku = List.of(easySudoku1, easySudoku2, mediumSudoku1, hardSudoku1, hardSudoku2, expertSudoku1,
+                masterSudoku1, extremeSudoku1, extremeSudok2);
+        for (Sudoku sudoku : listOfSudoku) {
+            System.out.printf("Starting solving %s sudoku:%n", sudoku.getDifficulty());
+            printSudoku(sudoku.getGrid());
+            int[] numberOfInsertions = {0};
+            int[] numberOfReset = {0};
+            solveWithBruteForce(sudoku, numberOfInsertions, numberOfReset);
+            System.out.printf("Sudoku solved after %d insertions and %d resets %n", numberOfInsertions[0], numberOfReset[0]);
+            System.out.println("Solution:");
+            printSudoku(sudoku.getGrid());
+
             assertTrue(checkSolvedSudoku(sudoku));
         }
     }

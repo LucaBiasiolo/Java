@@ -4,9 +4,7 @@ import games.sudokusolver.beans.Sudoku;
 import games.sudokusolver.beans.SudokuCell;
 import games.sudokusolver.beans.SudokuDifficulty;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -43,6 +41,38 @@ public class SudokuService {
             }
         }
         return sudoku;
+    }
+
+    static boolean solveWithBruteForce(Sudoku sudoku, int[] numberOfInsertions, int[] numberOfReset){
+        for(List<SudokuCell> sudokuRow : sudoku.getGrid()){
+            for(SudokuCell cell : sudokuRow){
+                if (cell.getValue() == 0){ //find first zero-valued cell
+                    if(cell.getPossibleValues() != null) {
+                        for (int possibleValue =1;possibleValue<=9; possibleValue++) { //for every possible value
+                            if(valueIsValid(sudoku, cell, possibleValue)) { // if value is valid
+                                cell.setValue(possibleValue); // set value
+                                numberOfInsertions[0]++;
+                                if (solveWithBruteForce(sudoku, numberOfInsertions, numberOfReset)) { // pass to next zero-valued cell
+                                    return true;
+                                }
+                                cell.setValue(0); // reset to zero
+                                numberOfReset[0]++;
+                            }
+                        }
+                        return false; // if no value is possible -> backtrack
+                    }
+                }
+            }
+        }
+        return true; // if sudoku is solved
+    }
+
+    private static boolean valueIsValid(Sudoku sudoku, SudokuCell cell, int possibleValue) {
+        List<Integer> sudokuRow = sudoku.getGrid().get(cell.getRowIndex()).stream().map(SudokuCell::getValue).toList();
+        List<Integer> sudokuColumn = sudoku.getTransposedGrid().get(cell.getColumnIndex()).stream().map(SudokuCell::getValue).toList();
+        List<Integer> block = sudoku.getBlocks().get(cell.getBlockIndex()).stream().map(SudokuCell::getValue).toList();
+
+        return !sudokuRow.contains(possibleValue) && !sudokuColumn.contains(possibleValue) && !block.contains(possibleValue);
     }
 
     static void solveWithHiddenSingles(Sudoku sudoku){

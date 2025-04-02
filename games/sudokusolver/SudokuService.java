@@ -51,25 +51,29 @@ public class SudokuService {
         for(List<List<SudokuCell>> partitions : getSudokuPartitions(sudoku)){
             for(List<SudokuCell> rowColumnOrBlock : partitions){
                 for (int number = 1; number <= 9 ; number++) {
-                    List<SudokuCell> possibleCellsForNumber = new ArrayList<>();
-                    if (!rowColumnOrBlock.stream().map(SudokuCell::getValue).toList().contains(number)){
-                        for (SudokuCell cell : rowColumnOrBlock) {
-                            if (cell.getValue() == 0) {
-                                // if the number appears only in a cell, that is the cell in which it has to be inserted
-                                List<Integer> cellPossibleValues = cell.getPossibleValues();
-                                if (cellPossibleValues.contains(number)){
-                                    possibleCellsForNumber.add(cell);
-                                }
-                            }
-                        }
-                        if (possibleCellsForNumber.size() == 1){
-                            System.out.printf("Found hidden single: inserting number %d in position %s %n", number, possibleCellsForNumber.getFirst());
-                            updateCellAndSudoku(sudoku, possibleCellsForNumber.getFirst(), number);
-                        }
+                    List<SudokuCell> possibleCellsForNumber = getPossibleCellsForNumber(rowColumnOrBlock, number);
+                    if (possibleCellsForNumber.size() == 1){
+                        System.out.printf("Found hidden single: inserting number %d in position %s %n", number, possibleCellsForNumber.getFirst());
+                        updateCellAndSudoku(sudoku, possibleCellsForNumber.getFirst(), number);
                     }
                 }
             }
         }
+    }
+
+    private static List<SudokuCell> getPossibleCellsForNumber(List<SudokuCell> rowColumnOrBlock, int number) {
+        List<SudokuCell> possibleCellsForNumber = new ArrayList<>();
+        if (!rowColumnOrBlock.stream().map(SudokuCell::getValue).toList().contains(number)){
+            for (SudokuCell cell : rowColumnOrBlock) {
+                if (cell.getValue() == 0) {
+                    List<Integer> cellPossibleValues = cell.getPossibleValues();
+                    if (cellPossibleValues.contains(number)){
+                        possibleCellsForNumber.add(cell);
+                    }
+                }
+            }
+        }
+        return possibleCellsForNumber;
     }
 
     static void solveWithHiddenPairs(Sudoku sudoku){
@@ -87,9 +91,9 @@ public class SudokuService {
                             }
                         }
                     }
-                    if (possibleCellsForNumber.size() == 2){
-                        mapNumberToPossibleCells.put(number, possibleCellsForNumber);
-                    }
+                }
+                if (possibleCellsForNumber.size() == 2){
+                    mapNumberToPossibleCells.put(number, possibleCellsForNumber);
                 }
             }
 

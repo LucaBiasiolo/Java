@@ -107,6 +107,21 @@ class SudokuTest {
             SudokuDifficulty.MASTER
     );
 
+    private final Sudoku extremeSudoku1 = createSudokuFromGrid(
+            new int[][]{
+                    {1,0,8,9,0,6,0,0,0},
+                    {9,0,3,0,0,0,7,0,0},
+                    {0,5,2,0,7,0,0,0,0},
+                    {0,0,0,5,0,0,0,0,3},
+                    {0,1,0,0,4,0,6,0,0},
+                    {0,0,0,1,0,7,0,5,4},
+                    {8,0,0,0,3,0,1,6,0},
+                    {4,0,0,0,0,9,0,0,0},
+                    {0,3,1,0,0,0,0,0,9},
+            },
+            SudokuDifficulty.EXTREME
+    );
+
     @Test
     void testSudoku(){
         List<Sudoku> listOfSudoku = List.of(easySudoku1, easySudoku2, mediumSudoku1, hardSudoku1, hardSudoku2, expertSudoku1, masterSudoku1);
@@ -118,6 +133,7 @@ class SudokuTest {
                 SudokuService.solveWithLastPossibleNumber(sudoku);
                 SudokuService.solveWithLastRemainingCell(sudoku);
                 SudokuService.solveWithObviousPairs(sudoku);
+                //SudokuService.solveWithHiddenPairs(sudoku);
                 System.out.printf("After round %d, the sudoku is as follows:%n",++round);
                 SudokuService.printSudoku(sudoku.getGrid());
             }

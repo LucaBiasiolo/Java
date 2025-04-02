@@ -45,6 +45,45 @@ public class SudokuService {
         return sudoku;
     }
 
+    static void solveWithHiddenPairs(Sudoku sudoku){
+        for(List<SudokuCell> submatrix : sudoku.getFlattenedSubmatrices()){
+            HashMap<Integer, List<SudokuCell>> mapNumberToPossibleCells = new HashMap<>();
+            for (int number = 1; number <= 9 ; number++) {
+                List<SudokuCell> possibleCellsForNumber = new ArrayList<>();
+                if (!submatrix.stream().map(SudokuCell::getValue).toList().contains(number)){
+                    for (SudokuCell cell : submatrix) {
+                        if (cell.getValue() == 0) {
+                            // if the number appears only in a cell, that is the cell in which it has to be inserted
+                            List<Integer> cellPossibleValues = cell.getPossibleValues();
+                            if (cellPossibleValues.contains(number) && cellPossibleValues.size() >2){
+                                possibleCellsForNumber.add(cell);
+                            }
+                        }
+                    }
+                    if (possibleCellsForNumber.size() == 2){
+                        mapNumberToPossibleCells.put(number, possibleCellsForNumber);
+                    }
+                }
+            }
+
+            //fixme: eliminate duplicate passages
+            //fixme: exclude case of two cells with 3 possible identical numbers (es. (1,3,7) , (1,3,7)
+            for(Integer number1 : mapNumberToPossibleCells.keySet()){
+                for(Integer number2 : mapNumberToPossibleCells.keySet()){
+                    if(!number1.equals(number2) && mapNumberToPossibleCells.get(number1).equals(mapNumberToPossibleCells.get(number2))){
+                        // found hidden pair: i can delete other numbers in notes
+                        System.out.printf("Found hidden pair: numbers %d and %d appear only in cells %s %n",number1, number2, mapNumberToPossibleCells.get(number1));
+                        System.out.println("Delete other possible numbers from the cells");
+                        for (SudokuCell cell : mapNumberToPossibleCells.get(number1)){
+                            cell.getPossibleValues().removeIf(value -> !value.equals(number1) && !value.equals(number2));
+                        }
+                    }
+                }
+            }
+
+        }
+    }
+
     static void solveWithObviousPairs(Sudoku sudoku){
         for(List<SudokuCell> submatrix : sudoku.getFlattenedSubmatrices()){
             List<SudokuCell> cellsWith2PossibleValues = submatrix.stream().filter(cell ->

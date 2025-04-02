@@ -137,6 +137,21 @@ class SudokuTest {
       SudokuDifficulty.EXTREME
     );
 
+    private final Sudoku degenerateSudoku = createSudokuFromGrid(
+            new int[][]{
+                    {0,0,0,0,0,0,0,0,0},
+                    {0,0,0,0,0,0,0,0,0},
+                    {0,0,0,0,0,0,0,0,0},
+                    {0,0,0,0,0,0,0,0,0},
+                    {0,0,0,0,0,0,0,0,0},
+                    {0,0,0,0,0,0,0,0,0},
+                    {0,0,0,0,0,0,0,0,0},
+                    {0,0,0,0,0,0,0,0,0},
+                    {0,0,0,0,0,0,0,0,0},
+            },
+            SudokuDifficulty.EXTREME
+    );
+
     @Test
     void testSudoku(){
         List<Sudoku> listOfSudoku = List.of(easySudoku1, easySudoku2, mediumSudoku1, hardSudoku1, hardSudoku2, expertSudoku1, masterSudoku1);
@@ -160,7 +175,7 @@ class SudokuTest {
     @Test
     void testBruteForceMethod(){
         List<Sudoku> listOfSudoku = List.of(easySudoku1, easySudoku2, mediumSudoku1, hardSudoku1, hardSudoku2, expertSudoku1,
-                masterSudoku1, extremeSudoku1, extremeSudok2);
+                masterSudoku1, extremeSudoku1, extremeSudok2, degenerateSudoku);
         for (Sudoku sudoku : listOfSudoku) {
             System.out.printf("Starting solving %s sudoku:%n", sudoku.getDifficulty());
             printSudoku(sudoku.getGrid());

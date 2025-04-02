@@ -45,6 +45,33 @@ public class SudokuService {
         return sudoku;
     }
 
+    static void solveWithHiddenSingles(Sudoku sudoku){
+        // for every possible number, build the list of cells in which the number may be inserted.
+        // If this list is just of 1 cell, insert the number in that cell
+        for(List<List<SudokuCell>> partitions : getSudokuPartitions(sudoku)){
+            for(List<SudokuCell> rowColumnOrBlock : partitions){
+                for (int number = 1; number <= 9 ; number++) {
+                    List<SudokuCell> possibleCellsForNumber = new ArrayList<>();
+                    if (!rowColumnOrBlock.stream().map(SudokuCell::getValue).toList().contains(number)){
+                        for (SudokuCell cell : rowColumnOrBlock) {
+                            if (cell.getValue() == 0) {
+                                // if the number appears only in a cell, that is the cell in which it has to be inserted
+                                List<Integer> cellPossibleValues = cell.getPossibleValues();
+                                if (cellPossibleValues.contains(number)){
+                                    possibleCellsForNumber.add(cell);
+                                }
+                            }
+                        }
+                        if (possibleCellsForNumber.size() == 1){
+                            System.out.printf("Found hidden single: inserting number %d in position %s %n", number, possibleCellsForNumber.getFirst());
+                            updateCellAndSudoku(sudoku, possibleCellsForNumber.getFirst(), number);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     static void solveWithHiddenPairs(Sudoku sudoku){
         for(List<SudokuCell> block : sudoku.getBlocks()){
             HashMap<Integer, List<SudokuCell>> mapNumberToPossibleCells = new HashMap<>();

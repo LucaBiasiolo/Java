@@ -133,6 +133,7 @@ class SudokuTest {
                 SudokuService.solveWithLastPossibleNumber(sudoku);
                 SudokuService.solveWithLastRemainingCell(sudoku);
                 SudokuService.solveWithObviousPairs(sudoku);
+                SudokuService.solveWithHiddenSingles(sudoku);
                 //SudokuService.solveWithHiddenPairs(sudoku);
                 System.out.printf("After round %d, the sudoku is as follows:%n",++round);
                 SudokuService.printSudoku(sudoku.getGrid());

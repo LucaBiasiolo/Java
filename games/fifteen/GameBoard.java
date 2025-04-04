@@ -39,10 +39,18 @@ public class GameBoard {
         }
     }
 
-    public boolean movementPossible(MoveDirection direction){
-        List<List<Integer>> transposedGrid = transposeMatrix(grid);
-        int rowIndexOfZeroCell = grid.indexOf(grid.stream().filter(row -> row.contains(0)).toList());
-        int columnIndexOfZeroCell = transposedGrid.indexOf(transposedGrid.stream().filter(row -> row.contains(0)).toList());
+    public boolean isMovementPossible(MoveDirection direction){
+        int rowIndexOfZeroCell = -1;
+        int columnIndexOfZeroCell = -1;
+        for(int i =0; i<grid.size();i++){
+            List<Integer> row = grid.get(i);
+            for (int j = 0; j < row.size(); j++) {
+                if (row.get(j) == 0){
+                    rowIndexOfZeroCell = i;
+                    columnIndexOfZeroCell = j;
+                }
+            }
+        }
         return switch (direction) {
             case UP -> rowIndexOfZeroCell != 3; // if null cell is not on the last row
             case DOWN -> rowIndexOfZeroCell != 0; // if null cell is not on the first row

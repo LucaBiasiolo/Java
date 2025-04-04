@@ -105,7 +105,7 @@ public class GameOfFifteen {
         };
     }
 
-    public void print() {
+    public void printGameBoard() {
         StringBuilder printableGameBoard = new StringBuilder();
         for (List<Integer> row : grid) {
             for (Integer number : row) {
@@ -132,26 +132,40 @@ public class GameOfFifteen {
     public void play(){
         System.out.println("Welcome to Java Game of 15!");
         System.out.println("Please make your moves using keys w,a,s,d on the keyboard");
-        System.out.println("This is the starting configuration of the board");
-        print();
-        while(!isGameEnded()){
-            Scanner scanner = new Scanner(System.in);
-            String userMove = scanner.nextLine();
-            Pattern pattern = Pattern.compile("[wasd]");
-            Matcher matcher = pattern.matcher(userMove);
-            MoveDirection direction = null;
-            if(matcher.matches()){
-                direction = switch (userMove) {
-                    case "w" -> MoveDirection.UP;
-                    case "a" -> MoveDirection.LEFT;
-                    case "s" -> MoveDirection.DOWN;
-                    case "d" -> MoveDirection.RIGHT;
-                    default -> direction;
-                };
+        while(true) { // loop to play games
+            System.out.println("This is the starting configuration of the board");
+            printGameBoard();
+            while (!isGameEnded()) { // loop for user moves
+                Scanner scanner = new Scanner(System.in);
+                String userMove = scanner.nextLine();
+                Pattern pattern = Pattern.compile("[wasd]");
+                Matcher matcher = pattern.matcher(userMove);
+                MoveDirection direction = null;
+                if (matcher.matches()) {
+                    direction = switch (userMove) {
+                        case "w" -> MoveDirection.UP;
+                        case "a" -> MoveDirection.LEFT;
+                        case "s" -> MoveDirection.DOWN;
+                        case "d" -> MoveDirection.RIGHT;
+                        default -> direction;
+                    };
+                }
+                if (direction != null) {
+                    move(direction);
+                    printGameBoard();
+                }
             }
-            if(direction != null){
-                move(direction);
-                print();
+            System.out.println("You finished the game! Do you want to play again? y/n: ");
+            Scanner scanner = new Scanner(System.in);
+            String userContinue = scanner.nextLine().toLowerCase();
+            while (!userContinue.equals("n") && !userContinue.equals("y")) {
+                System.out.println("Please insert y to continue or n to exit the program");
+                userContinue = scanner.nextLine();
+            }
+            if (userContinue.equals("n")) {
+                System.out.println("Bye!");
+                scanner.close();
+                break;
             }
         }
     }

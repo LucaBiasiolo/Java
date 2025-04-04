@@ -3,6 +3,9 @@ package games.fifteen;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class GameOfFifteen {
 
@@ -10,6 +13,7 @@ public class GameOfFifteen {
 
     public GameOfFifteen() {
         this.grid = new ArrayList<>(4);
+        populateGrid();
     }
 
     public List<List<Integer>> getGrid() {
@@ -68,6 +72,8 @@ public class GameOfFifteen {
             };
             grid.get(zeroCellRowIndex).set(zeroCellColumnIndex, numberToSwitch);
             grid.get(numberToSwitchCoordinates.get(0)).set(numberToSwitchCoordinates.get(1), 0);;
+        } else{
+            System.out.printf("Movement in direction %s not possible %n", direction);
         }
     }
 
@@ -103,7 +109,9 @@ public class GameOfFifteen {
         StringBuilder printableGameBoard = new StringBuilder();
         for (List<Integer> row : grid) {
             for (Integer number : row) {
-                if (number < 10) {
+                if (number == 0){
+                    printableGameBoard.append("|    ");
+                } else if (number < 10) {
                     printableGameBoard.append("| ").append(number).append("  ");
                 } else{
                     printableGameBoard.append("| ").append(number).append(" ");
@@ -113,5 +121,38 @@ public class GameOfFifteen {
             printableGameBoard.append("---------------------\n");
         }
         System.out.println(printableGameBoard);
+    }
+
+    public boolean isGameEnded(){
+        // check if board has numbers from 1 to 15 in line starting from the top-left corner
+        List<List<Integer>> finalGrid = List.of(List.of(1,2,3,4),List.of(5,6,7,8),List.of(9,10,11,12), List.of(13,14,15,0));
+        return grid.equals(finalGrid);
+    }
+
+    public void play(){
+        System.out.println("Welcome to Java Game of 15!");
+        System.out.println("Please make your moves using keys w,a,s,d on the keyboard");
+        System.out.println("This is the starting configuration of the board");
+        print();
+        while(!isGameEnded()){
+            Scanner scanner = new Scanner(System.in);
+            String userMove = scanner.nextLine();
+            Pattern pattern = Pattern.compile("[wasd]");
+            Matcher matcher = pattern.matcher(userMove);
+            MoveDirection direction = null;
+            if(matcher.matches()){
+                direction = switch (userMove) {
+                    case "w" -> MoveDirection.UP;
+                    case "a" -> MoveDirection.LEFT;
+                    case "s" -> MoveDirection.DOWN;
+                    case "d" -> MoveDirection.RIGHT;
+                    default -> direction;
+                };
+            }
+            if(direction != null){
+                move(direction);
+                print();
+            }
+        }
     }
 }

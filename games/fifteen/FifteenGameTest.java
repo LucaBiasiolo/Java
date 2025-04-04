@@ -43,4 +43,9 @@ public class FifteenGameTest {
             gameBoard.print();
         }
     }
+
+    public static void main(String[] args){
+        GameOfFifteen gameOfFifteen = new GameOfFifteen();
+        gameOfFifteen.play();
+    }
 }

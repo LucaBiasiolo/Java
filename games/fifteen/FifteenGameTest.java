@@ -9,11 +9,11 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class FifteenGameTest {
 
-    private static GameBoard gameBoard;
+    private static GameOfFifteen gameBoard;
 
     @BeforeAll
     public static void createGrid(){
-        gameBoard = new GameBoard();
+        gameBoard = new GameOfFifteen();
         gameBoard.populateGrid();
     }
 
@@ -28,9 +28,19 @@ public class FifteenGameTest {
     }
 
     @Test
-    public void moveTest(){
+    public void isMovementPossibleTest(){
         for (MoveDirection direction : List.of(MoveDirection.UP, MoveDirection.DOWN, MoveDirection.LEFT, MoveDirection.RIGHT)) {
             System.out.printf("Movement in direction %s : %s %n", direction, gameBoard.isMovementPossible(direction));
+        }
+    }
+
+    @Test
+    public void moveTest(){
+        gameBoard.print();
+        for (MoveDirection direction : List.of(MoveDirection.UP, MoveDirection.DOWN, MoveDirection.LEFT, MoveDirection.RIGHT)) {
+            System.out.printf("Movement in direction %s %n", direction);
+            gameBoard.move(direction);
+            gameBoard.print();
         }
     }
 }

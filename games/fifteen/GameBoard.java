@@ -42,12 +42,14 @@ public class GameBoard {
     public boolean isMovementPossible(MoveDirection direction){
         int rowIndexOfZeroCell = -1;
         int columnIndexOfZeroCell = -1;
+        outerLoop:
         for(int i =0; i<grid.size();i++){
             List<Integer> row = grid.get(i);
             for (int j = 0; j < row.size(); j++) {
                 if (row.get(j) == 0){
                     rowIndexOfZeroCell = i;
                     columnIndexOfZeroCell = j;
+                    break outerLoop;
                 }
             }
         }

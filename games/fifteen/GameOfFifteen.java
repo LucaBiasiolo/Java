@@ -4,11 +4,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -139,42 +135,39 @@ public class GameOfFifteen {
         System.out.println("Please make your moves using keys w,a,s,d");
         System.out.println("Press c to exit the game, S to save the game and l to load the previous game");
         while(true) { // loop to play games
-            System.out.println("This is the starting configuration of the board");
+            System.out.println("This is the starting configuration of the board:");
             printGameBoard();
             userMovesLoop:
             while (!isGameEnded()) { // loop for user moves
                 Scanner scanner = new Scanner(System.in);
                 String userInput = scanner.nextLine();
-                Pattern pattern = Pattern.compile("[wasdc]");
+                Pattern pattern = Pattern.compile("[wasdcSl]");
                 Matcher matcher = pattern.matcher(userInput);
                 MoveDirection direction = null;
                 if (matcher.matches()) {
                     switch (userInput) {
-                        case "w":{
+                        case "w":
                             direction = MoveDirection.UP;
                             break;
-                        }
-                        case "a":{
+                        case "a":
                             direction = MoveDirection.LEFT;
                             break;
-                        }
-                        case "s":{
+                        case "s":
                             direction = MoveDirection.DOWN;
                             break;
-                        }
-                        case "d":{
+                        case "d":
                             direction = MoveDirection.RIGHT;
                             break;
-                        }
-                        case "c":{
+                        case "c":
                             break userMovesLoop;
-                        }
-                        case "S": {
+                        case "S":
                             saveGame();
-                        }
-                        case "l":{
+                            break;
+                        case "l":
                             loadGame();
-                        }
+                            System.out.println("This is the loaded game:");
+                            printGameBoard();
+                            break;
                     }
                 }
                 if (direction != null) {
@@ -198,9 +191,9 @@ public class GameOfFifteen {
     }
 
     void loadGame() {
-        // load previous game from file
         try{
-            String gameString = Files.readString(Path.of("./games/fifteen/gameOfFifteen.csv"));
+            File savedGame = new File("./games/fifteen/gameOfFifteen.csv");
+            String gameString = Files.readString(savedGame.toPath());
             String[] gridNumbers = gameString.split(",");
             List<List<Integer>> newGrid = new ArrayList<>(4);
             int index = 0;
@@ -211,11 +204,12 @@ public class GameOfFifteen {
                 }
             }
             this.grid = newGrid;
+            System.out.println("Loaded previous game from date");
+            System.out.println(new Date(savedGame.lastModified()));
         } catch (IOException exception){
             System.err.println("Error during loadGame operation");
             exception.printStackTrace();
         }
-
     }
 
     void saveGame() {
@@ -228,6 +222,7 @@ public class GameOfFifteen {
                 }
             }
             fileWriter.write(stringBuilder.toString());
+            System.out.println("Game was saved successfully");
         } catch (IOException exception){
             System.err.println("Error during saveGame operation");
             exception.printStackTrace();

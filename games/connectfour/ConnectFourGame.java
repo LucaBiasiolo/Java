@@ -7,13 +7,23 @@ import java.util.regex.Pattern;
 
 import static games.MatrixUtil.*;
 
-public class ConnectFour {
+// todo: improve incapsulation of game
+// todo: write tests
+// todo: add saving and loading of the game
+public class ConnectFourGame {
 
-    public static void main(String[] args) {
+    private final int[][] gameMatrix = new int[6][7];
+
+    public int[][] getGameMatrix() {
+        return gameMatrix;
+    }
+
+    public ConnectFourGame() {}
+
+    public void play() {
         System.out.println("Welcome to java connect four game!");
         while(true){ // loop for playing games
-            int[][] gameMatrix = new int[6][7]; // connect four has 6 rows and 7 columns
-            printGameMatrix(gameMatrix);
+            printGameMatrix();
             int player = 1;
             Scanner scanner = new Scanner(System.in);
             while(true){ // loop for turns
@@ -27,13 +37,13 @@ public class ConnectFour {
                 }
                 int player1Column = Integer.parseInt(playerColumn)-1;
                 // populate game board
-                boolean success = populateGameBoardColumn(gameMatrix, player1Column, player);
+                boolean success = populateGameBoardColumn(player1Column, player);
                 if (!success){
                     System.out.println("Column is already full, please insert another column number");
                     continue;
                 }
-                printGameMatrix(gameMatrix);
-                int winner = checkGameMatrixForWinner(gameMatrix);
+                printGameMatrix();
+                int winner = checkGameMatrixForWinner();
                 if (winner == 0) {
                     System.out.println("It's a draw");
                     break;
@@ -63,7 +73,7 @@ public class ConnectFour {
     }
 
     // todo: test method with random matrices
-    private static int checkGameMatrixForWinner(int[][] gameMatrix){
+    private int checkGameMatrixForWinner(){
         if (findMinimumInMatrix(gameMatrix) != 0) { // if the matrix doesn't have zeros
             return 0; // the game is in draw condition
         }
@@ -108,20 +118,25 @@ public class ConnectFour {
         return -1; // return -1 if game is still ongoing
     }
 
-    private static boolean populateGameBoardColumn(int[][] gameMatrix, int column, int player) {
+    public boolean populateGameBoardColumn(int column, int player) {
         for (int i = 5; i >=0; i--) {
-            if(gameMatrix[i][column] == 0){
-                gameMatrix[i][column] = player;
+            if(this.gameMatrix[i][column] == 0){
+                this.gameMatrix[i][column] = player;
                 return true;
             }
         }
         return false;
     }
 
-    private static void printGameMatrix(int[][] gameMatrix){
+    public void printGameMatrix(){
         for (int i = 0; i < 6; i++) {
-            // todo: print '' instead of zeros
-            System.out.println(Arrays.toString(gameMatrix[i]).replaceAll("0", "").replaceAll(",", "|"));
+            System.out.println(Arrays.toString(this.gameMatrix[i])
+                    .replaceAll("0", " ")
+                    .replaceAll("1","X")
+                    .replaceAll("2","O")
+                    .replaceAll(",", "|")
+                    .replaceAll("\\[","|")
+                    .replaceAll("]","|"));
         }
     }
 }

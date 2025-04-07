@@ -76,7 +76,7 @@ public class ConnectFourGame {
     }
 
     private boolean isMovePossible(int column) {
-        return Arrays.stream(transposeMatrix(gameMatrix)[column])
+        return Arrays.stream(createTransposedMatrix(gameMatrix)[column])
                 .anyMatch(value -> value == 0);
     }
 
@@ -96,23 +96,18 @@ public class ConnectFourGame {
         }
 
         // use 4x4 sub-matrices and apply them the algorithm developed for tic-tac-toe, just extended. Move the submatrix around to cover all the board with offset
-        int[][] subMatrix = new int[4][4];
         for (int k=0; k<=2; k++){ // row offset
             for (int l = 0; l <= 3; l++) { // column offset
                 // start from bottom 4 rows
                 // start from first column on the left
-                for (int i = 0; i <=3; i++) {
-                    for (int j = 0; j <= 3; j++) {
-                        subMatrix[i][j] = gameMatrix[i+k][j+l]; // build submatrix from gameMatrix using offsets
-                    }
-                }
+                int[][] subMatrix = findSquareSubmatrix(gameMatrix, k, l, 4);
                 if (checkMatrixAllZeroes(subMatrix)){ // if submatrix is all zeros
                     continue;
                 }
 
-                int[][] transposedSubMatrix = transposeMatrix(subMatrix);
-                int[] subMatrixDiagonal = {subMatrix[0][0],subMatrix[1][1], subMatrix[2][2], subMatrix[3][3]};
-                int[] subMatrixAntiDiagonal = {subMatrix[3][0], subMatrix[2][1], subMatrix[1][2], subMatrix[0][3]};
+                int[][] transposedSubMatrix = createTransposedMatrix(subMatrix);
+                int[] subMatrixDiagonal = findMatrixDiagonal(subMatrix);
+                int[] subMatrixAntiDiagonal = findMatrixAntiDiagonal(subMatrix);
 
                 for (int i = 1; i <3; i++) { // loop for gamer (1,2)
                     for (int j = 0; j <= 3; j++) {

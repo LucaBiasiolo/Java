@@ -1,9 +1,10 @@
 package games.tictactoe;
 
+import games.MatrixUtil;
+
 import java.util.Arrays;
 
-import static games.MatrixUtil.findMinimumInMatrix;
-import static games.MatrixUtil.transposeMatrix;
+import static games.MatrixUtil.*;
 
 public class TicTacToeUtil {
 
@@ -22,9 +23,9 @@ public class TicTacToeUtil {
      -1 if the game is still ongoing.
      */
     public static int checkGameMatrixForWinner(int[][] gameMatrix) {
-        int[][] transposedMatrix = transposeMatrix(gameMatrix);
-        int[] matrixDiagonal = {gameMatrix[0][0],gameMatrix[1][1], gameMatrix[2][2]};
-        int[] matrixAntiDiagonal = {gameMatrix[2][0], gameMatrix[1][1], gameMatrix[0][2]};
+        int[][] transposedMatrix = MatrixUtil.createTransposedMatrix(gameMatrix);
+        int[] matrixDiagonal = findMatrixDiagonal(gameMatrix);
+        int[] matrixAntiDiagonal = findMatrixAntiDiagonal(gameMatrix);
 
         for (int i = 1; i <3; i++) {
             for (int j = 0; j < 2; j++) {

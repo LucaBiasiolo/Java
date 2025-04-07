@@ -8,7 +8,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import static games.MatrixUtil.transposeMatrix;
+import static games.MatrixUtil.createTransposedMatrix;
 
 public class SudokuService {
 
@@ -26,7 +26,7 @@ public class SudokuService {
         }
 
         sudoku.setGrid(grid);
-        sudoku.setTransposedGrid(transposeMatrix(grid));
+        sudoku.setTransposedGrid(createTransposedMatrix(grid));
         sudoku.setBlocks(buildBlocksFromSudoku(grid));
 
         // for every cell, build its list of possible values

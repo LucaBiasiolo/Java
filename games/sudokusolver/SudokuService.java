@@ -284,9 +284,16 @@ public class SudokuService {
         StringBuilder printableSudoku = new StringBuilder();
         for (List<SudokuCell> sudokuRow : sudoku){
             for (SudokuCell cell : sudokuRow){
-                printableSudoku.append(" ").append(cell.getValue()).append(" ");
+                if( cell.getValue() != 0) {
+                    printableSudoku.append("| ").append(cell.getValue()).append(" ");
+                } else{
+                    printableSudoku.append("|   ");
+                }
             }
-            printableSudoku.append("\n");
+            printableSudoku.append("|\n");
+            if (sudokuRow.getFirst().getRowIndex() %3 == 2) {
+                printableSudoku.append("-------------------------------------\n");
+            }
         }
         System.out.println(printableSudoku);
     }

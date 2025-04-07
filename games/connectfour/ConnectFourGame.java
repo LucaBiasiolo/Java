@@ -7,12 +7,12 @@ import java.util.regex.Pattern;
 
 import static games.MatrixUtil.*;
 
-// todo: improve incapsulation of game
+// todo: improve game encapsulation
 // todo: write tests
 // todo: add saving and loading of the game
 public class ConnectFourGame {
 
-    private final int[][] gameMatrix = new int[6][7];
+    private final int[][] gameMatrix = new int[6][7]; //connect four has 6 rows and 7 columns
 
     public int[][] getGameMatrix() {
         return gameMatrix;
@@ -25,9 +25,10 @@ public class ConnectFourGame {
         while(true){ // loop for playing games
             printGameMatrix();
             int player = 1;
+            String playerSymbol = "X";
             Scanner scanner = new Scanner(System.in);
             while(true){ // loop for turns
-                System.out.printf("Player %d, where do you want to place your '%d'? Use a number between 1 and 7%n", player, player);
+                System.out.printf("Player %d, where do you want to place your '%s'? Use a number between 1 and 7%n", player, playerSymbol);
                 String playerColumn = scanner.nextLine();
                 Pattern pattern = Pattern.compile("[1-7]");
                 Matcher matcher = pattern.matcher(playerColumn);
@@ -35,10 +36,10 @@ public class ConnectFourGame {
                     System.out.println("Please insert a number between 1 and 7");
                     continue;
                 }
-                int player1Column = Integer.parseInt(playerColumn)-1;
-                // populate game board
-                boolean success = populateGameBoardColumn(player1Column, player);
-                if (!success){
+                int column = Integer.parseInt(playerColumn)-1;
+                if(isMovePossible(column)){
+                    playerMove(column, player);
+                } else {
                     System.out.println("Column is already full, please insert another column number");
                     continue;
                 }
@@ -54,8 +55,10 @@ public class ConnectFourGame {
 
                 if (player == 1){
                     player = 2;
+                    playerSymbol = "O";
                 } else{
                     player = 1;
+                    playerSymbol = "X";
                 }
             }
             System.out.println("Do you wish to play again? y/n");
@@ -67,6 +70,20 @@ public class ConnectFourGame {
             if (userContinue.equals("n")) {
                 System.out.println("Bye!");
                 scanner.close();
+                break;
+            }
+        }
+    }
+
+    private boolean isMovePossible(int column) {
+        return Arrays.stream(transposeMatrix(gameMatrix)[column])
+                .anyMatch(value -> value == 0);
+    }
+
+    public void playerMove(int column, int player) {
+        for (int i = 5; i >=0; i--) {
+            if(this.gameMatrix[i][column] == 0){
+                this.gameMatrix[i][column] = player;
                 break;
             }
         }
@@ -116,16 +133,6 @@ public class ConnectFourGame {
             }
         }
         return -1; // return -1 if game is still ongoing
-    }
-
-    public boolean populateGameBoardColumn(int column, int player) {
-        for (int i = 5; i >=0; i--) {
-            if(this.gameMatrix[i][column] == 0){
-                this.gameMatrix[i][column] = player;
-                return true;
-            }
-        }
-        return false;
     }
 
     public void printGameMatrix(){

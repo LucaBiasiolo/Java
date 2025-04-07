@@ -8,14 +8,13 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class FifteenGameTest {
+public class GameOfFifteenTest {
 
     private static GameOfFifteen gameOfFifteen;
 
     @BeforeAll
     public static void createGrid(){
         gameOfFifteen = new GameOfFifteen();
-        gameOfFifteen.populateGrid();
     }
 
     @Test
@@ -62,6 +61,22 @@ public class FifteenGameTest {
         gameOfFifteen.move(MoveDirection.UP);
         gameOfFifteen.printGameBoard();
         assertTrue(gameOfFifteen.isGameEnded());
+    }
+
+    @Test
+    public void saveGameTest(){
+        System.out.println("Saving game:");
+        System.out.println(gameOfFifteen.getGrid());
+        gameOfFifteen.saveGame();
+    }
+
+    @Test
+    public void loadGameTest(){
+        System.out.println("Game board before loading:");
+        gameOfFifteen.printGameBoard();
+        gameOfFifteen.loadGame();
+        System.out.println("Game board after loading");
+        gameOfFifteen.printGameBoard();
     }
 
     public static void main(String[] args){

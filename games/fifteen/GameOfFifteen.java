@@ -1,5 +1,10 @@
 package games.fifteen;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -71,7 +76,7 @@ public class GameOfFifteen {
                 }
             };
             grid.get(zeroCellRowIndex).set(zeroCellColumnIndex, numberToSwitch);
-            grid.get(numberToSwitchCoordinates.get(0)).set(numberToSwitchCoordinates.get(1), 0);;
+            grid.get(numberToSwitchCoordinates.get(0)).set(numberToSwitchCoordinates.get(1), 0);
         } else{
             System.out.printf("Movement in direction %s not possible %n", direction);
         }
@@ -131,24 +136,46 @@ public class GameOfFifteen {
 
     public void play(){
         System.out.println("Welcome to Java Game of 15!");
-        System.out.println("Please make your moves using keys w,a,s,d on the keyboard");
+        System.out.println("Please make your moves using keys w,a,s,d");
+        System.out.println("Press c to exit the game, S to save the game and l to load the previous game");
         while(true) { // loop to play games
             System.out.println("This is the starting configuration of the board");
             printGameBoard();
+            userMovesLoop:
             while (!isGameEnded()) { // loop for user moves
                 Scanner scanner = new Scanner(System.in);
-                String userMove = scanner.nextLine();
-                Pattern pattern = Pattern.compile("[wasd]");
-                Matcher matcher = pattern.matcher(userMove);
+                String userInput = scanner.nextLine();
+                Pattern pattern = Pattern.compile("[wasdc]");
+                Matcher matcher = pattern.matcher(userInput);
                 MoveDirection direction = null;
                 if (matcher.matches()) {
-                    direction = switch (userMove) {
-                        case "w" -> MoveDirection.UP;
-                        case "a" -> MoveDirection.LEFT;
-                        case "s" -> MoveDirection.DOWN;
-                        case "d" -> MoveDirection.RIGHT;
-                        default -> direction;
-                    };
+                    switch (userInput) {
+                        case "w":{
+                            direction = MoveDirection.UP;
+                            break;
+                        }
+                        case "a":{
+                            direction = MoveDirection.LEFT;
+                            break;
+                        }
+                        case "s":{
+                            direction = MoveDirection.DOWN;
+                            break;
+                        }
+                        case "d":{
+                            direction = MoveDirection.RIGHT;
+                            break;
+                        }
+                        case "c":{
+                            break userMovesLoop;
+                        }
+                        case "S": {
+                            saveGame();
+                        }
+                        case "l":{
+                            loadGame();
+                        }
+                    }
                 }
                 if (direction != null) {
                     move(direction);
@@ -167,6 +194,43 @@ public class GameOfFifteen {
                 scanner.close();
                 break;
             }
+        }
+    }
+
+    void loadGame() {
+        // load previous game from file
+        try{
+            String gameString = Files.readString(Path.of("./games/fifteen/gameOfFifteen.csv"));
+            String[] gridNumbers = gameString.split(",");
+            List<List<Integer>> newGrid = new ArrayList<>(4);
+            int index = 0;
+            for (int i = 0; i < 4; i++) {
+                newGrid.add(new ArrayList<>(4));
+                for (int j = 0; j < 4; j++) {
+                    newGrid.get(i).add(Integer.parseInt(gridNumbers[index++]));
+                }
+            }
+            this.grid = newGrid;
+        } catch (IOException exception){
+            System.err.println("Error during loadGame operation");
+            exception.printStackTrace();
+        }
+
+    }
+
+    void saveGame() {
+        File saveFile = new File("./games/fifteen/gameOfFifteen.csv");
+        try (FileWriter fileWriter = new FileWriter(saveFile)){
+            StringBuilder stringBuilder = new StringBuilder();
+            for (int i = 0; i < 4; i++) {
+                for (int j = 0; j < 4; j++) {
+                    stringBuilder.append(this.grid.get(i).get(j)).append(",");
+                }
+            }
+            fileWriter.write(stringBuilder.toString());
+        } catch (IOException exception){
+            System.err.println("Error during saveGame operation");
+            exception.printStackTrace();
         }
     }
 }

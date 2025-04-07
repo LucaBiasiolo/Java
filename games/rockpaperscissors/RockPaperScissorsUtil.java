@@ -9,19 +9,11 @@ public class RockPaperScissorsUtil {
         return winnerMatrix[userPick][computerPick];
     }
 
-    public static String getPhraseFromWinner(int winner, String userWord, String computerWord){
+    public static String getPhraseFromWinner(int winner, RockPaperScissorsChoices userChoice, RockPaperScissorsChoices computerChoice){
         Map<Integer, String> mapWinnerToPhrase = new HashMap<>();
         mapWinnerToPhrase.put(0, "It's a tie!");
-        mapWinnerToPhrase.put(1, String.format("You won! %s beats %s", userWord, computerWord));
-        mapWinnerToPhrase.put(2, String.format("You lost! %s is beaten by %s", userWord, computerWord));
+        mapWinnerToPhrase.put(1, String.format("You won! %s beats %s", userChoice, computerChoice));
+        mapWinnerToPhrase.put(2, String.format("You lost! %s is beaten by %s", userChoice, computerChoice));
         return mapWinnerToPhrase.get(winner);
-    }
-
-    public static String getWordFromNumber(int number){
-        Map<Integer, String> mapNumberToWord = new HashMap<>();
-        mapNumberToWord.put(0,"Rock");
-        mapNumberToWord.put(1,"Paper");
-        mapNumberToWord.put(2,"Scissors");
-        return mapNumberToWord.get(number);
     }
 }

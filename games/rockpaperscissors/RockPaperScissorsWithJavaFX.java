@@ -69,7 +69,7 @@ public class RockPaperScissorsWithJavaFX extends Application {
         Integer winner = getWinner(userPick, computerPick);
         PauseTransition pause2 = new PauseTransition(Duration.seconds(2));
         pause2.setOnFinished(_ ->{
-            String endGamePhrase = getPhraseFromWinner(winner, getWordFromNumber(userPick), getWordFromNumber(computerPick));
+            String endGamePhrase = getPhraseFromWinner(winner, RockPaperScissorsChoices.fromNumber(userPick), RockPaperScissorsChoices.fromNumber(computerPick));
             endGamePhrase +="\nPress again your choice to start another game";
             endGameLabel.setText(endGamePhrase);
         });

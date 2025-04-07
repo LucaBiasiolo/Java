@@ -17,22 +17,22 @@ public class RockPaperScissorsWithCommandLine {
 
             Pattern pattern = Pattern.compile("[1-3]");
             String userInput = scanner.nextLine();
-            int userPick;
+            int userChoice;
             Matcher matcher = pattern.matcher(userInput);
             if (!matcher.matches()){
                 System.out.println("Please insert an integer between 1 and 3");
                 continue;
             } else{
-                userPick = Integer.parseInt(userInput) -1;
+                userChoice = Integer.parseInt(userInput) -1;
             }
-            System.out.println("You chose " + getWordFromNumber(userPick));
+            System.out.println("You chose " + RockPaperScissorsChoices.fromNumber(userChoice));
 
             Random random = new Random();
-            int computerPick = random.nextInt(0, 3);
-            System.out.println("Computer chose " + getWordFromNumber(computerPick));
+            int computerChoice = random.nextInt(0, 3);
+            System.out.println("Computer chose " + RockPaperScissorsChoices.fromNumber(computerChoice));
 
-            int winner = getWinner(userPick, computerPick);
-            System.out.println(getPhraseFromWinner(winner, getWordFromNumber(userPick), getWordFromNumber(computerPick)));
+            int winner = getWinner(userChoice, computerChoice);
+            System.out.println(getPhraseFromWinner(winner, RockPaperScissorsChoices.fromNumber(userChoice), RockPaperScissorsChoices.fromNumber(computerChoice)));
             System.out.println("Do you wish to play again? y/n");
             String userContinue = scanner.nextLine().toLowerCase();
             while (!userContinue.equals("n") && !userContinue.equals("y")) {

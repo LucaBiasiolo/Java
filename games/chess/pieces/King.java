@@ -16,6 +16,35 @@ public class King extends ChessPiece{
         super(xPosition, yPosition, isWhite);
     }
 
+    public boolean isInCheck(){
+        // Check if the King is in check
+
+        return false;
+    }
+
+    public boolean isInCheckMate(){
+        // Check if the King is in checkmate
+        // This is a placeholder implementation
+        return false;
+    }
+
+    public boolean isInStaleMate(){
+        // Check if the King is in stalemate
+        // This is a placeholder implementation
+        return false;
+    }
+
+    public boolean isInDraw(){
+        // Check if the King is in draw
+        // This is a placeholder implementation
+        return false;
+    }
+
+    public void castling(Rook rook){
+        // Perform castling with the Rook
+        // This is a placeholder implementation
+    }
+
     @Override
     public int getXPosition() {
         return xPosition;

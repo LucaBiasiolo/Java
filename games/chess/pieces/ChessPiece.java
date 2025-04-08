@@ -2,35 +2,24 @@ package games.chess.pieces;
 
 public abstract class ChessPiece {
 
-    private String position;
-    private ChessColors color;
+    protected String icon;
+    protected int xPosition;
+    protected int yPosition;
+    protected boolean isWhite;
 
-    public void move(String newPosition){
-        this.position = newPosition;
+    public abstract boolean isValidMove(int startX, int startY, int endX, int endY, ChessPiece[][] board);
+
+    public ChessPiece(int xPosition, int yPosition, boolean isWhite) {
+        this.isWhite = isWhite;
+        this.xPosition = xPosition;
+        this.yPosition = yPosition;
     }
 
-    public void capture(ChessPiece pieceToCapture){
+    public abstract int getXPosition();
 
-    }
+    public abstract int getYPosition();
 
-    public ChessPiece(String position, ChessColors color) {
-        this.position = position;
-        this.color = color;
-    }
+    public abstract boolean isWhite();
 
-    public String getPosition() {
-        return position;
-    }
-
-    public void setPosition(String position) {
-        this.position = position;
-    }
-
-    public ChessColors getColor() {
-        return color;
-    }
-
-    public void setColor(ChessColors color) {
-        this.color = color;
-    }
+    public abstract String getIcon();
 }

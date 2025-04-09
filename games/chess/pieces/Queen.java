@@ -34,4 +34,13 @@ public class Queen extends ChessPiece{
     public String getIcon() {
         return icon;
     }
+
+    @Override
+    public String toString() {
+        return "Queen{" +
+                "xPosition=" + xPosition +
+                ", yPosition=" + yPosition +
+                ", isWhite=" + isWhite +
+                '}';
+    }
 }

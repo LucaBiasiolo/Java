@@ -49,4 +49,13 @@ public class Pawn extends ChessPiece {
         // For simplicity, we can just set the position of the new piece to the Pawn's position
         // and remove the Pawn from the board.
     }
+
+    @Override
+    public String toString() {
+        return "Pawn{" +
+                "xPosition=" + xPosition +
+                ", yPosition=" + yPosition +
+                ", isWhite=" + isWhite +
+                '}';
+    }
 }

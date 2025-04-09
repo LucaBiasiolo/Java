@@ -32,4 +32,13 @@ public class Rook extends ChessPiece{
     public String getIcon() {
         return icon;
     }
+
+    @Override
+    public String toString() {
+        return "Rook{" +
+                "xPosition=" + xPosition +
+                ", yPosition=" + yPosition +
+                ", isWhite=" + isWhite +
+                '}';
+    }
 }

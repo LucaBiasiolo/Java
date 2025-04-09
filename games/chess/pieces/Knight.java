@@ -34,4 +34,13 @@ public class Knight extends ChessPiece{
     public String getIcon() {
         return icon;
     }
+
+    @Override
+    public String toString() {
+        return "Knight{" +
+                "xPosition=" + xPosition +
+                ", yPosition=" + yPosition +
+                ", isWhite=" + isWhite +
+                '}';
+    }
 }

@@ -63,4 +63,13 @@ public class King extends ChessPiece{
     public String getIcon() {
         return icon;
     }
+
+    @Override
+    public String toString() {
+        return "King{" +
+                "xPosition=" + xPosition +
+                ", yPosition=" + yPosition +
+                ", isWhite=" + isWhite +
+                '}';
+    }
 }

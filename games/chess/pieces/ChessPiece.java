@@ -22,4 +22,7 @@ public abstract class ChessPiece {
     public abstract boolean isWhite();
 
     public abstract String getIcon();
+
+    @Override
+    public abstract String toString();
 }

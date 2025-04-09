@@ -37,9 +37,9 @@ public class Pawn extends ChessPiece {
 
         // the last case is needed to allow the pawn to move diagonally (when capturing)
         if (isWhite) {
-            return (deltaY == 1 && deltaX == 0) || (deltaY == 2 && deltaX == 0 && startY == 1) || (deltaY == 1 && deltaX == 1);
+            return (deltaX == 1 && deltaY == 0) || (deltaX == 2 && deltaY == 0 && startX == 1) || (deltaX == 1 && deltaY == 1);
         } else {
-            return (deltaY == 1 && deltaX == 0) || (deltaY == 2 && deltaX == 0 && startY == 6) || (deltaY == 1 && deltaX == 1);
+            return (deltaX == 1 && deltaY == 0) || (deltaX == 2 && deltaY == 0 && startX == 6) || (deltaX == 1 && deltaY == 1);
         }
     }
 

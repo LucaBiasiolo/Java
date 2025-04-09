@@ -13,36 +13,40 @@ public class ChessBoard {
     private void initializeBoard() {
         // Pawns
         for (int i = 0; i < 8; i++) {
-            board[6][i] = new Pawn(6,i,true);
-            board[1][i] = new Pawn(1,i, false);
+            board[6][i] = new Pawn(true);
+            board[1][i] = new Pawn(false);
         }
         // Rooks
-        board[0][0] = new Rook(0, 0, false);
-        board[0][7] = new Rook(0, 7, false);
-        board[7][0] = new Rook(7, 0, true);
-        board[7][7] = new Rook(7, 7, true);
+        board[0][0] = new Rook(false);
+        board[0][7] = new Rook(false);
+        board[7][0] = new Rook(true);
+        board[7][7] = new Rook(true);
 
         // Knights
-        board[0][1] = new Knight(0, 1, false);
-        board[0][6] = new Knight(0, 6, false);
-        board[7][1] = new Knight(7, 1, true);
-        board[7][6] = new Knight(7, 6, true);
+        board[0][1] = new Knight(false);
+        board[0][6] = new Knight(false);
+        board[7][1] = new Knight(true);
+        board[7][6] = new Knight(true);
 
         // Bishops
-        board[0][2] = new Bishop(0, 2, false);
-        board[0][5] = new Bishop(0, 5, false);
-        board[7][2] = new Bishop(7, 2, true);
-        board[7][5] = new Bishop(7, 5, true);
+        board[0][2] = new Bishop(false);
+        board[0][5] = new Bishop(false);
+        board[7][2] = new Bishop(true);
+        board[7][5] = new Bishop(true);
         // Queens
-        board[0][3] = new Queen(0, 3, false);
-        board[7][3] = new Queen(7, 3, true);
+        board[0][3] = new Queen(false);
+        board[7][3] = new Queen(true);
 
         // Kings
-        board[0][4] = new King(0, 4, false);
-        board[7][4] = new King(7, 4, true);
+        board[0][4] = new King(false);
+        board[7][4] = new King(true);
     }
 
-    public boolean movePiece(int startX, int startY, int endX, int endY) {
+    public void updateBoard(){
+
+    }
+
+    /*public boolean movePiece(int startX, int startY, int endX, int endY) {
         ChessPiece piece = board[startX][startY];
         if (piece != null && piece.isValidMove(startX, startY, endX, endY, board)) {
             board[endX][endY] = piece;
@@ -53,7 +57,7 @@ public class ChessBoard {
         // Invalid move
         System.out.println("Invalid move for from (" + startX + "," + startY + ") to (" + endX + "," + endY + ")");
         return false;
-    }
+    }*/
 
     public ChessPiece getPiece(int x, int y) {
         return board[x][y];

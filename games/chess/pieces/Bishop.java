@@ -2,20 +2,8 @@ package games.chess.pieces;
 
 public class Bishop extends ChessPiece{
 
-    private String icon = "♗";
-
-    public Bishop(int xPosition, int yPosition, boolean isWhite) {
-        super(xPosition, yPosition, isWhite);
-    }
-
-    @Override
-    public int getXPosition() {
-        return xPosition;
-    }
-
-    @Override
-    public int getYPosition() {
-        return yPosition;
+    public Bishop(boolean isWhite) {
+        super("♗", isWhite);
     }
 
     @Override
@@ -26,6 +14,7 @@ public class Bishop extends ChessPiece{
     @Override
     public boolean isValidMove(int startX, int startY, int endX, int endY, ChessPiece[][] board) {
         // The Bishop can move diagonally any number of squares
+        // fixme: consider the actual disposition of the board
         int deltaX = Math.abs(endX - startX);
         int deltaY = Math.abs(endY - startY);
         return deltaX == deltaY;
@@ -38,9 +27,7 @@ public class Bishop extends ChessPiece{
     @Override
     public String toString() {
         return "Bishop{" +
-                "xPosition=" + xPosition +
-                ", yPosition=" + yPosition +
-                ", isWhite=" + isWhite +
+                "isWhite=" + isWhite +
                 '}';
     }
 }

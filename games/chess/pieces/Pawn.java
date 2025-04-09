@@ -2,20 +2,8 @@ package games.chess.pieces;
 
 public class Pawn extends ChessPiece {
 
-    private final String icon = "♙";
-
-    public Pawn(int xPosition, int yPosition, boolean isWhite) {
-        super(xPosition, yPosition, isWhite);
-    }
-
-    @Override
-    public int getXPosition() {
-        return xPosition;
-    }
-
-    @Override
-    public int getYPosition() {
-        return yPosition;
+    public Pawn(boolean isWhite) {
+        super("♙", isWhite);
     }
 
     @Override
@@ -53,9 +41,7 @@ public class Pawn extends ChessPiece {
     @Override
     public String toString() {
         return "Pawn{" +
-                "xPosition=" + xPosition +
-                ", yPosition=" + yPosition +
-                ", isWhite=" + isWhite +
+                "isWhite=" + isWhite +
                 '}';
     }
 }

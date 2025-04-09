@@ -2,8 +2,6 @@ package games.chess.pieces;
 
 public class Knight extends ChessPiece{
 
-    private String icon = "♞";
-
     @Override
     public boolean isValidMove(int startX, int startY, int endX, int endY, ChessPiece[][] board) {
         // The Knight moves in an L-shape: two squares in one direction and then one square perpendicular
@@ -12,18 +10,8 @@ public class Knight extends ChessPiece{
         return (deltaX == 2 && deltaY == 1) || (deltaX == 1 && deltaY == 2);
     }
 
-    public Knight(int xPosition, int yPosition, boolean isWhite) {
-        super(xPosition, yPosition, isWhite);
-    }
-
-    @Override
-    public int getXPosition() {
-        return xPosition;
-    }
-
-    @Override
-    public int getYPosition() {
-        return yPosition;
+    public Knight(boolean isWhite) {
+        super("♞", isWhite);
     }
 
     @Override
@@ -38,9 +26,7 @@ public class Knight extends ChessPiece{
     @Override
     public String toString() {
         return "Knight{" +
-                "xPosition=" + xPosition +
-                ", yPosition=" + yPosition +
-                ", isWhite=" + isWhite +
+                "isWhite=" + isWhite +
                 '}';
     }
 }

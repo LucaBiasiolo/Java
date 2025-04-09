@@ -2,20 +2,8 @@ package games.chess.pieces;
 
 public class Rook extends ChessPiece{
 
-    private String icon = "♖";
-
-    public Rook(int xPosition, int yPosition, boolean isWhite) {
-        super(xPosition, yPosition, isWhite);
-    }
-
-    @Override
-    public int getXPosition() {
-        return xPosition;
-    }
-
-    @Override
-    public int getYPosition() {
-        return yPosition;
+    public Rook(boolean isWhite) {
+        super("♖", isWhite);
     }
 
     @Override
@@ -36,9 +24,7 @@ public class Rook extends ChessPiece{
     @Override
     public String toString() {
         return "Rook{" +
-                "xPosition=" + xPosition +
-                ", yPosition=" + yPosition +
-                ", isWhite=" + isWhite +
+                "isWhite=" + isWhite +
                 '}';
     }
 }

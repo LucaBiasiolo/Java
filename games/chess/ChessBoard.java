@@ -4,6 +4,8 @@ import games.chess.pieces.*;
 
 public class ChessBoard {
     private ChessPiece[][] board;
+    public static final String RED = "\u001B[31m";
+    public static final String RESET = "\u001B[0m";
 
     public ChessBoard() {
         board = new ChessPiece[8][8];
@@ -43,12 +45,12 @@ public class ChessBoard {
     }
 
     public void printBoard(){
-        for (int i = 0; i < board.length; i++) {
+        for (ChessPiece[] boardRow : board) {
             for (int j = 0; j < board.length; j++) {
-                if(board[i][j] == null){
+                if (boardRow[j] == null) {
                     System.out.print(" ");
                 } else {
-                    System.out.print(board[i][j].getIcon());
+                    System.out.print(boardRow[j].isWhite() ? boardRow[j].getIcon() : RED + boardRow[j].getIcon() + RESET);
                 }
             }
             System.out.println();

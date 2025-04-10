@@ -42,24 +42,25 @@ public class ChessBoard {
         board[7][4] = new King(true);
     }
 
-    public void updateBoard(){
-
-    }
-
-    /*public boolean movePiece(int startX, int startY, int endX, int endY) {
-        ChessPiece piece = board[startX][startY];
-        if (piece != null && piece.isValidMove(startX, startY, endX, endY, board)) {
-            board[endX][endY] = piece;
-            board[startX][startY] = null;
-            System.out.println("Moved " + piece + "from (" + startX + "," + startY + ") to (" + endX + "," + endY + ")");
-            return true;
+    public void printBoard(){
+        for (int i = 0; i < board.length; i++) {
+            for (int j = 0; j < board.length; j++) {
+                if(board[i][j] == null){
+                    System.out.print(" ");
+                } else {
+                    System.out.print(board[i][j].getIcon());
+                }
+            }
+            System.out.println();
         }
-        // Invalid move
-        System.out.println("Invalid move for from (" + startX + "," + startY + ") to (" + endX + "," + endY + ")");
-        return false;
-    }*/
+        System.out.println();
+    }
 
     public ChessPiece getPiece(int x, int y) {
         return board[x][y];
+    }
+
+    public ChessPiece[][] getBoard() {
+        return board;
     }
 }

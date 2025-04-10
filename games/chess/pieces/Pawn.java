@@ -24,10 +24,11 @@ public class Pawn extends ChessPiece {
         int deltaY = Math.abs(endY - startY);
 
         // the last case is needed to allow the pawn to move diagonally (when capturing)
+        // todo: add capture en-passant
         if (isWhite) {
-            return (deltaX == 1 && deltaY == 0) || (deltaX == 2 && deltaY == 0 && startX == 1) || (deltaX == 1 && deltaY == 1);
+            return (deltaX == 1 && deltaY == 0) || (deltaX == 2 && deltaY == 0 && startX == 6);
         } else {
-            return (deltaX == 1 && deltaY == 0) || (deltaX == 2 && deltaY == 0 && startX == 6) || (deltaX == 1 && deltaY == 1);
+            return (deltaX == 1 && deltaY == 0) || (deltaX == 2 && deltaY == 0 && startX == 1);
         }
     }
 

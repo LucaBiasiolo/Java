@@ -8,7 +8,11 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
-public class ChessGame extends Application {
+/**
+ "the game of chess is like a sword fight: you must think first... Before you move!"
+ *
+ */
+public class ChessGameWithJavaFX extends Application {
     private ChessBoard chessBoard;
     private Player player1;
     private Player player2;
@@ -53,15 +57,14 @@ public class ChessGame extends Application {
     }
 
     private void handleSquareClick(MouseEvent click, int row, int column){
+        click.consume();
         System.out.println("Square clicked");
-        if (selectedPiece != null){
-            chessBoard.movePiece(selectedPiece.getXPosition(), selectedPiece.getYPosition(), row, column);
-        }
     }
 
     private void handlePieceClick(MouseEvent click, ChessPiece piece){
+        click.consume();
         System.out.println("Button clicked");
-        // show possible moves
+        // todo: show possible moves
         selectedPiece = piece;
         System.out.println("Selected piece: " + piece);
     }

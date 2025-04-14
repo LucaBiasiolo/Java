@@ -65,17 +65,18 @@ public class ChessBoard {
     }
 
     public void printBoard(){
-        for (ChessPiece[] boardRow : board) {
+        for (int i =0; i<board.length; i++) {
+            System.out.print(8-i + " ");
             for (int j = 0; j < board.length; j++) {
-                if (boardRow[j] == null) {
+                if (board[i][j] == null) {
                     System.out.print(" ");
                 } else {
-                    System.out.print(boardRow[j].isWhite() ? boardRow[j].getLetter() : RED + boardRow[j].getLetter() + RESET);
+                    System.out.print(board[i][j].isWhite() ? board[i][j].getLetter() : RED + board[i][j].getLetter() + RESET);
                 }
             }
             System.out.println();
         }
-        System.out.println("abcdefgh");
+        System.out.println("  abcdefgh");
     }
 
     public ChessPiece getPiece(int x, int y) {

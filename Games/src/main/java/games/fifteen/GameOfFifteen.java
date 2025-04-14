@@ -192,7 +192,7 @@ public class GameOfFifteen {
 
     void loadGame() {
         try{
-            File savedGame = new File("./games/fifteen/gameOfFifteen.csv");
+            File savedGame = new File("./games/games.fifteen/gameOfFifteen.csv");
             String gameString = Files.readString(savedGame.toPath());
             String[] gridNumbers = gameString.split(",");
             List<List<Integer>> newGrid = new ArrayList<>(4);
@@ -213,7 +213,7 @@ public class GameOfFifteen {
     }
 
     void saveGame() {
-        File saveFile = new File("./games/fifteen/gameOfFifteen.csv");
+        File saveFile = new File("./games/games.fifteen/gameOfFifteen.csv");
         try (FileWriter fileWriter = new FileWriter(saveFile)){
             StringBuilder stringBuilder = new StringBuilder();
             for (int i = 0; i < 4; i++) {

@@ -3,7 +3,7 @@ package games.chess.pieces;
 public class Pawn extends ChessPiece {
 
     public Pawn(boolean isWhite) {
-        super("♙", isWhite);
+        super("♙", "P",isWhite);
     }
 
     @Override

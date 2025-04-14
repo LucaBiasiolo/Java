@@ -1,9 +1,9 @@
 package games.chess.pieces;
 
-public class Bishop extends ChessPiece{
+public class Queen extends ChessPiece{
 
-    public Bishop(boolean isWhite) {
-        super("♗", isWhite);
+    public Queen(boolean isWhite) {
+        super("♕","Q", isWhite);
     }
 
     @Override
@@ -13,11 +13,10 @@ public class Bishop extends ChessPiece{
 
     @Override
     public boolean isValidMove(int startX, int startY, int endX, int endY, ChessPiece[][] board) {
-        // The Bishop can move diagonally any number of squares
-        // fixme: consider the actual disposition of the board
+        // The Queen can move any number of squares in any direction
         int deltaX = Math.abs(endX - startX);
         int deltaY = Math.abs(endY - startY);
-        return deltaX == deltaY;
+        return (deltaX == 0 || deltaY == 0 || deltaX == deltaY);
     }
 
     public String getIcon() {
@@ -26,7 +25,7 @@ public class Bishop extends ChessPiece{
 
     @Override
     public String toString() {
-        return "Bishop{" +
+        return "Queen{" +
                 "isWhite=" + isWhite +
                 '}';
     }

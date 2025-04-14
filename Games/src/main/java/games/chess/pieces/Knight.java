@@ -11,7 +11,7 @@ public class Knight extends ChessPiece{
     }
 
     public Knight(boolean isWhite) {
-        super("♞", isWhite);
+        super("♞", "N", isWhite);
     }
 
     @Override

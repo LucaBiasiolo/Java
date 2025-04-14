@@ -12,7 +12,9 @@ import javafx.util.Duration;
 
 import java.util.Random;
 
-import static games.rockpaperscissors.RockPaperScissorsUtil.*;
+import static games.rockpaperscissors.RockPaperScissorsUtil.getPhraseFromWinner;
+import static games.rockpaperscissors.RockPaperScissorsUtil.getWinner;
+
 
 public class RockPaperScissorsWithJavaFX extends Application {
 

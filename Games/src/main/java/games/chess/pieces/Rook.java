@@ -3,7 +3,7 @@ package games.chess.pieces;
 public class Rook extends ChessPiece{
 
     public Rook(boolean isWhite) {
-        super("♖", isWhite);
+        super("♖", "R",isWhite);
     }
 
     @Override

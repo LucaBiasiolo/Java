@@ -1,13 +1,13 @@
 package games.sudokusolver;
 
+import org.junit.jupiter.api.Test;
 import games.sudokusolver.beans.Sudoku;
 import games.sudokusolver.beans.SudokuDifficulty;
-import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
 import static games.sudokusolver.SudokuService.*;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class SudokuTest {
 

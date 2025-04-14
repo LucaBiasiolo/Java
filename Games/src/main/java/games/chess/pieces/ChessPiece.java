@@ -3,19 +3,29 @@ package games.chess.pieces;
 public abstract class ChessPiece {
 
     protected String icon;
+    protected String letter;
     protected boolean isWhite;
 
     public abstract boolean isValidMove(int startX, int startY, int endX, int endY, ChessPiece[][] board);
 
-    public ChessPiece(String icon, boolean isWhite) {
+    public ChessPiece(String icon, String letter, boolean isWhite) {
         this.icon = icon;
+        this.letter = letter;
         this.isWhite = isWhite;
     }
 
-    public abstract boolean isWhite();
+    public boolean isWhite(){
+        return isWhite;
+    }
 
-    public abstract String getIcon();
+    public String getIcon(){
+        return icon;
+    }
 
     @Override
     public abstract String toString();
+
+    public String getLetter(){
+        return letter;
+    }
 }

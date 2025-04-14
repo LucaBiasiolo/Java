@@ -86,4 +86,13 @@ public class Player {
         // The king cannot be in check when castling, nor can it move through or into a square attacked by an opponent's piece.
         // move the king two pieces towards the rook and the rook on the cell the king has passed
     }
+
+    public void promotePawn(ChessBoard board, int xPosition, int yPosition, ChessPiece pieceToPromoteTo){
+        // Logic for promoting the pawn to a different piece (e.g., Queen, Rook, Bishop, Knight)
+        // This would typically involve replacing the Pawn object with the new piece object on the board
+        // For simplicity, we can just set the position of the new piece to the Pawn's position
+        // and remove the Pawn from the board.
+        ChessPiece pawnToPromote = board.getPiece(xPosition, yPosition);
+        board.getBoard()[xPosition][yPosition] = pieceToPromoteTo;
+    }
 }

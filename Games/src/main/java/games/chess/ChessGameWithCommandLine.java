@@ -21,7 +21,7 @@ public class ChessGameWithCommandLine {
             ChessBoard board = new ChessBoard();
             Player player1 = new Player("Player1", true, board);
             Player player2 = new Player("Player2", false, board);
-            board.printBoard();
+            board.printBoardWithLetters();
             boolean whiteTurn = true;
             Scanner scanner = new Scanner(System.in);
             while(!board.isGameOver()){ // todo: loop continues until game finishes
@@ -43,7 +43,7 @@ public class ChessGameWithCommandLine {
                         continue;
                     }
                 }
-                board.printBoard();
+                board.printBoardWithLetters();
                 whiteTurn = !whiteTurn;
             }
             System.out.println("Game over! Do you want to play again? y/n: ");

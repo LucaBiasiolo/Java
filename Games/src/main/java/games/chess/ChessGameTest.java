@@ -24,17 +24,18 @@ public class ChessGameTest {
 
     @Test
     public void printGameBoardTest(){
-        chessBoard.printBoard();
+        chessBoard.printBoardWithLetters();
+        chessBoard.printBoardWithIcons();
     }
 
     @Test
     public void testPawnSingleMovement() {
-        chessBoard.printBoard();
+        chessBoard.printBoardWithLetters();
         ChessPiece pawn = chessBoard.getPiece(6, 0);
         assertNotNull(pawn);
         assertInstanceOf(Pawn.class, pawn);
         player1.movePieceWithMatrixCoordinates(chessBoard, 6, 0, 5, 0);
-        chessBoard.printBoard();
+        chessBoard.printBoardWithLetters();
         assertNull(chessBoard.getPiece(6, 0));
         pawn = chessBoard.getPiece(5, 0);
         assertNotNull(pawn);
@@ -47,7 +48,7 @@ public class ChessGameTest {
         assertInstanceOf(Pawn.class, chessBoard.getPiece(6,1));
         assertNull(chessBoard.getPiece(4,1));
         player1.movePieceWithMatrixCoordinates(chessBoard, 6,1,4,1);
-        chessBoard.printBoard();
+        chessBoard.printBoardWithLetters();
         assertNull(chessBoard.getPiece(6,1));
         assertNotNull(chessBoard.getPiece(4,1));
         assertInstanceOf(Pawn.class, chessBoard.getPiece(4,1));
@@ -59,7 +60,7 @@ public class ChessGameTest {
         assertInstanceOf(Knight.class, chessBoard.getPiece(7,1));
         assertNull(chessBoard.getPiece(5,2));
         player1.movePieceWithMatrixCoordinates(chessBoard, 7, 1,5,2);
-        chessBoard.printBoard();
+        chessBoard.printBoardWithLetters();
         assertNull(chessBoard.getPiece(7,1));
         assertNotNull(chessBoard.getPiece(5,2));
         assertInstanceOf(Knight.class, chessBoard.getPiece(5,2));

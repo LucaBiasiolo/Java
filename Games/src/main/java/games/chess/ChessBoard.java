@@ -64,7 +64,7 @@ public class ChessBoard {
         return mappingColumnLetterToIndex.get(columnLetter);
     }
 
-    public void printBoard(){
+    public void printBoardWithLetters(){
         for (int i =0; i<board.length; i++) {
             System.out.print(8-i + " ");
             for (int j = 0; j < board.length; j++) {
@@ -72,6 +72,21 @@ public class ChessBoard {
                     System.out.print(" ");
                 } else {
                     System.out.print(board[i][j].isWhite() ? board[i][j].getLetter() : RED + board[i][j].getLetter() + RESET);
+                }
+            }
+            System.out.println();
+        }
+        System.out.println("  abcdefgh");
+    }
+
+    public void printBoardWithIcons(){
+        for (int i =0; i<board.length; i++) {
+            System.out.print(8-i + " ");
+            for (int j = 0; j < board.length; j++) {
+                if (board[i][j] == null) {
+                    System.out.print(" ");
+                } else {
+                    System.out.print(board[i][j].isWhite() ? board[i][j].getIcon(): RED + board[i][j].getIcon() + RESET);
                 }
             }
             System.out.println();

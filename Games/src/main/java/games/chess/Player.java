@@ -34,25 +34,33 @@ public class Player {
         }
     }
 
-    public boolean movePiece(ChessBoard chessBoard, int startX, int startY, int endX, int endY){
+    public boolean movePieceWithBoardCoordinates(ChessBoard chessBoard, String playerMove){
+        int[] matrixCoordinates = ChessBoard.parsePlayerMove(playerMove);
+        return movePieceWithMatrixCoordinates(chessBoard, matrixCoordinates[0], matrixCoordinates[1], matrixCoordinates[2], matrixCoordinates[3] );
+    }
+
+    public boolean movePieceWithMatrixCoordinates(ChessBoard chessBoard, int startX, int startY, int endX, int endY){
         ChessPiece pieceToMove = chessBoard.getPiece(startX, startY);
         if (pieceToMove != null){
             if((isWhite && pieceToMove.isWhite()) || (!isWhite && !pieceToMove.isWhite())) {
                 if (pieceToMove.isValidMove(startX, startY, endX, endY, chessBoard.getBoard())) {  // check if movement complains with the piece's movement rules
                     ChessPiece pieceOnDestination = chessBoard.getBoard()[endX][endY];
-                    if (pieceOnDestination == null && !chessBoard.isTrajectoryBlocked(pieceToMove, startX, startY, endX, endY)) {
-                        //move
-                        chessBoard.getBoard()[endX][endY] = pieceToMove;
-                        chessBoard.getBoard()[startX][startY] = null;
-                        System.out.printf("Moved %s from (%d,%d) to (%d,%d)\n", pieceToMove, startX, startY, endX, endY);
-                        return true;
+                    if (pieceOnDestination == null){
+                        if(!chessBoard.isTrajectoryBlocked(pieceToMove, startX, startY, endX, endY)) {
+                            //move
+                            chessBoard.getBoard()[endX][endY] = pieceToMove;
+                            chessBoard.getBoard()[startX][startY] = null;
+                            System.out.printf("Moved %s from (%d,%d) to (%d,%d)\n", pieceToMove, startX, startY, endX, endY);
+                            return true;
+                        } else{
+                            System.out.println("Trajectory blocked by another piece");
+                        }
                     } else {
                         if (pieceOnDestination.isWhite() && pieceToMove.isWhite() ||
                                 !pieceOnDestination.isWhite() && !pieceToMove.isWhite()) {
                             // movement not possible, there's a piece with the same color on the final position
                             System.err.printf("Movement %s from (%d,%d) to (%d,%d) not possible\n", pieceToMove, startX, startY, endX, endY);
-                            return false;
-                        } else {
+                        }else{
                             // there's a piece with different color in the finall position.
                             // capture
                             chessBoard.getBoard()[endX][endY] = pieceToMove;

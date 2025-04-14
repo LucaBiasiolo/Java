@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 
-public class ChessGameWithJavaFXTest {
+public class ChessGameTest {
 
     private static ChessBoard chessBoard;
     private static Player player1;
@@ -33,7 +33,7 @@ public class ChessGameWithJavaFXTest {
         ChessPiece pawn = chessBoard.getPiece(6, 0);
         assertNotNull(pawn);
         assertInstanceOf(Pawn.class, pawn);
-        player1.movePiece(chessBoard, 6, 0, 5, 0);
+        player1.movePieceWithMatrixCoordinates(chessBoard, 6, 0, 5, 0);
         chessBoard.printBoard();
         assertNull(chessBoard.getPiece(6, 0));
         pawn = chessBoard.getPiece(5, 0);
@@ -46,7 +46,7 @@ public class ChessGameWithJavaFXTest {
         assertNotNull(chessBoard.getPiece(6,1));
         assertInstanceOf(Pawn.class, chessBoard.getPiece(6,1));
         assertNull(chessBoard.getPiece(4,1));
-        player1.movePiece(chessBoard, 6,1,4,1);
+        player1.movePieceWithMatrixCoordinates(chessBoard, 6,1,4,1);
         chessBoard.printBoard();
         assertNull(chessBoard.getPiece(6,1));
         assertNotNull(chessBoard.getPiece(4,1));
@@ -58,10 +58,22 @@ public class ChessGameWithJavaFXTest {
         assertNotNull(chessBoard.getPiece(7,1));
         assertInstanceOf(Knight.class, chessBoard.getPiece(7,1));
         assertNull(chessBoard.getPiece(5,2));
-        player1.movePiece(chessBoard, 7, 1,5,2);
+        player1.movePieceWithMatrixCoordinates(chessBoard, 7, 1,5,2);
         chessBoard.printBoard();
         assertNull(chessBoard.getPiece(7,1));
         assertNotNull(chessBoard.getPiece(5,2));
         assertInstanceOf(Knight.class, chessBoard.getPiece(5,2));
+    }
+
+    @Test
+    public void testPieceAlongTheWayMethod(){
+        assertFalse(player1.movePieceWithMatrixCoordinates(chessBoard, 7,2,5,0));
+        assertFalse(player1.movePieceWithMatrixCoordinates(chessBoard,7,0,5,0));
+        assertFalse(player1.movePieceWithMatrixCoordinates(chessBoard,7,3,5,1));
+        assertFalse(player1.movePieceWithBoardCoordinates(chessBoard, "c1a3"));
+        assertFalse(player1.movePieceWithBoardCoordinates(chessBoard,"a1a3"));
+        assertFalse(player1.movePieceWithBoardCoordinates(chessBoard,"d1b3"));
+        assertFalse(player1.movePieceWithBoardCoordinates(chessBoard,"e1e2"));
+        assertTrue(player1.movePieceWithBoardCoordinates(chessBoard,"b1c3"));
     }
 }

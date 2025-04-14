@@ -5,9 +5,6 @@ import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static games.chess.ChessBoard.getColumnIndexFromCoordinate;
-import static games.chess.ChessBoard.getRowIndexFromCoordinate;
-
 /**
  * This class manages the game of games.chess using a command-line approach (i.e. the moves are made using algebraic notation)
  * */
@@ -37,36 +34,29 @@ public class ChessGameWithCommandLine {
                     System.out.println("Please insert a valid coordinate notation like e2e4");
                     continue;
                 }
-                int[] coordinates = parsePlayerMove(playerMove);
                 if(whiteTurn) {
-                    if(!player1.movePiece(board, coordinates[0], coordinates[1], coordinates[2], coordinates[3])){
+                    if(!player1.movePieceWithBoardCoordinates(board, playerMove)){
                         continue;
                     }
                 } else{
-                    if(!player2.movePiece(board, coordinates[0],coordinates[1],coordinates[2],coordinates[3])){
+                    if(!player2.movePieceWithBoardCoordinates(board, playerMove)){
                         continue;
                     }
                 }
                 board.printBoard();
                 whiteTurn = !whiteTurn;
             }
+            System.out.println("Game over! Do you want to play again? y/n: ");
+            String userContinue = scanner.nextLine().toLowerCase();
+            while (!userContinue.equals("n") && !userContinue.equals("y")) {
+                System.out.println("Please insert y to continue or n to exit the program");
+                userContinue = scanner.nextLine();
+            }
+            if (userContinue.equals("n")) {
+                System.out.println("Bye!");
+                scanner.close();
+                break;
+            }
         }
-    }
-
-    public int[] parsePlayerMove(String playerMove){
-        String startingPosition = playerMove.substring(0,2);
-        String endingPosition = playerMove.substring(2,4);
-
-        String startColumnLetter = String.valueOf(startingPosition.charAt(0));
-        Integer startRow = Integer.valueOf(startingPosition.substring(1,2));
-        String endColumnLetter = String.valueOf(endingPosition.charAt(0));
-        Integer endRow = Integer.valueOf(endingPosition.substring(1,2));
-
-        int startX = getRowIndexFromCoordinate(startRow);
-        int startY = getColumnIndexFromCoordinate(startColumnLetter);
-        int endX = getRowIndexFromCoordinate(endRow);
-        int endY = getColumnIndexFromCoordinate(endColumnLetter);
-
-        return new int[]{startX, startY, endX, endY};
     }
 }

@@ -91,19 +91,42 @@ public class ChessBoard {
         return false;
     }
 
+    //todo: check the row for castling?
+    //todo: check the first cell in the diagonal for capturing en-passant?
     public boolean isTrajectoryBlocked(ChessPiece pieceToMove, int startX, int startY, int endX, int endY) {
-        //todo: check if there are pieces along the way. Pieces cannot move over one another (except for the knight)
-        if (pieceToMove instanceof Knight){
-            return false;
-        } else if (pieceToMove instanceof Rook || pieceToMove instanceof Bishop || pieceToMove instanceof  Queen){
-            // linear movements, use directions and check every cell along the trajectory
-        } else if (pieceToMove instanceof King){
-            // check only the final square if it is a normal movement
-            // check the row for castling
-        } else if (pieceToMove instanceof  Pawn){
-            // check the first one or two frontal cells for normal movement
-            // check the first cell in the diagonal
+        //Pieces cannot move over one another (except for the knight)
+        if (!(pieceToMove instanceof Knight)) {
+            int directionAlongX = Integer.signum(endX - startX);
+            int directionAlongY = Integer.signum(endY - startY);
+
+            int currentX = startX + directionAlongX;
+            int currentY = startY + directionAlongY;
+
+            while (currentX != endX || currentY != endY) {
+                if (board[currentX][currentY] != null) {
+                    return true;
+                }
+                currentX += directionAlongX;
+                currentY += directionAlongY;
+            }
         }
         return false;
+    }
+
+    public static int[] parsePlayerMove(String playerMove){
+        String startingPosition = playerMove.substring(0,2);
+        String endingPosition = playerMove.substring(2,4);
+
+        String startColumnLetter = String.valueOf(startingPosition.charAt(0));
+        Integer startRow = Integer.valueOf(startingPosition.substring(1,2));
+        String endColumnLetter = String.valueOf(endingPosition.charAt(0));
+        Integer endRow = Integer.valueOf(endingPosition.substring(1,2));
+
+        int startX = getRowIndexFromCoordinate(startRow);
+        int startY = getColumnIndexFromCoordinate(startColumnLetter);
+        int endX = getRowIndexFromCoordinate(endRow);
+        int endY = getColumnIndexFromCoordinate(endColumnLetter);
+
+        return new int[]{startX, startY, endX, endY};
     }
 }

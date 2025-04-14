@@ -6,7 +6,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * This class manages the game of games.chess using a command-line approach (i.e. the moves are made using algebraic notation)
+ * This class manages the game of chess using a command-line approach (i.e. the moves are made using algebraic notation)
  * */
 public class ChessGameWithCommandLine {
 
@@ -16,7 +16,7 @@ public class ChessGameWithCommandLine {
     }
 
     public void play(){
-        System.out.println("Welcome to Java Game of games.chess using command line!");
+        System.out.println("Welcome to Java game of chess using command line!");
         while(true){ // loop to play games
             ChessBoard board = new ChessBoard();
             Player player1 = new Player("Player1", true, board);

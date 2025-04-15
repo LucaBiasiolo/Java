@@ -82,21 +82,6 @@ public class ChessBoard {
         System.out.println("   a b c d e f g h");
     }
 
-    public void printBoardWithIcons(){
-        for (int i =0; i<board.length; i++) {
-            System.out.print(8-i + " ");
-            for (int j = 0; j < board.length; j++) {
-                if (board[i][j] == null) {
-                    System.out.print(" ");
-                } else {
-                    System.out.print(board[i][j].isWhite() ? board[i][j].getIcon(): RED + board[i][j].getIcon() + RESET);
-                }
-            }
-            System.out.println();
-        }
-        System.out.println("  abcdefgh");
-    }
-
     public ChessPiece getPiece(int x, int y) {
         return board[x][y];
     }

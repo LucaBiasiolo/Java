@@ -87,12 +87,30 @@ public class Player {
         // move the king two pieces towards the rook and the rook on the cell the king has passed
     }
 
-    public void promotePawn(ChessBoard board, int xPosition, int yPosition, ChessPiece pieceToPromoteTo){
-        // Logic for promoting the pawn to a different piece (e.g., Queen, Rook, Bishop, Knight)
+    public void promotePawn(ChessBoard board, int xPosition, int yPosition){
         // This would typically involve replacing the Pawn object with the new piece object on the board
         // For simplicity, we can just set the position of the new piece to the Pawn's position
         // and remove the Pawn from the board.
-        ChessPiece pawnToPromote = board.getPiece(xPosition, yPosition);
+        boolean isWhite = xPosition == 0;
+
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("The pawn can be promoted! What piece do you want to promote it to?");
+        System.out.println("Choose between Q (Queen), R (Rook), B (Bishop), K (Knight) :");
+        String playerMove = scanner.nextLine();
+        Pattern pattern = Pattern.compile("[QRBK]");
+        Matcher matcher = pattern.matcher(playerMove);
+        while (!matcher.matches()) {
+            System.out.println("Please insert a valid choice");
+            playerMove = scanner.nextLine();
+        }
+        ChessPiece pieceToPromoteTo = board.getPiece(xPosition, yPosition);
+        pieceToPromoteTo = switch (playerMove) {
+            case "Q" -> new Queen(isWhite);
+            case "R" -> new Rook(isWhite);
+            case "B" -> new Bishop(isWhite);
+            case "K" -> new Knight(isWhite);
+            default -> pieceToPromoteTo;
+        };
         board.getBoard()[xPosition][yPosition] = pieceToPromoteTo;
     }
 }

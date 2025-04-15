@@ -65,8 +65,9 @@ public class ChessBoard {
     }
 
     public void printBoardWithLetters(){
+        System.out.println("   abcdefgh");
         for (int i =0; i<board.length; i++) {
-            System.out.print(8-i + " ");
+            System.out.print(8-i + " |");
             for (int j = 0; j < board.length; j++) {
                 if (board[i][j] == null) {
                     System.out.print(" ");
@@ -74,9 +75,10 @@ public class ChessBoard {
                     System.out.print(board[i][j].isWhite() ? board[i][j].getLetter() : RED + board[i][j].getLetter() + RESET);
                 }
             }
-            System.out.println();
+            System.out.print("| ");
+            System.out.print(8-i + "\n");
         }
-        System.out.println("  abcdefgh");
+        System.out.println("   abcdefgh");
     }
 
     public void printBoardWithIcons(){

@@ -17,7 +17,7 @@ public class Pawn extends ChessPiece {
     }
 
     @Override
-    public boolean isValidMove(int startX, int startY, int endX, int endY, ChessPiece[][] board) {
+    public boolean isMoveValid(int startX, int startY, int endX, int endY) {
         // The Pawn can move forward one square, or two squares from its starting position
         // It can also capture diagonally
         int deltaX = Math.abs(endX - startX);

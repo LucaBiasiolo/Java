@@ -7,7 +7,7 @@ public class Bishop extends ChessPiece{
     }
 
     @Override
-    public boolean isValidMove(int startX, int startY, int endX, int endY, ChessPiece[][] board) {
+    public boolean isMoveValid(int startX, int startY, int endX, int endY) {
         int deltaX = Math.abs(endX - startX);
         int deltaY = Math.abs(endY - startY);
         return deltaX == deltaY;

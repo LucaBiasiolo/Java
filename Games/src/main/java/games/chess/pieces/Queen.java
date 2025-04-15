@@ -12,7 +12,7 @@ public class Queen extends ChessPiece{
     }
 
     @Override
-    public boolean isValidMove(int startX, int startY, int endX, int endY, ChessPiece[][] board) {
+    public boolean isMoveValid(int startX, int startY, int endX, int endY) {
         // The Queen can move any number of squares in any direction
         int deltaX = Math.abs(endX - startX);
         int deltaY = Math.abs(endY - startY);

@@ -3,7 +3,7 @@ package games.chess.pieces;
 public class King extends ChessPiece{
 
     @Override
-    public boolean isValidMove(int startX, int startY, int endX, int endY, ChessPiece[][] board) {
+    public boolean isMoveValid(int startX, int startY, int endX, int endY) {
         // The King can move one square in any direction
         int deltaX = Math.abs(endX - startX);
         int deltaY = Math.abs(endY - startY);

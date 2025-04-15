@@ -6,7 +6,7 @@ public abstract class ChessPiece {
     protected String letter;
     protected boolean isWhite;
 
-    public abstract boolean isValidMove(int startX, int startY, int endX, int endY, ChessPiece[][] board);
+    public abstract boolean isMoveValid(int startX, int startY, int endX, int endY);
 
     public ChessPiece(String icon, String letter, boolean isWhite) {
         this.icon = icon;

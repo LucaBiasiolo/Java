@@ -12,7 +12,7 @@ public class Rook extends ChessPiece{
     }
 
     @Override
-    public boolean isValidMove(int startX, int startY, int endX, int endY, ChessPiece[][] board) {
+    public boolean isMoveValid(int startX, int startY, int endX, int endY) {
         // The Rook can move any number of squares vertically or horizontally
         return (startX == endX || startY == endY);
     }

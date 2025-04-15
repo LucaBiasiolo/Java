@@ -3,7 +3,7 @@ package games.chess.pieces;
 public class Knight extends ChessPiece{
 
     @Override
-    public boolean isValidMove(int startX, int startY, int endX, int endY, ChessPiece[][] board) {
+    public boolean isMoveValid(int startX, int startY, int endX, int endY) {
         // The Knight moves in an L-shape: two squares in one direction and then one square perpendicular
         int deltaX = Math.abs(endX - startX);
         int deltaY = Math.abs(endY - startY);

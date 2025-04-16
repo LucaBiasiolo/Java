@@ -6,7 +6,7 @@ import games.chess.beans.ChessPiece;
 public class Pawn extends ChessPiece {
 
     public Pawn(ChessColor color) {
-        super("♙", null,color);
+        super("♙", "P",color);
     }
 
     @Override

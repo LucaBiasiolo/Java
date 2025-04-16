@@ -1,6 +1,6 @@
 package games.chess.beans;
 
-import static games.chess.ChessBoard.*;
+import games.chess.ChessBoardUtil;
 
 public class Move {
 
@@ -12,6 +12,7 @@ public class Move {
     private boolean isCapture;
     private boolean isCheck;
     private boolean isCastling; // todo: distinguish betwenn king-side and queen-side castling
+    private Castling castlingType;
     private boolean isCheckMate;
     private boolean isPromotion;
 
@@ -40,6 +41,10 @@ public class Move {
     }
 
     public String toAlgebraicNotation(){
+        if (isCastling){
+            return castlingType.getAlgebraicNotation();
+        }
+
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append(piece.getLetter());
         //todo: insert optional column for disambiguation ?
@@ -92,5 +97,21 @@ public class Move {
 
     public void setEndColumn(int endColumn) {
         this.endColumn = endColumn;
+    }
+
+    public boolean isCastling() {
+        return isCastling;
+    }
+
+    public void setCastling(boolean castling) {
+        isCastling = castling;
+    }
+
+    public Castling getCastlingType() {
+        return castlingType;
+    }
+
+    public void setCastlingType(Castling castlingType) {
+        this.castlingType = castlingType;
     }
 }

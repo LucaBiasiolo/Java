@@ -1,14 +1,12 @@
 package games.chess.beans.pieces;
 
-public class Queen extends ChessPiece{
+import games.chess.beans.ChessColor;
+import games.chess.beans.ChessPiece;
 
-    public Queen(boolean isWhite) {
-        super("♕","Q", isWhite);
-    }
+public class Queen extends ChessPiece {
 
-    @Override
-    public boolean isWhite() {
-        return isWhite;
+    public Queen(ChessColor color) {
+        super("♕","Q", color);
     }
 
     @Override
@@ -21,12 +19,5 @@ public class Queen extends ChessPiece{
 
     public String getIcon() {
         return icon;
-    }
-
-    @Override
-    public String toString() {
-        return "Queen{" +
-                "isWhite=" + isWhite +
-                '}';
     }
 }

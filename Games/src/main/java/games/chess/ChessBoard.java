@@ -1,5 +1,7 @@
 package games.chess;
 
+import games.chess.beans.ChessColor;
+import games.chess.beans.ChessPiece;
 import games.chess.beans.Move;
 import games.chess.beans.pieces.*;
 
@@ -56,33 +58,33 @@ public class ChessBoard {
     private void initializeBoard() {
         // Pawns
         for (int i = 0; i < 8; i++) {
-            board[6][i] = new Pawn(true);
-            board[1][i] = new Pawn(false);
+            board[6][i] = new Pawn(ChessColor.WHITE);
+            board[1][i] = new Pawn(ChessColor.BLACK);
         }
         // Rooks
-        board[0][0] = new Rook(false);
-        board[0][7] = new Rook(false);
-        board[7][0] = new Rook(true);
-        board[7][7] = new Rook(true);
+        board[0][0] = new Rook(ChessColor.BLACK);
+        board[0][7] = new Rook(ChessColor.BLACK);
+        board[7][0] = new Rook(ChessColor.WHITE);
+        board[7][7] = new Rook(ChessColor.WHITE);
 
         // Knights
-        board[0][1] = new Knight(false);
-        board[0][6] = new Knight(false);
-        board[7][1] = new Knight(true);
-        board[7][6] = new Knight(true);
+        board[0][1] = new Knight(ChessColor.BLACK);
+        board[0][6] = new Knight(ChessColor.BLACK);
+        board[7][1] = new Knight(ChessColor.WHITE);
+        board[7][6] = new Knight(ChessColor.WHITE);
 
         // Bishops
-        board[0][2] = new Bishop(false);
-        board[0][5] = new Bishop(false);
-        board[7][2] = new Bishop(true);
-        board[7][5] = new Bishop(true);
+        board[0][2] = new Bishop(ChessColor.BLACK);
+        board[0][5] = new Bishop(ChessColor.BLACK);
+        board[7][2] = new Bishop(ChessColor.WHITE);
+        board[7][5] = new Bishop(ChessColor.WHITE);
         // Queens
-        board[0][3] = new Queen(false);
-        board[7][3] = new Queen(true);
+        board[0][3] = new Queen(ChessColor.BLACK);
+        board[7][3] = new Queen(ChessColor.WHITE);
 
         // Kings
-        board[0][4] = new King(false);
-        board[7][4] = new King(true);
+        board[0][4] = new King(ChessColor.BLACK);
+        board[7][4] = new King(ChessColor.WHITE);
     }
 
     public static Integer getRowIndexFromCoordinate(Integer startRow){
@@ -110,7 +112,7 @@ public class ChessBoard {
                     System.out.print("| ");
                 } else {
                     System.out.print("|");
-                    System.out.print(board[i][j].isWhite() ? board[i][j].getLetter() : RED + board[i][j].getLetter() + RESET);
+                    System.out.print(board[i][j].getColor().equals(ChessColor.WHITE) ? board[i][j].getLetter() : RED + board[i][j].getLetter() + RESET);
                 }
             }
             System.out.print("| ");

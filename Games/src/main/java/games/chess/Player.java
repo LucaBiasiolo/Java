@@ -1,5 +1,7 @@
 package games.chess;
 
+import games.chess.beans.ChessColor;
+import games.chess.beans.ChessPiece;
 import games.chess.beans.Move;
 import games.chess.beans.pieces.*;
 
@@ -13,13 +15,12 @@ public class Player {
 
     private String name;
     private List<ChessPiece> pieces = new ArrayList<>(16); // todo: play "Pick up the pieces" by Average White Band
-    private boolean isWhite;
+    private ChessColor playerColor;
     private List<Move> moveLog = new ArrayList<>();
 
-    public Player(String name, boolean isWhite, ChessBoard chessBoard) {
+    public Player(String name, ChessColor playerColor, ChessBoard chessBoard) {
         this.name = name;
-        this.isWhite = isWhite;
-        //associatePieces(chessBoard);
+        this.playerColor = playerColor;
     }
 
     /*public void associatePieces(ChessBoard chessBoard){
@@ -60,7 +61,7 @@ public class Player {
 
         ChessPiece pieceToMove = chessBoard.getPiece(startRow, startColumn);
         if (pieceToMove != null){
-            if((isWhite && pieceToMove.isWhite()) || (!isWhite && !pieceToMove.isWhite())) { // check if you're moving your own pieces
+            if(pieceToMove.getColor().equals(playerColor)) { // check if you're moving your own pieces
                 // todo: implement castling, and capture en-passant
                 if (pieceToMove.isMoveValid(startRow, startColumn, endRow, endColumn)) {  // check if movement complains with the piece's movement rules
                     ChessPiece pieceOnDestination = chessBoard.getBoard()[endRow][endColumn];
@@ -86,8 +87,7 @@ public class Player {
                         }
                     } else {
                         //todo: is this if useless, given the method isTrajectoryBlocked?
-                        if (pieceOnDestination.isWhite() && pieceToMove.isWhite() ||
-                                !pieceOnDestination.isWhite() && !pieceToMove.isWhite()) {
+                        if (pieceOnDestination.getColor().equals(pieceToMove.getColor())){
                             // movement not possible, there's a piece with the same color on the final position
                             System.err.printf("Movement %s from (%d,%d) to (%d,%d) not possible\n", pieceToMove, startRow, startColumn, endRow, endColumn);
                         }else{
@@ -131,7 +131,12 @@ public class Player {
         // This would typically involve replacing the Pawn object with the new piece object on the board
         // For simplicity, we can just set the position of the new piece to the Pawn's position
         // and remove the Pawn from the board.
-        boolean isWhite = xPosition == 0;
+        ChessColor color;
+        if(xPosition == 0){
+            color = ChessColor.WHITE;
+        } else {
+            color = ChessColor.BLACK;
+        }
 
         Scanner scanner = new Scanner(System.in);
         System.out.println("The pawn can be promoted! What piece do you want to promote it to?");
@@ -147,10 +152,10 @@ public class Player {
 
         ChessPiece pieceToPromoteTo = board.getPiece(xPosition, yPosition);
         pieceToPromoteTo = switch (playerMove) {
-            case "Q" -> new Queen(isWhite);
-            case "R" -> new Rook(isWhite);
-            case "B" -> new Bishop(isWhite);
-            case "K" -> new Knight(isWhite);
+            case "Q" -> new Queen(color);
+            case "R" -> new Rook(color);
+            case "B" -> new Bishop(color);
+            case "K" -> new Knight(color);
             default -> pieceToPromoteTo;
         };
         board.getBoard()[xPosition][yPosition] = pieceToPromoteTo;

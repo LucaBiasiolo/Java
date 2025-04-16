@@ -1,21 +1,21 @@
-package games.chess.beans.pieces;
+package games.chess.beans;
 
 public abstract class ChessPiece {
 
     protected String icon;
     protected String letter;
-    protected boolean isWhite;
+    protected ChessColor color;
 
     public abstract boolean isMoveValid(int startX, int startY, int endX, int endY);
 
-    public ChessPiece(String icon, String letter, boolean isWhite) {
+    public ChessPiece(String icon, String letter, ChessColor color) {
         this.icon = icon;
         this.letter = letter;
-        this.isWhite = isWhite;
+        this.color = color;
     }
 
-    public boolean isWhite(){
-        return isWhite;
+    public ChessColor getColor() {
+        return color;
     }
 
     public String getIcon(){
@@ -23,7 +23,9 @@ public abstract class ChessPiece {
     }
 
     @Override
-    public abstract String toString();
+    public String toString() {
+        return color.getDescription() + " " + this.getClass().getName();
+    }
 
     public String getLetter(){
         return letter;

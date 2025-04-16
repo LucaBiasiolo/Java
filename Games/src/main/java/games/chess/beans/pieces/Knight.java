@@ -1,6 +1,9 @@
 package games.chess.beans.pieces;
 
-public class Knight extends ChessPiece{
+import games.chess.beans.ChessColor;
+import games.chess.beans.ChessPiece;
+
+public class Knight extends ChessPiece {
 
     @Override
     public boolean isMoveValid(int startX, int startY, int endX, int endY) {
@@ -10,23 +13,12 @@ public class Knight extends ChessPiece{
         return (deltaX == 2 && deltaY == 1) || (deltaX == 1 && deltaY == 2);
     }
 
-    public Knight(boolean isWhite) {
-        super("♞", "N", isWhite);
+    public Knight(ChessColor color) {
+        super("♞", "N", color);
     }
 
-    @Override
-    public boolean isWhite() {
-        return isWhite;
-    }
 
     public String getIcon() {
         return icon;
-    }
-
-    @Override
-    public String toString() {
-        return "Knight{" +
-                "isWhite=" + isWhite +
-                '}';
     }
 }

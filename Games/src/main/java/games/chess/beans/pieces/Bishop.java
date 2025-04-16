@@ -1,9 +1,12 @@
 package games.chess.beans.pieces;
 
-public class Bishop extends ChessPiece{
+import games.chess.beans.ChessColor;
+import games.chess.beans.ChessPiece;
 
-    public Bishop(boolean isWhite) {
-        super("♗", "B", isWhite);
+public class Bishop extends ChessPiece {
+
+    public Bishop(ChessColor color) {
+        super("♗", "B", color);
     }
 
     @Override
@@ -11,16 +14,5 @@ public class Bishop extends ChessPiece{
         int deltaX = Math.abs(endX - startX);
         int deltaY = Math.abs(endY - startY);
         return deltaX == deltaY;
-    }
-
-    public String getIcon() {
-        return icon;
-    }
-
-    @Override
-    public String toString() {
-        return "Bishop{" +
-                "isWhite=" + isWhite +
-                '}';
     }
 }

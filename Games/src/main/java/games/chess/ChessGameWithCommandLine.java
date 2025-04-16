@@ -1,12 +1,14 @@
 
 package games.chess;
 
+import games.chess.beans.ChessColor;
+
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * This class manages the game of chess using a command-line approach (i.e. the moves are made using algebraic notation)
+ * This class manages the game of chess using a command-line approach (i.e. the moves are made using board notation)
  * */
 public class ChessGameWithCommandLine {
 
@@ -19,8 +21,8 @@ public class ChessGameWithCommandLine {
         System.out.println("Welcome to Java game of chess using command line!");
         while(true){ // loop to play games
             ChessBoard board = new ChessBoard();
-            Player player1 = new Player("Player1", true, board);
-            Player player2 = new Player("Player2", false, board);
+            Player player1 = new Player("Player1", ChessColor.WHITE, board);
+            Player player2 = new Player("Player2", ChessColor.BLACK, board);
             board.printBoardWithLetters();
             boolean whiteTurn = true;
             Scanner scanner = new Scanner(System.in);

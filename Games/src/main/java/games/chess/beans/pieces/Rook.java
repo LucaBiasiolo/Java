@@ -1,14 +1,12 @@
 package games.chess.beans.pieces;
 
-public class Rook extends ChessPiece{
+import games.chess.beans.ChessColor;
+import games.chess.beans.ChessPiece;
 
-    public Rook(boolean isWhite) {
-        super("♖", "R",isWhite);
-    }
+public class Rook extends ChessPiece {
 
-    @Override
-    public boolean isWhite() {
-        return isWhite;
+    public Rook(ChessColor color) {
+        super("♖", "R",color);
     }
 
     @Override
@@ -19,12 +17,5 @@ public class Rook extends ChessPiece{
 
     public String getIcon() {
         return icon;
-    }
-
-    @Override
-    public String toString() {
-        return "Rook{" +
-                "isWhite=" + isWhite +
-                '}';
     }
 }

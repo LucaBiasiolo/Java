@@ -1,6 +1,6 @@
 package games.chess;
 
-import games.chess.beans.pieces.ChessPiece;
+import games.chess.beans.ChessPiece;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -36,7 +36,7 @@ public class ChessGameWithJavaFX extends Application {
                 if (piece != null) {
                     button.setText(piece.getIcon());
                     button.setStyle(button.getStyle() + "-fx-font-size: 40px; -fx-font-weight: bold;");
-                    button.setStyle(button.getStyle() + " -fx-text-fill: " + (piece.isWhite() ? "white" : "black") + ";");
+                    button.setStyle(button.getStyle() + " -fx-text-fill: " + piece.getColor().getDescription() + ";");
                     button.setOnMouseClicked(event ->{
                         handlePieceClick(event,piece);
                     });

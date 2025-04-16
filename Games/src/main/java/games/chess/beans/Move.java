@@ -1,7 +1,5 @@
 package games.chess.beans;
 
-import games.chess.beans.pieces.ChessPiece;
-
 import static games.chess.ChessBoard.*;
 
 public class Move {

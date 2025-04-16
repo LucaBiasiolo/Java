@@ -68,13 +68,9 @@ public class Player {
                             //move
                             chessBoard.getBoard()[endRow][endColumn] = pieceToMove;
                             chessBoard.getBoard()[startRow][startColumn] = null;
-                            System.out.printf("Moved %s from (%d,%d) to (%d,%d)\n", pieceToMove, startRow, startColumn, endRow, endColumn);
-
-                            if(pieceToMove instanceof Pawn && (endRow == 0 || endRow == 7)){
-                                promotePawn(chessBoard, endRow, endColumn);
-                            }
-
-                            moveLog.add(new Move(pieceToMove, startRow, startColumn, endRow, endColumn));
+                            move.setPiece(pieceToMove);
+                            System.out.println(move.toAlgebraicNotation());
+                            playerMoveLog.add(move);
                             return true;
                         } else{
                             System.out.println("Trajectory blocked by another piece");
@@ -88,11 +84,10 @@ public class Player {
                             // capture
                             chessBoard.getBoard()[endRow][endColumn] = pieceToMove;
                             chessBoard.getBoard()[startRow][startColumn] = null;
-
-                            if(pieceToMove instanceof Pawn && (endRow == 0 || endRow == 7)){
-                                promotePawn(chessBoard, endRow, endColumn);
-                            }
-                            moveLog.add(new Move(pieceToMove, startRow, startColumn, endRow, endColumn));
+                            move.setPiece(pieceToMove);
+                            move.setIsCapture(true);
+                            System.out.println(move.toAlgebraicNotation());
+                            playerMoveLog.add(move);
                             return true;
                         }
                     }

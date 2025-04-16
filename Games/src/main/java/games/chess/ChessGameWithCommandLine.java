@@ -23,13 +23,13 @@ public class ChessGameWithCommandLine {
         System.out.println("Welcome to Java game of chess using command line!");
         while(true){ // loop to play games
             ChessBoard board = new ChessBoard();
-            Player player1 = new Player("Player1", ChessColor.WHITE);
-            Player player2 = new Player("Player2", ChessColor.BLACK);
+            Player whitePlayer = new Player("White Player", ChessColor.WHITE);
+            Player blackPlayer = new Player("Black Player", ChessColor.BLACK);
             board.printBoardWithLetters();
-            boolean whiteTurn = true;
+            Player activePlayer = whitePlayer;
             Scanner scanner = new Scanner(System.in);
-            while(!board.isGameOver()){ // todo: loop for turns continues until game finishes
-                System.out.print((whiteTurn ? "White " : "Black ") + "player, it's your turn. Write your move using coordinate notation\n");
+            while(!board.isGameOver()){
+                System.out.print(activePlayer.getName() + ", it's your turn. Write your move using coordinate notation\n");
                 System.out.println("Remember that columns are named with letters from a to h starting from left and row are named with numbers from 1 to 8 starting from white pieces");
                 String playerMove = scanner.nextLine();
                 Pattern pattern = Pattern.compile("[a-h][1-8][a-h][1-8]");
@@ -38,17 +38,16 @@ public class ChessGameWithCommandLine {
                     System.out.println("Please insert a valid coordinate notation like e2e4");
                     continue;
                 }
-                if(whiteTurn) {
-                    if(!player1.movePieceWithBoardCoordinates(board, playerMove)){
-                        continue;
-                    }
-                } else{
-                    if(!player2.movePieceWithBoardCoordinates(board, playerMove)){
-                        continue;
-                    }
+
+                if(!activePlayer.movePieceWithBoardCoordinates(board, playerMove)) {
+                    continue;
                 }
                 board.printBoardWithLetters();
-                whiteTurn = !whiteTurn;
+                if(activePlayer.equals(whitePlayer)){
+                    activePlayer = blackPlayer;
+                } else{
+                    activePlayer = whitePlayer;
+                }
             }
             System.out.println("Game over! Do you want to play again? y/n: ");
             String userContinue = scanner.nextLine().toLowerCase();

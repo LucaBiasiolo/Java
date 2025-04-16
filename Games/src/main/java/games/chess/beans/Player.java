@@ -149,4 +149,8 @@ public class Player {
         };
         board.getBoard()[xPosition][yPosition] = pieceToPromoteTo;
     }
+
+    public String getName() {
+        return name;
+    }
 }

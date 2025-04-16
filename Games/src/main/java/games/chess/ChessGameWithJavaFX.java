@@ -1,6 +1,6 @@
 package games.chess;
 
-import games.chess.pieces.ChessPiece;
+import games.chess.beans.pieces.ChessPiece;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -32,7 +32,7 @@ public class ChessGameWithJavaFX extends Application {
                 } else {
                     button.setStyle("-fx-background-color: brown;");
                 }
-                games.chess.pieces.ChessPiece piece = chessBoard.getPiece(row, col);
+                ChessPiece piece = chessBoard.getPiece(row, col);
                 if (piece != null) {
                     button.setText(piece.getIcon());
                     button.setStyle(button.getStyle() + "-fx-font-size: 40px; -fx-font-weight: bold;");
@@ -61,7 +61,7 @@ public class ChessGameWithJavaFX extends Application {
         System.out.println("Square clicked");
     }
 
-    private void handlePieceClick(MouseEvent click, games.chess.pieces.ChessPiece piece){
+    private void handlePieceClick(MouseEvent click, ChessPiece piece){
         click.consume();
         System.out.println("Button clicked");
         // todo: show possible moves

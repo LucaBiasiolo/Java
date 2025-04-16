@@ -1,8 +1,6 @@
 package games.chess;
 
-import games.chess.beans.ChessColor;
-import games.chess.beans.Move;
-import games.chess.beans.ChessPiece;
+import games.chess.beans.*;
 import games.chess.beans.pieces.Knight;
 import games.chess.beans.pieces.Pawn;
 import org.junit.jupiter.api.BeforeAll;
@@ -20,8 +18,8 @@ public class ChessGameTest {
     @BeforeAll
     public static void createChessBoard(){
         chessBoard = new ChessBoard();
-        player1 = new Player("Luca White", ChessColor.WHITE, chessBoard);
-        player2 = new Player("Luca Black", ChessColor.BLACK, chessBoard);
+        player1 = new Player("Luca White", ChessColor.WHITE);
+        player2 = new Player("Luca Black", ChessColor.BLACK);
     }
 
     @Test

@@ -1,6 +1,8 @@
 package games.chess;
 
+import games.chess.beans.ChessBoard;
 import games.chess.beans.ChessPiece;
+import games.chess.beans.Player;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;

@@ -1,8 +1,6 @@
-package games.chess;
+package games.chess.beans;
 
-import games.chess.beans.ChessColor;
-import games.chess.beans.ChessPiece;
-import games.chess.beans.Move;
+import games.chess.ChessBoardUtil;
 import games.chess.beans.pieces.*;
 
 import java.util.ArrayList;
@@ -14,11 +12,11 @@ import java.util.regex.Pattern;
 public class Player {
 
     private String name;
-    private List<ChessPiece> pieces = new ArrayList<>(16); // todo: play "Pick up the pieces" by Average White Band
+    // todo: play "Pick up the pieces" by Average White Band
     private ChessColor playerColor;
     private List<Move> moveLog = new ArrayList<>();
 
-    public Player(String name, ChessColor playerColor, ChessBoard chessBoard) {
+    public Player(String name, ChessColor playerColor) {
         this.name = name;
         this.playerColor = playerColor;
     }
@@ -68,10 +66,6 @@ public class Player {
                     if (pieceOnDestination == null){
                         if(!chessBoard.isTrajectoryBlocked(pieceToMove, startRow, startColumn, endRow, endColumn)) {
                             //move
-                            if (pieceToMove instanceof King){
-                                performCastling((King) pieceToMove, endColumn);
-                            }
-
                             chessBoard.getBoard()[endRow][endColumn] = pieceToMove;
                             chessBoard.getBoard()[startRow][startColumn] = null;
                             System.out.printf("Moved %s from (%d,%d) to (%d,%d)\n", pieceToMove, startRow, startColumn, endRow, endColumn);
@@ -86,7 +80,6 @@ public class Player {
                             System.out.println("Trajectory blocked by another piece");
                         }
                     } else {
-                        //todo: is this if useless, given the method isTrajectoryBlocked?
                         if (pieceOnDestination.getColor().equals(pieceToMove.getColor())){
                             // movement not possible, there's a piece with the same color on the final position
                             System.err.printf("Movement %s from (%d,%d) to (%d,%d) not possible\n", pieceToMove, startRow, startColumn, endRow, endColumn);
@@ -127,6 +120,7 @@ public class Player {
 
     }
 
+    // todo: move this method?
     public void promotePawn(ChessBoard board, int xPosition, int yPosition){
         // This would typically involve replacing the Pawn object with the new piece object on the board
         // For simplicity, we can just set the position of the new piece to the Pawn's position

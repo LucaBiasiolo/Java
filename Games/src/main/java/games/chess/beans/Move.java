@@ -1,6 +1,7 @@
 package games.chess.beans;
 
 import games.chess.ChessBoardUtil;
+import games.chess.beans.pieces.Pawn;
 
 public class Move {
 
@@ -9,12 +10,13 @@ public class Move {
     private int endRow;
     private int endColumn;
     private ChessPiece piece;
-    private boolean isCapture;
-    private boolean isCheck;
-    private boolean isCastling; // todo: distinguish betwenn king-side and queen-side castling
+    private boolean isCapture = false;
+    private boolean isCheck = false;
+    private boolean isCastling =false;
     private Castling castlingType;
-    private boolean isCheckMate;
-    private boolean isPromotion;
+    private boolean isCheckMate =false;
+    private boolean isPromotion =false;
+    private ChessPiece pieceOfPromotion;
 
     public Move(ChessPiece piece, int startRow, int startColumn, int endRow,int endColumn) {
         this.piece = piece;
@@ -46,14 +48,22 @@ public class Move {
         }
 
         StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append(piece.getLetter());
-        //todo: insert optional column for disambiguation ?
-        stringBuilder.append(isCapture ? "x" : "");
+        if (piece instanceof  Pawn && isCapture){ // if a pawn is capturing add starting file
+            stringBuilder.append(startColumn).append("x");
+        } else {
+            stringBuilder.append(piece.getLetter());
+            //todo: insert optional column for disambiguation ?
+            if (isCapture) stringBuilder.append("x");
+        }
 
         String endBoardColumn = ChessBoardUtil.fromMatrixColumnToBoardColumn(endColumn);
         int endBoardRow = ChessBoardUtil.convertRowInOtherNotation(endRow);
 
         stringBuilder.append(endBoardColumn).append(endBoardRow);
+
+        if (isPromotion){
+            stringBuilder.append(pieceOfPromotion.getLetter());
+        }
         stringBuilder.append(isCheck ? "+" : "");
         stringBuilder.append(isCheckMate ? "#" : "");
         return stringBuilder.toString();
@@ -113,5 +123,13 @@ public class Move {
 
     public void setCastlingType(Castling castlingType) {
         this.castlingType = castlingType;
+    }
+
+    public boolean isCapture() {
+        return isCapture;
+    }
+
+    public void setIsCapture(boolean capture) {
+        isCapture = capture;
     }
 }

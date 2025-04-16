@@ -48,8 +48,8 @@ public class Player {
 //        }
 //    }
 
-    public boolean movePieceWithBoardCoordinates(ChessBoard chessBoard, String playerMove){
-        Move move = ChessBoard.parsePlayerMoveFromBoardCoordinates(playerMove);
+    public boolean movePieceWithBoardCoordinates(ChessBoard chessBoard, String playerMoveInBoardCoordinates){
+        Move move = ChessBoardUtil.parsePlayerMoveInBoardCoordinates(playerMoveInBoardCoordinates);
         return movePieceWithMatrixCoordinates(chessBoard, move);
     }
 

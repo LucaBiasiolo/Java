@@ -31,10 +31,10 @@ public class Move {
     }
 
     public String toBoardNotation(){
-        String startBoardColumn = getBoardColumnFromColumnIndex(startColumn);
-        int startBoardRow = getBoardRowFromRowIndex(startRow);
-        String endBoardColum = getBoardColumnFromColumnIndex(endColumn);
-        int endBoardRow = getBoardRowFromRowIndex(endRow);
+        String startBoardColumn = ChessBoardUtil.fromMatrixColumnToBoardColumn(startColumn);
+        int startBoardRow = ChessBoardUtil.fromMatrixRowToBoardRow(startRow);
+        String endBoardColum = ChessBoardUtil.fromMatrixColumnToBoardColumn(endColumn);
+        int endBoardRow = ChessBoardUtil.fromMatrixRowToBoardRow(endRow);
 
         return String.format("%s%d%s%d",startBoardColumn,startBoardRow,endBoardColum,endBoardRow);
     }
@@ -45,8 +45,8 @@ public class Move {
         //todo: insert optional column for disambiguation ?
         stringBuilder.append(isCapture ? "x" : "");
 
-        String endBoardColumn = getBoardColumnFromColumnIndex(endColumn);
-        int endBoardRow = getBoardRowFromRowIndex(endRow);
+        String endBoardColumn = ChessBoardUtil.fromMatrixColumnToBoardColumn(endColumn);
+        int endBoardRow = ChessBoardUtil.fromMatrixRowToBoardRow(endRow);
 
         stringBuilder.append(endBoardColumn).append(endBoardRow);
         stringBuilder.append(isCheck ? "+" : "");

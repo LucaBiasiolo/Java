@@ -1,25 +1,11 @@
-package games.chess;
+package games.chess.beans;
 
-import games.chess.beans.ChessColor;
-import games.chess.beans.ChessPiece;
-import games.chess.beans.Move;
 import games.chess.beans.pieces.*;
-
-import java.util.HashMap;
-import java.util.Map;
 
 public class ChessBoard {
     private ChessPiece[][] board;
-    public static final String RED = "\u001B[31m";
-    public static final String RESET = "\u001B[0m";
-    public static final String[] columnIndexToLetter = new String[]{"a","b","c","d","e","f","g","h"};
-    public static final Map<String,Integer> letterToColumnIndex = new HashMap<>(8);
-
-    static{
-        for (int i = 0; i < columnIndexToLetter.length; i++) {
-            letterToColumnIndex.put(columnIndexToLetter[i],i);
-        }
-    }
+    private static final String RED = "\u001B[31m";
+    private static final String RESET = "\u001B[0m";
 
     public ChessBoard() {
         board = new ChessPiece[8][8];
@@ -87,22 +73,6 @@ public class ChessBoard {
         board[7][4] = new King(ChessColor.WHITE);
     }
 
-    public static Integer getRowIndexFromCoordinate(Integer startRow){
-        return 8-startRow;
-    }
-
-    public static Integer getBoardRowFromRowIndex(Integer rowIndex){
-        return 8+rowIndex;
-    }
-
-    public static Integer getColumnIndexFromCoordinate(String columnLetter){
-        return letterToColumnIndex.get(columnLetter);
-    }
-
-    public static String getBoardColumnFromColumnIndex(Integer columnIndex){
-        return columnIndexToLetter[columnIndex];
-    }
-
     public void printBoardWithLetters(){
         System.out.println("   a b c d e f g h");
         for (int i =0; i<board.length; i++) {
@@ -154,22 +124,5 @@ public class ChessBoard {
             }
         }
         return false;
-    }
-
-    public static Move parsePlayerMoveFromBoardCoordinates(String playerMove){
-        String startingPosition = playerMove.substring(0,2);
-        String endingPosition = playerMove.substring(2,4);
-
-        String startColumnLetter = String.valueOf(startingPosition.charAt(0));
-        Integer startRow = Integer.valueOf(startingPosition.substring(1,2));
-        String endColumnLetter = String.valueOf(endingPosition.charAt(0));
-        Integer endRow = Integer.valueOf(endingPosition.substring(1,2));
-
-        int startX = getRowIndexFromCoordinate(startRow);
-        int startY = getColumnIndexFromCoordinate(startColumnLetter);
-        int endX = getRowIndexFromCoordinate(endRow);
-        int endY = getColumnIndexFromCoordinate(endColumnLetter);
-
-        return new Move(startX, startY, endX, endY);
     }
 }

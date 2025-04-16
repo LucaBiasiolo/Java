@@ -1,6 +1,7 @@
 package games.chess;
 
-import games.chess.pieces.*;
+import games.chess.beans.Move;
+import games.chess.beans.pieces.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -9,6 +10,14 @@ public class ChessBoard {
     private ChessPiece[][] board;
     public static final String RED = "\u001B[31m";
     public static final String RESET = "\u001B[0m";
+    public static final String[] columnIndexToLetter = new String[]{"a","b","c","d","e","f","g","h"};
+    public static final Map<String,Integer> letterToColumnIndex = new HashMap<>(8);
+
+    static{
+        for (int i = 0; i < columnIndexToLetter.length; i++) {
+            letterToColumnIndex.put(columnIndexToLetter[i],i);
+        }
+    }
 
     public ChessBoard() {
         board = new ChessPiece[8][8];
@@ -80,17 +89,16 @@ public class ChessBoard {
         return 8-startRow;
     }
 
+    public static Integer getBoardRowFromRowIndex(Integer rowIndex){
+        return 8+rowIndex;
+    }
+
     public static Integer getColumnIndexFromCoordinate(String columnLetter){
-        Map<String, Integer> mappingColumnLetterToIndex = new HashMap<>();
-        mappingColumnLetterToIndex.put("a",0);
-        mappingColumnLetterToIndex.put("b",1);
-        mappingColumnLetterToIndex.put("c",2);
-        mappingColumnLetterToIndex.put("d",3);
-        mappingColumnLetterToIndex.put("e",4);
-        mappingColumnLetterToIndex.put("f",5);
-        mappingColumnLetterToIndex.put("g",6);
-        mappingColumnLetterToIndex.put("h",7);
-        return mappingColumnLetterToIndex.get(columnLetter);
+        return letterToColumnIndex.get(columnLetter);
+    }
+
+    public static String getBoardColumnFromColumnIndex(Integer columnIndex){
+        return columnIndexToLetter[columnIndex];
     }
 
     public void printBoardWithLetters(){
@@ -146,7 +154,7 @@ public class ChessBoard {
         return false;
     }
 
-    public static int[] parsePlayerMove(String playerMove){
+    public static Move parsePlayerMoveFromBoardCoordinates(String playerMove){
         String startingPosition = playerMove.substring(0,2);
         String endingPosition = playerMove.substring(2,4);
 
@@ -160,6 +168,6 @@ public class ChessBoard {
         int endX = getRowIndexFromCoordinate(endRow);
         int endY = getColumnIndexFromCoordinate(endColumnLetter);
 
-        return new int[]{startX, startY, endX, endY};
+        return new Move(startX, startY, endX, endY);
     }
 }

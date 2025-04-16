@@ -1,8 +1,7 @@
 package games.chess;
 
-import games.chess.pieces.ChessPiece;
-import games.chess.pieces.King;
-import games.chess.pieces.Rook;
+import games.chess.beans.Move;
+import games.chess.beans.pieces.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,14 +11,15 @@ public class Player {
     private String name;
     private List<ChessPiece> pieces = new ArrayList<>(16); // todo: play "Pick up the pieces" by Average White Band
     private boolean isWhite;
+    private List<Move> moveLog = new ArrayList<>();
 
     public Player(String name, boolean isWhite, ChessBoard chessBoard) {
         this.name = name;
         this.isWhite = isWhite;
-        associatePieces(chessBoard);
+        //associatePieces(chessBoard);
     }
 
-    public void associatePieces(ChessBoard chessBoard){
+    /*public void associatePieces(ChessBoard chessBoard){
         ChessPiece[][] board = chessBoard.getBoard();
         for (int i = 0; i < board.length; i++) {
             for (int j = 0; j < board.length; j++) {
@@ -45,12 +45,17 @@ public class Player {
 //    }
 
     public boolean movePieceWithBoardCoordinates(ChessBoard chessBoard, String playerMove){
-        int[] matrixCoordinates = ChessBoard.parsePlayerMove(playerMove);
-        return movePieceWithMatrixCoordinates(chessBoard, matrixCoordinates[0], matrixCoordinates[1], matrixCoordinates[2], matrixCoordinates[3] );
+        Move move = ChessBoard.parsePlayerMoveFromBoardCoordinates(playerMove);
+        return movePieceWithMatrixCoordinates(chessBoard, move);
     }
 
-    public boolean movePieceWithMatrixCoordinates(ChessBoard chessBoard, int startX, int startY, int endX, int endY){
-        ChessPiece pieceToMove = chessBoard.getPiece(startX, startY);
+    public boolean movePieceWithMatrixCoordinates(ChessBoard chessBoard, Move move){
+        int startRow = move.getStartRow();
+        int startColumn = move.getStartColumn();
+        int endRow = move.getEndRow();
+        int endColumn = move.getEndColumn();
+
+        ChessPiece pieceToMove = chessBoard.getPiece(startRow, startColumn);
         if (pieceToMove != null){
             if((isWhite && pieceToMove.isWhite()) || (!isWhite && !pieceToMove.isWhite())) {
                 if (pieceToMove.isValidMove(startX, startY, endX, endY, chessBoard.getBoard())) {  // check if movement complains with the piece's movement rules

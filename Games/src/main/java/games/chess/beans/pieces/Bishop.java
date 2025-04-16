@@ -1,4 +1,4 @@
-package games.chess.pieces;
+package games.chess.beans.pieces;
 
 public class Bishop extends ChessPiece{
 

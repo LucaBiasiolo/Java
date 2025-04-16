@@ -1,9 +1,9 @@
-package games.chess.pieces;
+package games.chess.beans.pieces;
 
 public class Pawn extends ChessPiece {
 
     public Pawn(boolean isWhite) {
-        super("♙", "P",isWhite);
+        super("♙", null,isWhite);
     }
 
     @Override

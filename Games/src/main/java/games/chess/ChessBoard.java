@@ -15,6 +15,35 @@ public class ChessBoard {
         initializeBoard();
     }
 
+    /*public static int[] parsePlayerMoveInAlgebraicNotation(String playerMove, boolean isWhite) {
+        int[] matrixCoordinates = new int[4];
+        List<String> piecesLetters = List.of("K","Q","R","B","N");
+        String firstLetter = String.valueOf(playerMove.charAt(0));
+        if (piecesLetters.contains(firstLetter)){
+            // move a piece which is not a pawn
+
+            ChessPiece pieceToMove = findPiece(firstLetter, isWhite);
+        } else{
+            // move a pawn
+        }
+
+    }
+
+    public ChessPiece findPiece(String pieceLetter, boolean isWhite){
+        for (int i = 0; i < board.length; i++) {
+            for (int j = 0; j < board.length; j++) {
+                if (board[i][j] != null){
+                    ChessPiece piece = board[i][j];
+                    // fixme: this finds the first piece with same letter and same color
+                    if(piece.getLetter().equals(pieceLetter) && ((piece.isWhite() && isWhite) || (!piece.isWhite() && !isWhite))){
+                        return piece;
+                    }
+                }
+            }
+        }
+        return null;
+    }*/
+
     private void initializeBoard() {
         // Pawns
         for (int i = 0; i < 8; i++) {

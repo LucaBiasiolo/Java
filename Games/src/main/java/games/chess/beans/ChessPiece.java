@@ -24,7 +24,7 @@ public abstract class ChessPiece {
 
     @Override
     public String toString() {
-        return color.getDescription() + " " + this.getClass().getName();
+        return color.getDescription() + " " + this.getClass().getSimpleName();
     }
 
     public String getLetter(){

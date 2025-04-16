@@ -5,6 +5,9 @@ import games.chess.beans.pieces.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Player {
 
@@ -57,30 +60,46 @@ public class Player {
 
         ChessPiece pieceToMove = chessBoard.getPiece(startRow, startColumn);
         if (pieceToMove != null){
-            if((isWhite && pieceToMove.isWhite()) || (!isWhite && !pieceToMove.isWhite())) {
-                if (pieceToMove.isValidMove(startX, startY, endX, endY, chessBoard.getBoard())) {  // check if movement complains with the piece's movement rules
-                    ChessPiece pieceOnDestination = chessBoard.getBoard()[endX][endY];
+            if((isWhite && pieceToMove.isWhite()) || (!isWhite && !pieceToMove.isWhite())) { // check if you're moving your own pieces
+                // todo: implement castling, and capture en-passant
+                if (pieceToMove.isMoveValid(startRow, startColumn, endRow, endColumn)) {  // check if movement complains with the piece's movement rules
+                    ChessPiece pieceOnDestination = chessBoard.getBoard()[endRow][endColumn];
                     if (pieceOnDestination == null){
-                        if(!chessBoard.isTrajectoryBlocked(pieceToMove, startX, startY, endX, endY)) {
+                        if(!chessBoard.isTrajectoryBlocked(pieceToMove, startRow, startColumn, endRow, endColumn)) {
                             //move
-                            chessBoard.getBoard()[endX][endY] = pieceToMove;
-                            chessBoard.getBoard()[startX][startY] = null;
-                            System.out.printf("Moved %s from (%d,%d) to (%d,%d)\n", pieceToMove, startX, startY, endX, endY);
+                            if (pieceToMove instanceof King){
+                                performCastling((King) pieceToMove, endColumn);
+                            }
+
+                            chessBoard.getBoard()[endRow][endColumn] = pieceToMove;
+                            chessBoard.getBoard()[startRow][startColumn] = null;
+                            System.out.printf("Moved %s from (%d,%d) to (%d,%d)\n", pieceToMove, startRow, startColumn, endRow, endColumn);
+
+                            if(pieceToMove instanceof Pawn && (endRow == 0 || endRow == 7)){
+                                promotePawn(chessBoard, endRow, endColumn);
+                            }
+
+                            moveLog.add(new Move(pieceToMove, startRow, startColumn, endRow, endColumn));
                             return true;
                         } else{
                             System.out.println("Trajectory blocked by another piece");
                         }
                     } else {
+                        //todo: is this if useless, given the method isTrajectoryBlocked?
                         if (pieceOnDestination.isWhite() && pieceToMove.isWhite() ||
                                 !pieceOnDestination.isWhite() && !pieceToMove.isWhite()) {
                             // movement not possible, there's a piece with the same color on the final position
-                            System.err.printf("Movement %s from (%d,%d) to (%d,%d) not possible\n", pieceToMove, startX, startY, endX, endY);
+                            System.err.printf("Movement %s from (%d,%d) to (%d,%d) not possible\n", pieceToMove, startRow, startColumn, endRow, endColumn);
                         }else{
-                            // there's a piece with different color in the finall position.
+                            // there's a piece with different color in the final position.
                             // capture
-                            chessBoard.getBoard()[endX][endY] = pieceToMove;
-                            chessBoard.getBoard()[startX][startY] = null;
-                            // todo: remove piece from other player's pieces ?
+                            chessBoard.getBoard()[endRow][endColumn] = pieceToMove;
+                            chessBoard.getBoard()[startRow][startColumn] = null;
+
+                            if(pieceToMove instanceof Pawn && (endRow == 0 || endRow == 7)){
+                                promotePawn(chessBoard, endRow, endColumn);
+                            }
+                            moveLog.add(new Move(pieceToMove, startRow, startColumn, endRow, endColumn));
                             return true;
                         }
                     }
@@ -96,10 +115,16 @@ public class Player {
         return false;
     }
 
-    public void castling(King king, Rook rook){
+    public void performCastling(King king, int endY){
         // if neither rook nor the king were moved and the line along them is free, perform castling
         // The king cannot be in check when castling, nor can it move through or into a square attacked by an opponent's piece.
         // move the king two pieces towards the rook and the rook on the cell the king has passed
+
+        //e1g1 for kingside castling
+        //e1c1 for queenside castling
+
+        //todo: a log of movements is needed to check that rook and king were not moved
+
     }
 
     public void promotePawn(ChessBoard board, int xPosition, int yPosition){
@@ -118,6 +143,8 @@ public class Player {
             System.out.println("Please insert a valid choice");
             playerMove = scanner.nextLine();
         }
+        scanner.close();
+
         ChessPiece pieceToPromoteTo = board.getPiece(xPosition, yPosition);
         pieceToPromoteTo = switch (playerMove) {
             case "Q" -> new Queen(isWhite);

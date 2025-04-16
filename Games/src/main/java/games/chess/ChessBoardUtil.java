@@ -19,12 +19,8 @@ public class ChessBoardUtil {
         }
     }
 
-    public static Integer fromBoardRowToMatrixRow(Integer startRow){
+    public static Integer convertRowInOtherNotation(Integer startRow){
         return 8-startRow;
-    }
-
-    public static Integer fromMatrixRowToBoardRow(Integer rowIndex){
-        return 8+rowIndex;
     }
 
     public static Integer fromBoardColumnToMatrixColumn(String columnLetter){
@@ -44,9 +40,9 @@ public class ChessBoardUtil {
         String endBoardColumn = String.valueOf(endingPosition.charAt(0));
         Integer endBoardRow = Integer.valueOf(endingPosition.substring(1,2));
 
-        int startMatrixRow = fromBoardRowToMatrixRow(startBoardRow);
+        int startMatrixRow = convertRowInOtherNotation(startBoardRow);
         int startMatrixColumn = fromBoardColumnToMatrixColumn(startBoardColumn);
-        int endMatrixRow = fromBoardRowToMatrixRow(endBoardRow);
+        int endMatrixRow = convertRowInOtherNotation(endBoardRow);
         int endMatrixColumn = fromBoardColumnToMatrixColumn(endBoardColumn);
 
         return new Move(startMatrixRow, startMatrixColumn, endMatrixRow, endMatrixColumn);

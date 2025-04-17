@@ -1,8 +1,9 @@
 package games.chess.beans;
 
+import games.chess.ChessBoardUtil;
 import games.chess.beans.pieces.*;
 
-import java.util.List;
+import java.util.regex.Pattern;
 
 public class ChessBoard {
     private ChessPiece[][] board;
@@ -15,28 +16,104 @@ public class ChessBoard {
     }
 
     public Move parsePlayerMoveInAlgebraicNotation(String playerMove, ChessColor playerColor) {
-        Move moveInMatrixCoordinates;
-        List<String> piecesLetters = List.of("K","Q","R","B","N");
-        String firstLetter = String.valueOf(playerMove.charAt(0));
+
+        //todo: ignore "x", check and checkmate symbols. These cases will be checked anyway
+        boolean isPawnMove = Pattern.matches("^([a-h][1-8])$", playerMove);
+        boolean isNonPawnMove = Pattern.matches("^([KQRBN][a-h][1-8])$", playerMove); // pattern for other pieces other that pawn
+        boolean pawnCapturing = Pattern.matches("^([a-h]x[a-h][1-8][+#]?)$", playerMove); // pattern for pawn capturing and promotion
+        boolean nonPawnCapturing = Pattern.matches("^([KQRBN]x[a-h][1-8])$", playerMove);
+
+        //todo: add disambiguation cases
+
+        // special moves
+        Pattern kingSideCastlingPattern = Pattern.compile("^(O-O)$");
+        Pattern queenSideCastlingPattern = Pattern.compile("^(O-O-O)$");
+        boolean pawnMoveWithPromotion = Pattern.matches("^([a-h][1-8](=[QRBN])?[+#]?)$", playerMove); // pattern for pawn move and promotion
+
+        if (isPawnMove){
+            return parsePawnMoveWithoutCapturing(playerMove, playerColor);
+        } else if (isNonPawnMove){
+            return parseNonPawnMoveWithoutCapturing(playerMove, playerColor);
+        }
+
+        /*List<String> piecesLetters = List.of("K","Q","R","B","N");
+        String firstLetter = String.valueOf(playerMove.charAt(0)); // todo: add other cases in which there's also starting file and rank
+        String endBoardColumn = String.valueOf(playerMove.charAt(1));
+        int endMatrixColumn = ChessBoardUtil.fromBoardColumnToMatrixColumn(endBoardColumn);
+        int endMatrixRow = Integer.parseInt(String.valueOf(playerMove.charAt(2)));
         if (piecesLetters.contains(firstLetter)){
             // move a piece which is not a pawn
+            //1.Nf3 Nf6
 
-            ChessPiece pieceToMove = findPiece(firstLetter, playerColor);
+            int[] startMatrixCoordinates = findPieceCoordinates(firstLetter, playerColor);
+            if (startMatrixCoordinates != null) {
+                return new Move(startMatrixCoordinates[0], startMatrixCoordinates[1], endMatrixRow, endMatrixColumn);
+            } else{
+                // piece not found
+                // todo: reprompt user for move adding more detail
+            }
         } else{
             // move a pawn
-        }
+
+            Pawn pawnToMove = findPawn(playerColor);
+        }*/
 
         return null;
     }
 
-    public ChessPiece findPiece(String pieceLetter, ChessColor playerColor){
+    private Move parseNonPawnMoveWithoutCapturing(String playerMove, ChessColor playerColor) {
+        return null;
+    }
+
+    private Move parsePawnMoveWithoutCapturing(String playerMove, ChessColor playerColor) {
+        String boardColumn = String.valueOf(playerMove.charAt(0));
+        Integer boardEndRow = Integer.parseInt(String.valueOf(playerMove.charAt(1)));
+
+        int matrixEndRow = ChessBoardUtil.convertRowInOtherNotation(boardEndRow);
+        Integer matrixColumn = ChessBoardUtil.fromBoardColumnToMatrixColumn(boardColumn);
+
+        Pawn pawn;
+        int matrixStartRow;
+        if (playerColor.equals(ChessColor.WHITE)){
+           if (matrixEndRow == 4){
+               // go back 1 or 2 squares. Start with 1 square
+               pawn = (Pawn) getPiece(matrixEndRow + 1, matrixColumn);
+               matrixStartRow = matrixEndRow +1;
+               if (pawn == null){
+                   pawn = (Pawn) getPiece(matrixEndRow +2, matrixColumn);
+                   matrixStartRow = matrixEndRow +2;
+               }
+           } else{
+               // go back 1 square
+               pawn = (Pawn) getPiece(matrixEndRow + 1, matrixColumn);
+               matrixStartRow = matrixEndRow +1;
+           }
+        } else{
+            if (matrixEndRow == 3){
+                // go back 1 or 2 squares. Start with 1 square
+                pawn = (Pawn) getPiece(matrixEndRow -1, matrixColumn);
+                matrixStartRow = matrixEndRow -1;
+                if (pawn == null){
+                    pawn = (Pawn) getPiece(matrixEndRow -2, matrixColumn);
+                    matrixStartRow = matrixEndRow -2;
+                }
+            } else{
+                // go back 1 square
+                pawn = (Pawn) getPiece(matrixEndRow - 1, matrixColumn);
+                matrixStartRow = matrixEndRow -1;
+            }
+        }
+        return new Move(pawn, matrixStartRow, matrixColumn, matrixEndRow, matrixColumn);
+    }
+
+    public int[] findPieceCoordinates(String pieceLetter, ChessColor playerColor){
         for (int i = 0; i < board.length; i++) {
             for (int j = 0; j < board.length; j++) {
                 if (board[i][j] != null){
                     ChessPiece piece = board[i][j];
-                    // fixme: this finds the first piece with same letter and same color
+                    // fixme: this finds the first piece with same letter and same color. What if there are more?
                     if(piece.getLetter().equals(pieceLetter) && piece.getColor().equals(playerColor)){
-                        return piece;
+                        return new int[]{i,j};
                     }
                 }
             }

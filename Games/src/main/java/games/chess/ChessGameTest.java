@@ -76,4 +76,14 @@ public class ChessGameTest {
         assertFalse(player1.movePieceWithBoardCoordinates(chessBoard,"e1e2"));
         assertTrue(player1.movePieceWithBoardCoordinates(chessBoard,"b1c3"));
     }
+
+    @Test
+    public void testParsingPawnMoveWithoutCapturingInAlgebraicNotation(){
+        player1.movePieceWithAlgebraicNotation(chessBoard, "a3");
+        player1.movePieceWithAlgebraicNotation(chessBoard, "b3");
+        player1.movePieceWithAlgebraicNotation(chessBoard, "c4");
+        player2.movePieceWithAlgebraicNotation(chessBoard, "a6");
+        player2.movePieceWithAlgebraicNotation(chessBoard, "b5");
+        assertThrows(ClassCastException.class,() -> player1.movePieceWithAlgebraicNotation(chessBoard, "a2"));
+    }
 }

@@ -30,16 +30,14 @@ public class ChessGameWithCommandLine {
             Scanner scanner = new Scanner(System.in);
             while(!board.isGameOver()){
                 System.out.print(activePlayer.getName() + ", it's your turn. Write your move using coordinate notation\n");
-                System.out.println("Remember that columns are named with letters from a to h starting from left and row are named with numbers from 1 to 8 starting from white pieces");
                 String playerMove = scanner.nextLine();
-                Pattern pattern = Pattern.compile("[a-h][1-8][a-h][1-8]");
+                Pattern pattern = Pattern.compile("^(O-O(-O)?|[KQRBN]?[a-h]?[1-8]?x?[a-h][1-8](=[QRBN])?[+#]?)$");
                 Matcher matcher = pattern.matcher(playerMove);
                 if (!matcher.matches()) {
                     System.out.println("Please insert a valid coordinate notation like e2e4");
                     continue;
                 }
-
-                if(!activePlayer.movePieceWithBoardCoordinates(board, playerMove)) {
+                if(!activePlayer.movePieceWithAlgebraicNotation(board, playerMove)) {
                     continue;
                 }
                 board.printBoardWithLetters();

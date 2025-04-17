@@ -48,8 +48,14 @@ public class Player {
         if(!matcher.matches()){
             System.out.println("Move not valid. Please enter valid algebraic notation");
             // todo: reprompt user for move
+            return false;
         }
         Move move = chessBoard.parsePlayerMoveInAlgebraicNotation(playerMove, playerColor);
+        if (move == null){
+            System.err.println("Move not valid. Please insert valid coordinates in algebraic notation");
+            return false;
+        }
+
         return movePieceWithMatrixCoordinates(chessBoard, move);
     }
 

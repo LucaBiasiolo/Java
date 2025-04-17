@@ -66,10 +66,13 @@ public class ChessBoard {
         String pieceLetter = String.valueOf(playerMove.charAt(0));
         String endBoardColumn = String.valueOf(playerMove.charAt(1));
         int endMatrixColumn = ChessBoardUtil.fromBoardColumnToMatrixColumn(endBoardColumn);
-        int endMatrixRow = Integer.parseInt(String.valueOf(playerMove.charAt(2)));
+        int endBoardRow = Integer.parseInt(String.valueOf(playerMove.charAt(2)));
+        int endMatrixRow = ChessBoardUtil.convertRowInOtherNotation(endBoardRow);
 
-        int[] startMatrixCoordinates = findPieceStartingCoordinates(pieceLetter, playerColor);
-
+        int[] startMatrixCoordinates = findPieceStartingCoordinates(pieceLetter, endMatrixRow, endMatrixColumn, playerColor);
+        if (startMatrixCoordinates == null){
+            return null;
+        }
         return new Move(startMatrixCoordinates[0], startMatrixCoordinates[1], endMatrixRow, endMatrixColumn);
     }
 
@@ -119,14 +122,15 @@ public class ChessBoard {
         }
     }
 
-    public int[] findPieceStartingCoordinates(String pieceLetter, ChessColor playerColor){
+    public int[] findPieceStartingCoordinates(String pieceLetter, int endMatrixRow, int endMatrixColumn, ChessColor playerColor){
         for (int i = 0; i < board.length; i++) {
             for (int j = 0; j < board.length; j++) {
                 if (board[i][j] != null){
                     ChessPiece piece = board[i][j];
-                    // fixme: this finds the first piece with same letter and same color. What if there are more?
                     if(piece.getLetter().equals(pieceLetter) && piece.getColor().equals(playerColor)){
-                        return new int[]{i,j};
+                        if (piece.isMoveValid(i,j, endMatrixRow, endMatrixColumn)) {
+                            return new int[]{i, j};
+                        }
                     }
                 }
             }

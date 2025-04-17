@@ -61,8 +61,16 @@ public class ChessBoard {
         return null;
     }
 
-    private Move parseNonPawnMoveWithoutCapturing(String playerMove, ChessColor playerColor) {
-        return null;
+    private Move parseNonPawnMoveWithoutCapturing(String playerMove, ChessColor playerColor){
+        // Nf5
+        String pieceLetter = String.valueOf(playerMove.charAt(0));
+        String endBoardColumn = String.valueOf(playerMove.charAt(1));
+        int endMatrixColumn = ChessBoardUtil.fromBoardColumnToMatrixColumn(endBoardColumn);
+        int endMatrixRow = Integer.parseInt(String.valueOf(playerMove.charAt(2)));
+
+        int[] startMatrixCoordinates = findPieceStartingCoordinates(pieceLetter, playerColor);
+
+        return new Move(startMatrixCoordinates[0], startMatrixCoordinates[1], endMatrixRow, endMatrixColumn);
     }
 
     private Move parsePawnMoveWithoutCapturing(String playerMove, ChessColor playerColor) {
@@ -74,39 +82,44 @@ public class ChessBoard {
 
         Pawn pawn;
         int matrixStartRow;
-        if (playerColor.equals(ChessColor.WHITE)){
-           if (matrixEndRow == 4){
-               // go back 1 or 2 squares. Start with 1 square
-               pawn = (Pawn) getPiece(matrixEndRow + 1, matrixColumn);
-               matrixStartRow = matrixEndRow +1;
-               if (pawn == null){
-                   pawn = (Pawn) getPiece(matrixEndRow +2, matrixColumn);
-                   matrixStartRow = matrixEndRow +2;
-               }
-           } else{
-               // go back 1 square
-               pawn = (Pawn) getPiece(matrixEndRow + 1, matrixColumn);
-               matrixStartRow = matrixEndRow +1;
-           }
-        } else{
-            if (matrixEndRow == 3){
-                // go back 1 or 2 squares. Start with 1 square
-                pawn = (Pawn) getPiece(matrixEndRow -1, matrixColumn);
-                matrixStartRow = matrixEndRow -1;
-                if (pawn == null){
-                    pawn = (Pawn) getPiece(matrixEndRow -2, matrixColumn);
-                    matrixStartRow = matrixEndRow -2;
+        try {
+            if (playerColor.equals(ChessColor.WHITE)) {
+                if (matrixEndRow == 4) {
+                    // go back 1 or 2 squares. Start with 1 square
+                    pawn = (Pawn) getPiece(matrixEndRow + 1, matrixColumn);
+                    matrixStartRow = matrixEndRow + 1;
+                    if (pawn == null) {
+                        pawn = (Pawn) getPiece(matrixEndRow + 2, matrixColumn);
+                        matrixStartRow = matrixEndRow + 2;
+                    }
+                } else {
+                    // go back 1 square
+                    pawn = (Pawn) getPiece(matrixEndRow + 1, matrixColumn);
+                    matrixStartRow = matrixEndRow + 1;
                 }
-            } else{
-                // go back 1 square
-                pawn = (Pawn) getPiece(matrixEndRow - 1, matrixColumn);
-                matrixStartRow = matrixEndRow -1;
+            } else {
+                if (matrixEndRow == 3) {
+                    // go back 1 or 2 squares. Start with 1 square
+                    pawn = (Pawn) getPiece(matrixEndRow - 1, matrixColumn);
+                    matrixStartRow = matrixEndRow - 1;
+                    if (pawn == null) {
+                        pawn = (Pawn) getPiece(matrixEndRow - 2, matrixColumn);
+                        matrixStartRow = matrixEndRow - 2;
+                    }
+                } else {
+                    // go back 1 square
+                    pawn = (Pawn) getPiece(matrixEndRow - 1, matrixColumn);
+                    matrixStartRow = matrixEndRow - 1;
+                }
             }
+            return new Move(pawn, matrixStartRow, matrixColumn, matrixEndRow, matrixColumn);
+        } catch (ClassCastException classCastException){ // if a piece is found that is not a Pawn
+            System.err.println("Error: pawn movement invalid. Please retry");
+            return null;
         }
-        return new Move(pawn, matrixStartRow, matrixColumn, matrixEndRow, matrixColumn);
     }
 
-    public int[] findPieceCoordinates(String pieceLetter, ChessColor playerColor){
+    public int[] findPieceStartingCoordinates(String pieceLetter, ChessColor playerColor){
         for (int i = 0; i < board.length; i++) {
             for (int j = 0; j < board.length; j++) {
                 if (board[i][j] != null){

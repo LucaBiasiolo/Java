@@ -14,6 +14,7 @@ public class ChessBoard {
     }
 
     public Move parsePlayerMoveInAlgebraicNotation(String playerMove, ChessColor playerColor) {
+        // ignore capture, promotion, check and checkmate symbols. These will be handled by code
         playerMove = playerMove.replace("x", "")
                 .replace("=","")
                 .replace("+", "")
@@ -30,7 +31,6 @@ public class ChessBoard {
             }
         } else if (firstLetter.matches("[KQRBN]")){
             // non-pawn movement
-            // todo: add case of double disambiguation (e.g. Qh4e1)
             if (secondCharacter.matches("[a-h]")){
                 String thirdCharacter = String.valueOf(playerMove.charAt(2));
                 if(thirdCharacter.matches("[1-8]")) {
@@ -51,11 +51,11 @@ public class ChessBoard {
             }
         } else if (firstLetter.matches("[a-h]")){
             // pawn movement
-            // todo: add pawn promotion
             if (secondCharacter.matches("[1-8]")){
-                // standard pawn move
+                // standard pawn move (e.g. a4)
                 return parsePawnMoveWithoutCapturing(playerMove, playerColor);
             } else if (secondCharacter.matches("[a-h]")){
+                // pawn move with capturing (e.g. fg4)
                 return parsePawnMoveWithCapturing(playerMove, playerColor);
             }
         }

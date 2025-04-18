@@ -35,12 +35,19 @@ public class ChessBoard {
                 String thirdCharacter = String.valueOf(playerMove.charAt(2));
                 if(thirdCharacter.matches("[1-8]")) {
                     // standard non-pawn movement (e.g. Nh3)
-                    return parseNonPawnMoveWithoutCapturing(playerMove, playerColor);
+                    if (playerMove.length() == 3) {
+                        return parseStandardNonPawnMove(playerMove, playerColor);
+                    } else if (playerMove.length() == 5){
+                        // double disambiguation (e.g. Qh4e1)
+                        return parseNonPawnMoveWithDoubleDisambiguation(playerMove, playerColor);
+                    }
                 } else if (thirdCharacter.matches("[a-h]")){
                     // non-standard non-pawn movement with disambiguation (e.g. Nbd7)
+                    return parseNonPawnMoveWithColumnDisambiguation(playerMove, playerColor);
                 }
             } else if (secondCharacter.matches("[1-8]")){
                 // non-standard non-pawn movement with disambiguation (e.g. R1a3)
+                return parseNonPawnMoveWithRowDisambiguation(playerMove, playerColor);
             }
         } else if (firstLetter.matches("[a-h]")){
             // pawn movement
@@ -51,6 +58,72 @@ public class ChessBoard {
             } else if (secondCharacter.matches("[a-h]")){
                 return parsePawnMoveWithCapturing(playerMove, playerColor);
             }
+        }
+        return null;
+    }
+
+    private Move parseNonPawnMoveWithRowDisambiguation(String playerMove, ChessColor playerColor) {
+        // non-standard non-pawn movement with disambiguation (e.g. R1a3)
+        String pieceLetter = String.valueOf(playerMove.charAt(0));
+        int startBoardRow = Integer.parseInt(String.valueOf(playerMove.charAt(1)));
+        int startMatrixColumn = -1;
+        String endBoardColumn = String.valueOf(playerMove.charAt(2));
+        int endBoardRow = Integer.parseInt(String.valueOf(playerMove.charAt(3)));
+
+        for (int j = 0; j < board.length; j++) {
+            if (board[startBoardRow][j] != null){
+                ChessPiece piece = board[startBoardRow][j];
+                if (piece.getLetter().equals(pieceLetter) && piece.getColor().equals(playerColor)){
+                    startMatrixColumn = j;
+                }
+            }
+        }
+
+        Integer startMatrixRow = ChessBoardUtil.convertRowInOtherNotation(startBoardRow);
+        Integer endMatrixRow = ChessBoardUtil.convertRowInOtherNotation(endBoardRow);
+        Integer endMatrixColumn = ChessBoardUtil.fromBoardColumnToMatrixColumn(endBoardColumn);
+
+        return new Move(startMatrixRow, startMatrixColumn, endMatrixRow, endMatrixColumn);
+    }
+
+    private Move parseNonPawnMoveWithColumnDisambiguation(String playerMove, ChessColor playerColor) {
+        // non-standard non-pawn movement with disambiguation (e.g. Nbd7)
+        String pieceLetter = String.valueOf(playerMove.charAt(0));
+        String startBoardColumn = String.valueOf(playerMove.charAt(1));
+        String endBoardColumn = String.valueOf(playerMove.charAt(2));
+        Integer endBoardRow = Integer.parseInt(String.valueOf(playerMove.charAt(3)));
+        Integer startMatrixColumn = ChessBoardUtil.fromBoardColumnToMatrixColumn(startBoardColumn);
+        Integer endMatrixColumn = ChessBoardUtil.fromBoardColumnToMatrixColumn(endBoardColumn);
+        Integer endMatrixRow = ChessBoardUtil.convertRowInOtherNotation(endBoardRow);
+        int startMatrixRow = -1;
+
+        for (int i = 0; i < board.length; i++) {
+            if (board[i][startMatrixColumn] != null){
+                ChessPiece piece= board[i][startMatrixColumn];
+                if (piece.getLetter().equals(pieceLetter) && piece.getColor().equals(playerColor)){
+                    startMatrixRow = i;
+                }
+            }
+        }
+        return new Move(startMatrixRow, startMatrixColumn, endMatrixRow, endMatrixColumn);
+    }
+
+    private Move parseNonPawnMoveWithDoubleDisambiguation(String playerMove, ChessColor playerColor) {
+        // double disambiguation (e.g. Qh4e1)
+        String pieceLetter = String.valueOf(playerMove.charAt(0));
+        String startBoardColumn = String.valueOf(playerMove.charAt(1));
+        Integer startBoardRow = Integer.parseInt(String.valueOf(playerMove.charAt(2)));
+        String endBoardColumn = String.valueOf(playerMove.charAt(3));
+        Integer endBoardRow = Integer.parseInt(String.valueOf(playerMove.charAt(4)));
+
+        Integer startMatrixColumn = ChessBoardUtil.fromBoardColumnToMatrixColumn(startBoardColumn);
+        Integer endMatrixColumn = ChessBoardUtil.fromBoardColumnToMatrixColumn(endBoardColumn);
+        Integer endMatrixRow = ChessBoardUtil.convertRowInOtherNotation(endBoardRow);
+        int startMatrixRow = ChessBoardUtil.convertRowInOtherNotation(startBoardRow);
+
+        ChessPiece piece = getPiece(startMatrixRow, startMatrixColumn);
+        if (piece.getLetter().equals(pieceLetter) && piece.getColor().equals(playerColor)){
+            return new Move(piece,startMatrixRow, startMatrixColumn, endMatrixRow, endMatrixColumn);
         }
         return null;
     }
@@ -77,7 +150,7 @@ public class ChessBoard {
         return new Move(startMatrixRow, startMatrixColumn, endMatrixRow, endMatrixColumn);
     }
 
-    private Move parseNonPawnMoveWithoutCapturing(String playerMove, ChessColor playerColor){
+    private Move parseStandardNonPawnMove(String playerMove, ChessColor playerColor){
         // Nf5
         String pieceLetter = String.valueOf(playerMove.charAt(0));
         String endBoardColumn = String.valueOf(playerMove.charAt(1));

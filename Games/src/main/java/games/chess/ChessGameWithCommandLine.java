@@ -31,7 +31,7 @@ public class ChessGameWithCommandLine {
             while(!board.isGameOver()){
                 System.out.print(activePlayer.getName() + ", it's your turn. Write your move using coordinate notation\n");
                 String playerMove = scanner.nextLine();
-                Pattern pattern = Pattern.compile("^(O-O(-O)?|[KQRBN]?[a-h]?[1-8]?x?[a-h][1-8](=[QRBN])?[+#]?)$");
+                Pattern pattern = Pattern.compile("^(0-0(-0)?|[KQRBN]?[a-h]?[1-8]?x?[a-h][1-8](=[QRBN])?[+#]?)$");
                 Matcher matcher = pattern.matcher(playerMove);
                 if (!matcher.matches()) {
                     System.out.println("Please insert a valid coordinate notation like e2e4");

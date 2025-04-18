@@ -3,8 +3,6 @@ package games.chess.beans;
 import games.chess.ChessBoardUtil;
 import games.chess.beans.pieces.*;
 
-import java.util.regex.Pattern;
-
 public class ChessBoard {
     private ChessPiece[][] board;
     private static final String RED = "\u001B[31m";
@@ -16,49 +14,67 @@ public class ChessBoard {
     }
 
     public Move parsePlayerMoveInAlgebraicNotation(String playerMove, ChessColor playerColor) {
+        playerMove = playerMove.replace("x", "")
+                .replace("=","")
+                .replace("+", "")
+                .replace("#", "");
 
-        //todo: ignore "x", check and checkmate symbols. These cases will be checked anyway
-        boolean isPawnMove = Pattern.matches("^([a-h][1-8])$", playerMove);
-        boolean isNonPawnMove = Pattern.matches("^([KQRBN][a-h][1-8])$", playerMove); // pattern for other pieces other that pawn
-        boolean pawnCapturing = Pattern.matches("^([a-h]x[a-h][1-8][+#]?)$", playerMove); // pattern for pawn capturing and promotion
-        boolean nonPawnCapturing = Pattern.matches("^([KQRBN]x[a-h][1-8])$", playerMove);
+        String firstLetter = String.valueOf(playerMove.charAt(0));
+        String secondCharacter = String.valueOf(playerMove.charAt(1));
 
-        //todo: add disambiguation cases
+        if (firstLetter.matches("0")){
+            if (playerMove.matches("0-0")){
+                // king-side castling
+            } else if (playerMove.matches("0-0-0")){
+                // queen-side castling
+            }
+        } else if (firstLetter.matches("[KQRBN]")){
+            // non-pawn movement
+            // todo: add case of double disambiguation (e.g. Qh4e1)
+            if (secondCharacter.matches("[a-h]")){
+                String thirdCharacter = String.valueOf(playerMove.charAt(2));
+                if(thirdCharacter.matches("[1-8]")) {
+                    // standard non-pawn movement (e.g. Nh3)
+                    return parseNonPawnMoveWithoutCapturing(playerMove, playerColor);
+                } else if (thirdCharacter.matches("[a-h]")){
+                    // non-standard non-pawn movement with disambiguation (e.g. Nbd7)
+                }
+            } else if (secondCharacter.matches("[1-8]")){
+                // non-standard non-pawn movement with disambiguation (e.g. R1a3)
+            }
+        } else if (firstLetter.matches("[a-h]")){
+            // pawn movement
+            // todo: add pawn promotion
+            if (secondCharacter.matches("[1-8]")){
+                // standard pawn move
+                return parsePawnMoveWithoutCapturing(playerMove, playerColor);
+            } else if (secondCharacter.matches("[a-h]")){
+                return parsePawnMoveWithCapturing(playerMove, playerColor);
+            }
+        }
+        return null;
+    }
 
-        // special moves
-        Pattern kingSideCastlingPattern = Pattern.compile("^(O-O)$");
-        Pattern queenSideCastlingPattern = Pattern.compile("^(O-O-O)$");
-        boolean pawnMoveWithPromotion = Pattern.matches("^([a-h][1-8](=[QRBN])?[+#]?)$", playerMove); // pattern for pawn move and promotion
+    private Move parsePawnMoveWithCapturing(String playerMove, ChessColor playerColor) {
+        //bxc3
+        String startBoardColumn = String.valueOf(playerMove.charAt(0));
+        String endBoardColumn = String.valueOf(playerMove.charAt(2));
 
-        if (isPawnMove){
-            return parsePawnMoveWithoutCapturing(playerMove, playerColor);
-        } else if (isNonPawnMove){
-            return parseNonPawnMoveWithoutCapturing(playerMove, playerColor);
+        Integer startMatrixColumn = ChessBoardUtil.fromBoardColumnToMatrixColumn(startBoardColumn);
+        Integer endMatrixColumn = ChessBoardUtil.fromBoardColumnToMatrixColumn(endBoardColumn);
+        int endBoardRow = Integer.parseInt(String.valueOf(playerMove.charAt(3)));
+        Integer endMatrixRow = ChessBoardUtil.convertRowInOtherNotation(endBoardRow);
+
+        int startBoardRow;
+        if (playerColor.equals(ChessColor.WHITE)){
+            startBoardRow = endBoardRow -1;
+        } else{
+            startBoardRow = endBoardRow +1;
         }
 
-        /*List<String> piecesLetters = List.of("K","Q","R","B","N");
-        String firstLetter = String.valueOf(playerMove.charAt(0)); // todo: add other cases in which there's also starting file and rank
-        String endBoardColumn = String.valueOf(playerMove.charAt(1));
-        int endMatrixColumn = ChessBoardUtil.fromBoardColumnToMatrixColumn(endBoardColumn);
-        int endMatrixRow = Integer.parseInt(String.valueOf(playerMove.charAt(2)));
-        if (piecesLetters.contains(firstLetter)){
-            // move a piece which is not a pawn
-            //1.Nf3 Nf6
+        Integer startMatrixRow = ChessBoardUtil.convertRowInOtherNotation(startBoardRow);
 
-            int[] startMatrixCoordinates = findPieceCoordinates(firstLetter, playerColor);
-            if (startMatrixCoordinates != null) {
-                return new Move(startMatrixCoordinates[0], startMatrixCoordinates[1], endMatrixRow, endMatrixColumn);
-            } else{
-                // piece not found
-                // todo: reprompt user for move adding more detail
-            }
-        } else{
-            // move a pawn
-
-            Pawn pawnToMove = findPawn(playerColor);
-        }*/
-
-        return null;
+        return new Move(startMatrixRow, startMatrixColumn, endMatrixRow, endMatrixColumn);
     }
 
     private Move parseNonPawnMoveWithoutCapturing(String playerMove, ChessColor playerColor){

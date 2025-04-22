@@ -12,8 +12,23 @@ public class GoBoard {
     }
 
     public void printBoard() {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("  ");
         for (int i = 0; i < board.length; i++) {
-            // Print horizontal intersections and stones
+            if (i<10) {
+                stringBuilder.append(" ").append(i + 1).append(" ");
+            } else{
+                stringBuilder.append(i + 1).append(" ");
+            }
+        }
+
+        System.out.println(stringBuilder);
+        for (int i = 0; i < board.length; i++) {
+            if (i<9){
+                System.out.print(i+1 + " ");
+            } else {
+                System.out.print(i+1);
+            }
             for (int j = 0; j < board.length; j++) {
                 if (board[i][j] == null) {
                     System.out.print(" + ");
@@ -21,7 +36,12 @@ public class GoBoard {
                     System.out.print(board[i][j].getColor().equals(PieceColor.BLACK) ? " ○ " : " ● ");
                 }
             }
-            System.out.println();
+            System.out.println(i+1 + " ");
         }
+        System.out.println(stringBuilder);
+    }
+
+    public Piece[][] getBoard() {
+        return board;
     }
 }

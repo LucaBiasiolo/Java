@@ -286,8 +286,48 @@ public class ChessBoard {
         return board;
     }
 
+    public boolean isKingInCheck(PieceColor kingColor){
+        // ex. the white moves -> check if the piece moved puts the black king in check, i.e., check if another movement
+        // of this piece to the other king's position is possible
+        int[] kingCoordinates = new int[2];
+
+        // todo: improve methods deleting duplicate code
+        for (int i = 0; i < board.length; i++) {
+            for (int j = 0; j < board.length; j++) {
+                if (board[i][j] != null && board[i][j] instanceof King && board[i][j].getColor().equals(kingColor)){
+                    kingCoordinates[0] = i;
+                    kingCoordinates[1] = j;
+                }
+            }
+        }
+
+        for (int i = 0; i < board.length; i++) {
+            for (int j = 0; j < board.length; j++) {
+                if (board[i][j] != null){
+                    if(board[i][j].isMoveValid(i,j,kingCoordinates[0],kingCoordinates[1])){
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    public boolean isKingInCheckMate(PieceColor kingColor){
+        return false;
+    }
+
+    public boolean isKingInStaleMate(PieceColor kingColor){
+        // check if the king has no legal moves
+        return false;
+    }
+
     public boolean isGameOver() {
-        // check if game is in checkmate, stalemate or draw condition
+        // check if king is in checkmate, stalemate or draw condition
+
+        /*if (isKingInCheckMate() || isKingInStaleMate()){
+            return true;
+        }*/
         return false;
     }
 

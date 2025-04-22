@@ -21,22 +21,6 @@ public class Player {
         this.playerColor = playerColor;
     }
 
-    /*public void associatePieces(ChessBoard chessBoard){
-        ChessPiece[][] board = chessBoard.getBoard();
-        for (int i = 0; i < board.length; i++) {
-            for (int j = 0; j < board.length; j++) {
-                if (board[i][j] != null){
-                    if(board[i][j].isWhite() && isWhite) {
-                        pieces.add(board[i][j]);
-                    } else if (!board[i][j].isWhite() && !isWhite){
-                        pieces.add(board[i][j]);
-                    }
-                }
-            }
-        }
-    }*/
-
-
     //0-0 0-0-0 b4 Nh3 bxc3 Nxh4 Nbd7 Rfe8+ R1a3 Qh4e1
     public boolean movePieceWithAlgebraicNotation(ChessBoard chessBoard, String playerMove){
         Move move = chessBoard.parsePlayerMoveInAlgebraicNotation(playerMove, playerColor);
@@ -70,7 +54,18 @@ public class Player {
                             //move
                             chessBoard.getBoard()[endRow][endColumn] = pieceToMove;
                             chessBoard.getBoard()[startRow][startColumn] = null;
+
                             move.setPiece(pieceToMove);
+                            if (playerColor.equals(PieceColor.WHITE)){
+                                if (chessBoard.isKingInCheck(PieceColor.BLACK)) {
+                                    move.setCheck(true);
+                                }
+                            } else{
+                                if (chessBoard.isKingInCheck(PieceColor.WHITE)) {
+                                    move.setCheck(true);
+                                }
+                            }
+
                             System.out.println(move.toAlgebraicNotation());
                             playerMoveLog.add(move);
                             return true;
@@ -88,6 +83,16 @@ public class Player {
                             chessBoard.getBoard()[startRow][startColumn] = null;
                             move.setPiece(pieceToMove);
                             move.setIsCapture(true);
+
+                            if (playerColor.equals(PieceColor.WHITE)){
+                                if (chessBoard.isKingInCheck(PieceColor.BLACK)) {
+                                    move.setCheck(true);
+                                }
+                            } else{
+                                if (chessBoard.isKingInCheck(PieceColor.WHITE)) {
+                                    move.setCheck(true);
+                                }
+                            }
                             System.out.println(move.toAlgebraicNotation());
                             playerMoveLog.add(move);
                             return true;

@@ -50,7 +50,7 @@ public class Move {
         StringBuilder stringBuilder = new StringBuilder();
         if (piece instanceof  Pawn && isCapture){ // if a pawn is capturing add starting file
             stringBuilder.append(startColumn).append("x");
-        } else {
+        } else if (!(piece instanceof Pawn)){
             stringBuilder.append(piece.getLetter());
             //todo: insert optional column for disambiguation ?
             if (isCapture) stringBuilder.append("x");
@@ -131,5 +131,13 @@ public class Move {
 
     public void setIsCapture(boolean capture) {
         isCapture = capture;
+    }
+
+    public boolean isCheck() {
+        return isCheck;
+    }
+
+    public void setCheck(boolean check) {
+        isCheck = check;
     }
 }

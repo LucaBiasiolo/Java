@@ -21,4 +21,8 @@ public class Player {
     public void moveWithBoardCoordinates(GoBoard board, int row, int column){
         moveWithMatrixCoordinates(board, row-1, column-1);
     }
+
+    public String getName() {
+        return name;
+    }
 }

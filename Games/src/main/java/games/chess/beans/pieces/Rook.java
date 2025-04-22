@@ -1,11 +1,11 @@
 package games.chess.beans.pieces;
 
-import games.chess.beans.ChessColor;
+import games.PieceColor;
 import games.chess.beans.ChessPiece;
 
 public class Rook extends ChessPiece {
 
-    public Rook(ChessColor color) {
+    public Rook(PieceColor color) {
         super("♖", "R",color);
     }
 

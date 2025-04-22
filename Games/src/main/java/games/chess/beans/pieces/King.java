@@ -1,6 +1,6 @@
 package games.chess.beans.pieces;
 
-import games.chess.beans.ChessColor;
+import games.PieceColor;
 import games.chess.beans.ChessPiece;
 
 public class King extends ChessPiece {
@@ -18,7 +18,7 @@ public class King extends ChessPiece {
         return (deltaX <= 1 && deltaY <= 1);
     }
 
-    public King(ChessColor color) {
+    public King(PieceColor color) {
         super("♔", "K", color);
     }
 

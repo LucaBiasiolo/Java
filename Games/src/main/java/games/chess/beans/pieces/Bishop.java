@@ -1,11 +1,11 @@
 package games.chess.beans.pieces;
 
-import games.chess.beans.ChessColor;
+import games.PieceColor;
 import games.chess.beans.ChessPiece;
 
 public class Bishop extends ChessPiece {
 
-    public Bishop(ChessColor color) {
+    public Bishop(PieceColor color) {
         super("♗", "B", color);
     }
 

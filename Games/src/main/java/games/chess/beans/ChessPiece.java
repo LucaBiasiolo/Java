@@ -1,20 +1,22 @@
 package games.chess.beans;
 
+import games.PieceColor;
+
 public abstract class ChessPiece {
 
     protected String icon;
     protected String letter;
-    protected ChessColor color;
+    protected PieceColor color;
 
     public abstract boolean isMoveValid(int startX, int startY, int endX, int endY);
 
-    public ChessPiece(String icon, String letter, ChessColor color) {
+    public ChessPiece(String icon, String letter, PieceColor color) {
         this.icon = icon;
         this.letter = letter;
         this.color = color;
     }
 
-    public ChessColor getColor() {
+    public PieceColor getColor() {
         return color;
     }
 

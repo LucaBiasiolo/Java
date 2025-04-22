@@ -1,35 +1,28 @@
 package games.checkers;
 
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
+import games.PieceColor;
 
 public class Piece {
-    private final boolean isRed;
+    private PieceColor color;
     private boolean isKing;
-    private final Circle visualRepresentation;
 
-    public Piece(boolean isRed) {
-        this.isRed = isRed;
-        this.isKing = false;
-        this.visualRepresentation = new Circle(35); // Example radius
-        this.visualRepresentation.setFill(isRed ? Color.CRIMSON : Color.DARKGRAY);
-    }
-
-    public boolean isRed() {
-        return isRed;
+    public Piece(PieceColor color) {
+        this.color = color;
     }
 
     public boolean isKing() {
         return isKing;
     }
 
-    public void promoteToKing() {
-        isKing = true;
-        visualRepresentation.setStroke(Color.GOLD);
-        visualRepresentation.setStrokeWidth(3);
+    public void setKing(boolean king) {
+        isKing = king;
     }
 
-    public Circle getVisualRepresentation() {
-        return visualRepresentation;
+    public PieceColor getColor() {
+        return color;
+    }
+
+    public void setColor(PieceColor color) {
+        this.color = color;
     }
 }

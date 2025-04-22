@@ -1,5 +1,6 @@
 package games.chess;
 
+import games.PieceColor;
 import games.chess.beans.*;
 import games.chess.beans.pieces.Knight;
 import games.chess.beans.pieces.Pawn;
@@ -18,12 +19,12 @@ public class ChessGameTest {
     @BeforeAll
     public static void createChessBoard(){
         chessBoard = new ChessBoard();
-        player1 = new Player("Luca White", ChessColor.WHITE);
-        player2 = new Player("Luca Black", ChessColor.BLACK);
+        player1 = new Player("Luca White", PieceColor.WHITE);
+        player2 = new Player("Luca Black", PieceColor.BLACK);
     }
 
     @Test
-    public void printGameBoardTest(){
+    public void printGameBoardWithLettersTest(){
         chessBoard.printBoardWithLetters();
     }
 

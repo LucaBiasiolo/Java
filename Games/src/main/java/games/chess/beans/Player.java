@@ -1,5 +1,6 @@
 package games.chess.beans;
 
+import games.PieceColor;
 import games.chess.ChessBoardUtil;
 import games.chess.beans.pieces.*;
 
@@ -11,12 +12,11 @@ import java.util.regex.Pattern;
 
 public class Player {
 
-    private String name;
-    // todo: play "Pick up the pieces" by Average White Band
-    private ChessColor playerColor;
-    private List<Move> playerMoveLog = new ArrayList<>();
+    private final String name;
+    private final PieceColor playerColor;
+    private final List<Move> playerMoveLog = new ArrayList<>();
 
-    public Player(String name, ChessColor playerColor) {
+    public Player(String name, PieceColor playerColor) {
         this.name = name;
         this.playerColor = playerColor;
     }
@@ -122,11 +122,11 @@ public class Player {
         // This would typically involve replacing the Pawn object with the new piece object on the board
         // For simplicity, we can just set the position of the new piece to the Pawn's position
         // and remove the Pawn from the board.
-        ChessColor color;
+        PieceColor color;
         if(xPosition == 0){
-            color = ChessColor.WHITE;
+            color = PieceColor.WHITE;
         } else {
-            color = ChessColor.BLACK;
+            color = PieceColor.BLACK;
         }
 
         Scanner scanner = new Scanner(System.in);

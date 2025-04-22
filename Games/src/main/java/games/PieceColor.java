@@ -1,9 +1,9 @@
-package games.chess.beans;
+package games;
 
-public enum ChessColor {
+public enum PieceColor {
     BLACK("black"), WHITE("white");
 
-    ChessColor(String description) {
+    PieceColor(String description) {
         this.description = description;
     }
 

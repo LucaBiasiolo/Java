@@ -1,5 +1,6 @@
 package games.chess.beans;
 
+import games.PieceColor;
 import games.chess.ChessBoardUtil;
 import games.chess.beans.pieces.*;
 
@@ -13,8 +14,8 @@ public class ChessBoard {
         initializeBoard();
     }
 
-    public Move parsePlayerMoveInAlgebraicNotation(String playerMove, ChessColor playerColor) {
-        // ignore capture, promotion, check and checkmate symbols. These will be handled by code
+    public Move parsePlayerMoveInAlgebraicNotation(String playerMove, PieceColor playerColor) {
+        // Ignore capture, promotion, check and checkmate symbols. Code will handle these
         playerMove = playerMove.replace("x", "")
                 .replace("=","")
                 .replace("+", "")
@@ -46,7 +47,7 @@ public class ChessBoard {
                     return parseNonPawnMoveWithColumnDisambiguation(playerMove, playerColor);
                 }
             } else if (secondCharacter.matches("[1-8]")){
-                // non-standard non-pawn movement with disambiguation (e.g. R1a3)
+                // non-standard non-pawn movement with disambiguation (e.g., R1a3)
                 return parseNonPawnMoveWithRowDisambiguation(playerMove, playerColor);
             }
         } else if (firstLetter.matches("[a-h]")){
@@ -55,15 +56,15 @@ public class ChessBoard {
                 // standard pawn move (e.g. a4)
                 return parsePawnMoveWithoutCapturing(playerMove, playerColor);
             } else if (secondCharacter.matches("[a-h]")){
-                // pawn move with capturing (e.g. fg4)
+                // pawn move with capturing (e.g., fg4)
                 return parsePawnMoveWithCapturing(playerMove, playerColor);
             }
         }
         return null;
     }
 
-    private Move parseNonPawnMoveWithRowDisambiguation(String playerMove, ChessColor playerColor) {
-        // non-standard non-pawn movement with disambiguation (e.g. R1a3)
+    private Move parseNonPawnMoveWithRowDisambiguation(String playerMove, PieceColor playerColor) {
+        // non-standard non-pawn movement with disambiguation (e.g., R1a3)
         String pieceLetter = String.valueOf(playerMove.charAt(0));
         int startBoardRow = Integer.parseInt(String.valueOf(playerMove.charAt(1)));
         int startMatrixColumn = -1;
@@ -86,7 +87,7 @@ public class ChessBoard {
         return new Move(startMatrixRow, startMatrixColumn, endMatrixRow, endMatrixColumn);
     }
 
-    private Move parseNonPawnMoveWithColumnDisambiguation(String playerMove, ChessColor playerColor) {
+    private Move parseNonPawnMoveWithColumnDisambiguation(String playerMove, PieceColor playerColor) {
         // non-standard non-pawn movement with disambiguation (e.g. Nbd7)
         String pieceLetter = String.valueOf(playerMove.charAt(0));
         String startBoardColumn = String.valueOf(playerMove.charAt(1));
@@ -108,7 +109,7 @@ public class ChessBoard {
         return new Move(startMatrixRow, startMatrixColumn, endMatrixRow, endMatrixColumn);
     }
 
-    private Move parseNonPawnMoveWithDoubleDisambiguation(String playerMove, ChessColor playerColor) {
+    private Move parseNonPawnMoveWithDoubleDisambiguation(String playerMove, PieceColor playerColor) {
         // double disambiguation (e.g. Qh4e1)
         String pieceLetter = String.valueOf(playerMove.charAt(0));
         String startBoardColumn = String.valueOf(playerMove.charAt(1));
@@ -128,7 +129,7 @@ public class ChessBoard {
         return null;
     }
 
-    private Move parsePawnMoveWithCapturing(String playerMove, ChessColor playerColor) {
+    private Move parsePawnMoveWithCapturing(String playerMove, PieceColor playerColor) {
         //bxc3
         String startBoardColumn = String.valueOf(playerMove.charAt(0));
         String endBoardColumn = String.valueOf(playerMove.charAt(2));
@@ -139,7 +140,7 @@ public class ChessBoard {
         Integer endMatrixRow = ChessBoardUtil.convertRowInOtherNotation(endBoardRow);
 
         int startBoardRow;
-        if (playerColor.equals(ChessColor.WHITE)){
+        if (playerColor.equals(PieceColor.WHITE)){
             startBoardRow = endBoardRow -1;
         } else{
             startBoardRow = endBoardRow +1;
@@ -150,7 +151,7 @@ public class ChessBoard {
         return new Move(startMatrixRow, startMatrixColumn, endMatrixRow, endMatrixColumn);
     }
 
-    private Move parseStandardNonPawnMove(String playerMove, ChessColor playerColor){
+    private Move parseStandardNonPawnMove(String playerMove, PieceColor playerColor){
         // Nf5
         String pieceLetter = String.valueOf(playerMove.charAt(0));
         String endBoardColumn = String.valueOf(playerMove.charAt(1));
@@ -165,7 +166,7 @@ public class ChessBoard {
         return new Move(startMatrixCoordinates[0], startMatrixCoordinates[1], endMatrixRow, endMatrixColumn);
     }
 
-    private Move parsePawnMoveWithoutCapturing(String playerMove, ChessColor playerColor) {
+    private Move parsePawnMoveWithoutCapturing(String playerMove, PieceColor playerColor) {
         String boardColumn = String.valueOf(playerMove.charAt(0));
         Integer boardEndRow = Integer.parseInt(String.valueOf(playerMove.charAt(1)));
 
@@ -175,9 +176,9 @@ public class ChessBoard {
         Pawn pawn;
         int matrixStartRow;
         try {
-            if (playerColor.equals(ChessColor.WHITE)) {
+            if (playerColor.equals(PieceColor.WHITE)) {
                 if (matrixEndRow == 4) {
-                    // go back 1 or 2 squares. Start with 1 square
+                    // Go back 1 or 2 squares. Start with 1 square
                     pawn = (Pawn) getPiece(matrixEndRow + 1, matrixColumn);
                     matrixStartRow = matrixEndRow + 1;
                     if (pawn == null) {
@@ -191,7 +192,7 @@ public class ChessBoard {
                 }
             } else {
                 if (matrixEndRow == 3) {
-                    // go back 1 or 2 squares. Start with 1 square
+                    // Go back 1 or 2 squares. Start with 1 square
                     pawn = (Pawn) getPiece(matrixEndRow - 1, matrixColumn);
                     matrixStartRow = matrixEndRow - 1;
                     if (pawn == null) {
@@ -205,13 +206,13 @@ public class ChessBoard {
                 }
             }
             return new Move(pawn, matrixStartRow, matrixColumn, matrixEndRow, matrixColumn);
-        } catch (ClassCastException classCastException){ // if a piece is found that is not a Pawn
+        } catch (ClassCastException classCastException){ // if a piece is found, that is not a Pawn
             System.err.println("Error: pawn movement invalid. Please retry");
             return null;
         }
     }
 
-    public int[] findPieceStartingCoordinates(String pieceLetter, int endMatrixRow, int endMatrixColumn, ChessColor playerColor){
+    public int[] findPieceStartingCoordinates(String pieceLetter, int endMatrixRow, int endMatrixColumn, PieceColor playerColor){
         for (int i = 0; i < board.length; i++) {
             for (int j = 0; j < board.length; j++) {
                 if (board[i][j] != null){
@@ -230,33 +231,33 @@ public class ChessBoard {
     private void initializeBoard() {
         // Pawns
         for (int i = 0; i < 8; i++) {
-            board[6][i] = new Pawn(ChessColor.WHITE);
-            board[1][i] = new Pawn(ChessColor.BLACK);
+            board[6][i] = new Pawn(PieceColor.WHITE);
+            board[1][i] = new Pawn(PieceColor.BLACK);
         }
         // Rooks
-        board[0][0] = new Rook(ChessColor.BLACK);
-        board[0][7] = new Rook(ChessColor.BLACK);
-        board[7][0] = new Rook(ChessColor.WHITE);
-        board[7][7] = new Rook(ChessColor.WHITE);
+        board[0][0] = new Rook(PieceColor.BLACK);
+        board[0][7] = new Rook(PieceColor.BLACK);
+        board[7][0] = new Rook(PieceColor.WHITE);
+        board[7][7] = new Rook(PieceColor.WHITE);
 
         // Knights
-        board[0][1] = new Knight(ChessColor.BLACK);
-        board[0][6] = new Knight(ChessColor.BLACK);
-        board[7][1] = new Knight(ChessColor.WHITE);
-        board[7][6] = new Knight(ChessColor.WHITE);
+        board[0][1] = new Knight(PieceColor.BLACK);
+        board[0][6] = new Knight(PieceColor.BLACK);
+        board[7][1] = new Knight(PieceColor.WHITE);
+        board[7][6] = new Knight(PieceColor.WHITE);
 
         // Bishops
-        board[0][2] = new Bishop(ChessColor.BLACK);
-        board[0][5] = new Bishop(ChessColor.BLACK);
-        board[7][2] = new Bishop(ChessColor.WHITE);
-        board[7][5] = new Bishop(ChessColor.WHITE);
+        board[0][2] = new Bishop(PieceColor.BLACK);
+        board[0][5] = new Bishop(PieceColor.BLACK);
+        board[7][2] = new Bishop(PieceColor.WHITE);
+        board[7][5] = new Bishop(PieceColor.WHITE);
         // Queens
-        board[0][3] = new Queen(ChessColor.BLACK);
-        board[7][3] = new Queen(ChessColor.WHITE);
+        board[0][3] = new Queen(PieceColor.BLACK);
+        board[7][3] = new Queen(PieceColor.WHITE);
 
         // Kings
-        board[0][4] = new King(ChessColor.BLACK);
-        board[7][4] = new King(ChessColor.WHITE);
+        board[0][4] = new King(PieceColor.BLACK);
+        board[7][4] = new King(PieceColor.WHITE);
     }
 
     public void printBoardWithLetters(){
@@ -268,7 +269,7 @@ public class ChessBoard {
                     System.out.print("| ");
                 } else {
                     System.out.print("|");
-                    System.out.print(board[i][j].getColor().equals(ChessColor.WHITE) ? board[i][j].getLetter() : RED + board[i][j].getLetter() + RESET);
+                    System.out.print(board[i][j].getColor().equals(PieceColor.WHITE) ? board[i][j].getLetter() : RED + board[i][j].getLetter() + RESET);
                 }
             }
             System.out.print("| ");

@@ -2,7 +2,7 @@
 package games.chess;
 
 import games.chess.beans.ChessBoard;
-import games.chess.beans.ChessColor;
+import games.PieceColor;
 import games.chess.beans.Player;
 
 import java.util.Scanner;
@@ -23,8 +23,8 @@ public class ChessGameWithCommandLine {
         System.out.println("Welcome to Java game of chess using command line!");
         while(true){ // loop to play games
             ChessBoard board = new ChessBoard();
-            Player whitePlayer = new Player("White Player", ChessColor.WHITE);
-            Player blackPlayer = new Player("Black Player", ChessColor.BLACK);
+            Player whitePlayer = new Player("White Player", PieceColor.WHITE);
+            Player blackPlayer = new Player("Black Player", PieceColor.BLACK);
             board.printBoardWithLetters();
             Player activePlayer = whitePlayer;
             Scanner scanner = new Scanner(System.in);

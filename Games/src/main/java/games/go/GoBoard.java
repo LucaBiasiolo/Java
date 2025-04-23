@@ -44,4 +44,12 @@ public class GoBoard {
     public Piece[][] getBoard() {
         return board;
     }
+
+    public void checkBoardState(){
+        // check the liberties of pieces and remove the pieces that do not have liberties
+    }
+
+    public void countScore(){
+        // count captured pieces from both players and add territories
+    }
 }

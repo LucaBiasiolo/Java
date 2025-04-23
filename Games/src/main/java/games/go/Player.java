@@ -6,6 +6,7 @@ public class Player {
 
     private String name;
     private PieceColor playerColor;
+    private boolean hasPassed = false;
 
     public Player(String name, PieceColor playerColor) {
         this.name = name;
@@ -24,5 +25,13 @@ public class Player {
 
     public String getName() {
         return name;
+    }
+
+    public boolean getPassed() {
+        return hasPassed;
+    }
+
+    public void setPassed(boolean hasPassed) {
+        this.hasPassed = hasPassed;
     }
 }

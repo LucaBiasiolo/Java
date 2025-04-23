@@ -38,6 +38,14 @@ public class GoGameWithCommandLine {
                         String[] coordinates = playerMove.split(",");
                         activePlayer.moveWithBoardCoordinates(board, Integer.parseInt(coordinates[0]), Integer.parseInt(coordinates[1]));
                         board.printBoard();
+                        boolean boardChanged = board.removeDeadStones(blackPlayer, whitePlayer);
+                        if (boardChanged){
+                            board.printBoard();
+                            int whitePlayerScore = whitePlayer.getScore();
+                            int blackPlayerScore = blackPlayer.getScore();
+                            System.out.println("Black player score: " + blackPlayerScore);
+                            System.out.println("White player score: " + whitePlayerScore);
+                        }
                     }
                 }
                 if (activePlayer.equals(blackPlayer)){

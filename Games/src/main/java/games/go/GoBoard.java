@@ -115,22 +115,28 @@ public class GoBoard {
         return group;
     }
 
-    public void removeDeadStones(){
+    public boolean removeDeadStones(Player blackPlayer, Player whitePlayer){
         // check the liberties of pieces and remove the pieces that do not have liberties
+        boolean boardChanged = false;
         for (int i = 0; i < board.length; i++) {
             for (int j = 0; j < board.length; j++) {
                 if (board[i][j] != null){
                     boolean isStoneOrGroupAlive = isGroupAlive(board[i][j]);
                     if (!isStoneOrGroupAlive){
-                        List<Stone> group = findGroup(board[i][j],null);
+                        Stone stoneToRemove = board[i][j];
+                        PieceColor stoneColor = stoneToRemove.getColor();
+                        if (stoneColor.equals(PieceColor.WHITE)){
+                            blackPlayer.setScore(blackPlayer.getScore() +1);
+                        } else{
+                            whitePlayer.setScore(whitePlayer.getScore() +1);
+                        }
                         board[i][j] = null;
-                        // todo: add removed stones to other player's captured stones
-                        // remove dead stones
-                        // add them to the other player's captured stones
+                        boardChanged = true;
                     }
                 }
             }
         }
+        return boardChanged;
     }
 
     public void countScore(){
@@ -152,7 +158,6 @@ public class GoBoard {
         try{
             return board[row][column];
         } catch (ArrayIndexOutOfBoundsException arrayIndexOutOfBoundsException){
-            System.err.println(arrayIndexOutOfBoundsException.getMessage());
             return null;
         }
     }

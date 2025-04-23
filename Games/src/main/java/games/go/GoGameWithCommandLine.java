@@ -36,7 +36,7 @@ public class GoGameWithCommandLine {
                     } else {
                         activePlayer.setPassed(false);
                         String[] coordinates = playerMove.split(",");
-                        activePlayer.moveWithBoardCoordinates(board, Integer.parseInt(coordinates[0]), Integer.parseInt(coordinates[1]));
+                        activePlayer.placeStoneWithBoardCoordinates(board, Integer.parseInt(coordinates[0]), Integer.parseInt(coordinates[1]));
                         board.printBoard();
                         boolean boardChanged = board.removeDeadStones(blackPlayer, whitePlayer);
                         if (boardChanged){

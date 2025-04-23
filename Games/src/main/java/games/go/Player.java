@@ -14,7 +14,7 @@ public class Player {
         this.playerColor = playerColor;
     }
 
-    private void moveWithMatrixCoordinates(GoBoard board, int row, int column){
+    private void placeStoneWithMatrixCoordinates(GoBoard board, int row, int column){
         if (board.getBoard()[row][column] == null){
             board.getBoard()[row][column] = new Stone(playerColor);
         } else{
@@ -22,8 +22,8 @@ public class Player {
         }
     }
 
-    public void moveWithBoardCoordinates(GoBoard board, int row, int column){
-        moveWithMatrixCoordinates(board, row-1, column-1);
+    public void placeStoneWithBoardCoordinates(GoBoard board, int row, int column){
+        placeStoneWithMatrixCoordinates(board, row-1, column-1);
     }
 
     public String getName() {

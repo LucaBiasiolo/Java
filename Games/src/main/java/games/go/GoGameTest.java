@@ -29,20 +29,20 @@ public class GoGameTest {
 
     @Test
     public void moveWithBoardCoordinates(){
-        blackPlayer.moveWithBoardCoordinates(board, 3,4);
+        blackPlayer.placeStoneWithBoardCoordinates(board, 3,4);
         board.printBoard();
-        whitePlayer.moveWithBoardCoordinates(board, 4,3);
+        whitePlayer.placeStoneWithBoardCoordinates(board, 4,3);
         board.printBoard();
     }
 
     @Test
     public void isGroupAliveTest(){
-        blackPlayer.moveWithBoardCoordinates(board, 2,3);
-        whitePlayer.moveWithBoardCoordinates(board, 2,4);
-        blackPlayer.moveWithBoardCoordinates(board,3,3);
-        whitePlayer.moveWithBoardCoordinates(board, 2,2);
-        blackPlayer.moveWithBoardCoordinates(board,1,3);
-        whitePlayer.moveWithBoardCoordinates(board, 4,3);
+        blackPlayer.placeStoneWithBoardCoordinates(board, 2,3);
+        whitePlayer.placeStoneWithBoardCoordinates(board, 2,4);
+        blackPlayer.placeStoneWithBoardCoordinates(board,3,3);
+        whitePlayer.placeStoneWithBoardCoordinates(board, 2,2);
+        blackPlayer.placeStoneWithBoardCoordinates(board,1,3);
+        whitePlayer.placeStoneWithBoardCoordinates(board, 4,3);
         board.printBoard();
         boolean stoneOrGroupAlive = board.isGroupAlive(board.getStoneWithBoardCoordinates(2, 3));
         assertTrue(stoneOrGroupAlive);
@@ -50,13 +50,13 @@ public class GoGameTest {
 
     @Test
     public void findGroupTest(){
-        blackPlayer.moveWithBoardCoordinates(board, 2,3);
-        whitePlayer.moveWithBoardCoordinates(board, 2,4);
-        blackPlayer.moveWithBoardCoordinates(board,3,3);
-        whitePlayer.moveWithBoardCoordinates(board, 2,2);
-        blackPlayer.moveWithBoardCoordinates(board,1,3);
-        whitePlayer.moveWithBoardCoordinates(board, 4,3);
-        whitePlayer.moveWithBoardCoordinates(board, 2,1);
+        blackPlayer.placeStoneWithBoardCoordinates(board, 2,3);
+        whitePlayer.placeStoneWithBoardCoordinates(board, 2,4);
+        blackPlayer.placeStoneWithBoardCoordinates(board,3,3);
+        whitePlayer.placeStoneWithBoardCoordinates(board, 2,2);
+        blackPlayer.placeStoneWithBoardCoordinates(board,1,3);
+        whitePlayer.placeStoneWithBoardCoordinates(board, 4,3);
+        whitePlayer.placeStoneWithBoardCoordinates(board, 2,1);
         board.printBoard();
 
         List<Stone> blackGroup = board.findGroup(board.getStoneWithBoardCoordinates(1, 3), null);

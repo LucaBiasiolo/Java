@@ -56,9 +56,13 @@ public class GoGameTest {
         whitePlayer.moveWithBoardCoordinates(board, 2,2);
         blackPlayer.moveWithBoardCoordinates(board,1,3);
         whitePlayer.moveWithBoardCoordinates(board, 4,3);
+        whitePlayer.moveWithBoardCoordinates(board, 2,1);
         board.printBoard();
 
-        List<Stone> group = board.findGroup(board.getStoneWithBoardCoordinates(1, 3), null);
-        assertEquals(3, group.size());
+        List<Stone> blackGroup = board.findGroup(board.getStoneWithBoardCoordinates(1, 3), null);
+
+        List<Stone> whiteGroup = board.findGroup(board.getStoneWithBoardCoordinates(2, 2), null);
+        assertEquals(3, blackGroup.size());
+        assertEquals(2, whiteGroup.size());
     }
 }

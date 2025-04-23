@@ -2,11 +2,11 @@ package games.go;
 
 import games.PieceColor;
 
-public class Piece {
+public class Stone {
 
-    private PieceColor color;
+    private final PieceColor color;
 
-    public Piece(PieceColor color) {
+    public Stone(PieceColor color) {
         this.color = color;
     }
 

@@ -22,7 +22,7 @@ public class GoGameWithCommandLine {
             board.printBoard();
             Player activePlayer = blackPlayer;
             Scanner scanner = new Scanner(System.in);
-            while(!(whitePlayer.getPassed() && blackPlayer.getPassed())) { // if both player pass, the game is over
+            while(!(whitePlayer.getPassed() && blackPlayer.getPassed())) { // if both players pass, the game is over
                 System.out.println(activePlayer.getName() + ", it's your turn. Write your move using row,column notation (e.g., 1,2) or press p to pass");
                 String playerMove = scanner.nextLine();
                 Pattern pattern = Pattern.compile("(^\\d,\\d|p)$");

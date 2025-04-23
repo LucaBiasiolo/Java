@@ -2,11 +2,15 @@ package games.go;
 
 import games.PieceColor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Player {
 
     private String name;
     private PieceColor playerColor;
     private boolean hasPassed = false;
+    private List<Stone> capturedStones = new ArrayList<>();
 
     public Player(String name, PieceColor playerColor) {
         this.name = name;
@@ -15,7 +19,9 @@ public class Player {
 
     private void moveWithMatrixCoordinates(GoBoard board, int row, int column){
         if (board.getBoard()[row][column] == null){
-            board.getBoard()[row][column] = new Piece(playerColor);
+            board.getBoard()[row][column] = new Stone(playerColor);
+        } else{
+            System.err.println("Intersection already occupied by another stone");
         }
     }
 

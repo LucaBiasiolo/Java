@@ -4,11 +4,11 @@ import games.PieceColor;
 
 public class GoBoard {
 
-    //9x9, 13x13 or 19x19 crosses
-    private final Piece[][] board;
+    //9x9, 13x13 or 19x19 intersections
+    private final Stone[][] board;
 
     public GoBoard(int dimension) {
-        board = new Piece[dimension][dimension];
+        board = new Stone[dimension][dimension];
     }
 
     public void printBoard() {
@@ -41,7 +41,7 @@ public class GoBoard {
         System.out.println(stringBuilder);
     }
 
-    public Piece[][] getBoard() {
+    public Stone[][] getBoard() {
         return board;
     }
 

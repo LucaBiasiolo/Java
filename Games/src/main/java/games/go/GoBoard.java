@@ -54,48 +54,47 @@ public class GoBoard {
     }
 
     public boolean isStoneOrGroupAlive(Stone stoneToCheck){
-        MatrixCoordinates stoneCoordinates = getStoneMatrixCoordinates(stoneToCheck);
+        MatrixCoordinates stoneToCheckCoordinates = getStoneMatrixCoordinates(stoneToCheck);
         PieceColor stoneToCheckColor = stoneToCheck.getColor();
+        int stoneToCheckRowIndex = stoneToCheckCoordinates.getRowIndex();
+        int stoneToCheckColumnIndex = stoneToCheckCoordinates.getColumnIndex();
 
-        Stone stoneUp = getStoneWithMatrixCoordinates(stoneCoordinates.getRowIndex()-1,stoneCoordinates.getColumnIndex());
-        Stone stoneDown = getStoneWithMatrixCoordinates(stoneCoordinates.getRowIndex()+1,stoneCoordinates.getColumnIndex());
-        Stone stoneRight = getStoneWithMatrixCoordinates(stoneCoordinates.getRowIndex(),stoneCoordinates.getColumnIndex()+1);
-        Stone stoneLeft = getStoneWithMatrixCoordinates(stoneCoordinates.getRowIndex(),stoneCoordinates.getColumnIndex()-1);
+        Stone upperStone = getStoneWithMatrixCoordinates(stoneToCheckRowIndex -1, stoneToCheckColumnIndex);
+        Stone lowerStone = getStoneWithMatrixCoordinates(stoneToCheckRowIndex +1, stoneToCheckColumnIndex);
+        Stone rightStone = getStoneWithMatrixCoordinates(stoneToCheckRowIndex, stoneToCheckColumnIndex +1);
+        Stone leftStone = getStoneWithMatrixCoordinates(stoneToCheckRowIndex, stoneToCheckColumnIndex -1);
 
-        List<Stone> stonesAround = new ArrayList<>();
-        stonesAround.add(stoneUp);
-        stonesAround.add(stoneDown);
-        stonesAround.add(stoneLeft);
-        stonesAround.add(stoneRight);
+        List<Stone> adjacentStones = new ArrayList<>();
+        adjacentStones.add(upperStone);
+        adjacentStones.add(lowerStone);
+        adjacentStones.add(leftStone);
+        adjacentStones.add(rightStone);
 
         // edge cases: stone in the perimeter of the board or in one of the four edges of the grid
-        if (stoneCoordinates.getRowIndex() == 0){
-            stonesAround.remove(stoneUp);
-        } else if (stoneCoordinates.getRowIndex() == board.length -1){
-            stonesAround.remove(stoneDown);
+        if (stoneToCheckRowIndex == 0){
+            adjacentStones.remove(upperStone);
+        } else if (stoneToCheckRowIndex == board.length -1){
+            adjacentStones.remove(lowerStone);
         }
-        if (stoneCoordinates.getColumnIndex() == 0){
-            stonesAround.remove(stoneLeft);
-        } else if (stoneCoordinates.getColumnIndex() == board.length-1){
-            stonesAround.remove(stoneRight);
+        if (stoneToCheckColumnIndex == 0){
+            adjacentStones.remove(leftStone);
+        } else if (stoneToCheckColumnIndex == board.length-1){
+            adjacentStones.remove(rightStone);
         }
 
-        if (stonesAround.contains(null)){
-            // the stone or group is alive
+        if (adjacentStones.contains(null)){ // if one of the adjacent stones is null, the stone or group is alive
             return true;
         } else{
-            // Check the colors of stones around. If the color is only that of the opponent, the stone is dead
-            List<PieceColor> stonesAroundColors = stonesAround.stream().map(Stone::getColor).toList();
-            if (!stonesAroundColors.contains(stoneToCheckColor)){
+            // Check the colors of stones around
+            List<PieceColor> adjacentStonesColors = adjacentStones.stream().map(Stone::getColor).distinct().toList();
+            if (!adjacentStonesColors.contains(stoneToCheckColor)){
                 // the stone is dead because all stones around are of different colors
-                //board[stoneCoordinates.getRowIndex()][stoneCoordinates.getColumnIndex()] = null;
-                // todo: add removed stone to opponent player
                 return false;
             } else{
-                // stone belongs to group
-                List<Stone> group = stonesAround.stream().filter(stoneAround -> stoneAround.getColor().equals(stoneToCheckColor)).toList();
-                for (Stone stoneOfGroup : group) {
-                    return isStoneOrGroupAlive(stoneOfGroup);
+                // Stone belongs to group. Find adjacent group stones
+                List<Stone> adjacentGroupStones = adjacentStones.stream().filter(stoneAround -> stoneAround.getColor().equals(stoneToCheckColor)).toList();
+                for (Stone groupStone : adjacentGroupStones) {
+                    return isStoneOrGroupAlive(groupStone);
                 }
             }
         }

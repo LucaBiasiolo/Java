@@ -36,20 +36,7 @@ public class GoGameTest {
     }
 
     @Test
-    public void isStoneOrGroupAliveTest(){
-        blackPlayer.moveWithBoardCoordinates(board, 2,3);
-        whitePlayer.moveWithBoardCoordinates(board, 2,4);
-        blackPlayer.moveWithBoardCoordinates(board,3,3);
-        whitePlayer.moveWithBoardCoordinates(board, 2,2);
-        blackPlayer.moveWithBoardCoordinates(board,1,3);
-        whitePlayer.moveWithBoardCoordinates(board, 4,3);
-        board.printBoard();
-        boolean stoneOrGroupAlive = board.isGroupAlive(board.getStoneWithBoardCoordinates(2, 3));
-        assertTrue(stoneOrGroupAlive);
-    }
-
-    @Test
-    public void isGroupAlive2Test(){
+    public void isGroupAliveTest(){
         blackPlayer.moveWithBoardCoordinates(board, 2,3);
         whitePlayer.moveWithBoardCoordinates(board, 2,4);
         blackPlayer.moveWithBoardCoordinates(board,3,3);

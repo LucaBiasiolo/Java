@@ -4,6 +4,9 @@ import games.PieceColor;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class GoGameTest {
@@ -43,5 +46,19 @@ public class GoGameTest {
         board.printBoard();
         boolean stoneOrGroupAlive = board.isStoneOrGroupAlive(board.getStoneWithBoardCoordinates(2, 3));
         assertTrue(stoneOrGroupAlive);
+    }
+
+    @Test
+    public void findGroupTest(){
+        blackPlayer.moveWithBoardCoordinates(board, 2,3);
+        whitePlayer.moveWithBoardCoordinates(board, 2,4);
+        blackPlayer.moveWithBoardCoordinates(board,3,3);
+        whitePlayer.moveWithBoardCoordinates(board, 2,2);
+        blackPlayer.moveWithBoardCoordinates(board,1,3);
+        whitePlayer.moveWithBoardCoordinates(board, 4,3);
+        board.printBoard();
+
+        List<Stone> group = board.findGroup(board.getStoneWithBoardCoordinates(1, 3), null);
+        assertEquals(3, group.size());
     }
 }

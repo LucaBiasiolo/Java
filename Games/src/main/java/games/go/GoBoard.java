@@ -3,8 +3,7 @@ package games.go;
 import games.MatrixCoordinates;
 import games.PieceColor;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class GoBoard {
 
@@ -54,8 +53,28 @@ public class GoBoard {
     }
 
     public boolean isStoneOrGroupAlive(Stone stoneToCheck){
+        List<Stone> adjacentStones = getAdjacentStones(stoneToCheck);
+        if (adjacentStones.contains(null)){ // if one of the adjacent stones is null, the stone or group is alive
+            return true;
+        } else{
+            // Check the colors of stones around
+            List<PieceColor> adjacentStonesColors = adjacentStones.stream().map(Stone::getColor).distinct().toList();
+            if (!adjacentStonesColors.contains(stoneToCheck.getColor())){
+                // the stone is dead because all stones around are of different colors
+                return false;
+            } else{
+                // Stone belongs to group. Find adjacent group stones
+                List<Stone> adjacentGroupStones = adjacentStones.stream().filter(stoneAround -> stoneAround.getColor().equals(stoneToCheck.getColor())).toList();
+                for (Stone groupStone : adjacentGroupStones) {
+                    return isStoneOrGroupAlive(groupStone);
+                }
+            }
+        }
+        return false;
+    }
+
+    private List<Stone> getAdjacentStones(Stone stoneToCheck) {
         MatrixCoordinates stoneToCheckCoordinates = getStoneMatrixCoordinates(stoneToCheck);
-        PieceColor stoneToCheckColor = stoneToCheck.getColor();
         int stoneToCheckRowIndex = stoneToCheckCoordinates.getRowIndex();
         int stoneToCheckColumnIndex = stoneToCheckCoordinates.getColumnIndex();
 
@@ -81,28 +100,44 @@ public class GoBoard {
         } else if (stoneToCheckColumnIndex == board.length-1){
             adjacentStones.remove(rightStone);
         }
+        return adjacentStones;
+    }
 
-        if (adjacentStones.contains(null)){ // if one of the adjacent stones is null, the stone or group is alive
-            return true;
-        } else{
-            // Check the colors of stones around
-            List<PieceColor> adjacentStonesColors = adjacentStones.stream().map(Stone::getColor).distinct().toList();
-            if (!adjacentStonesColors.contains(stoneToCheckColor)){
-                // the stone is dead because all stones around are of different colors
-                return false;
-            } else{
-                // Stone belongs to group. Find adjacent group stones
-                List<Stone> adjacentGroupStones = adjacentStones.stream().filter(stoneAround -> stoneAround.getColor().equals(stoneToCheckColor)).toList();
-                for (Stone groupStone : adjacentGroupStones) {
-                    return isStoneOrGroupAlive(groupStone);
+    public List<Stone> findGroup(Stone startingStone, Set<Stone> visited) {
+        List<Stone> group = new ArrayList<>();
+        if (visited == null){
+            visited = new HashSet<>();
+        }
+        if (visited.contains(startingStone)) {
+            return group; // Skip already visited stones
+        }
+        visited.add(startingStone);
+        group.add(startingStone);
+
+        List<Stone> adjacentStones = getAdjacentStones(startingStone).stream().filter(Objects::nonNull).toList();
+        List<Stone> adjacentGroup = adjacentStones.stream()
+                .filter(adjacentStone -> adjacentStone.getColor().equals(startingStone.getColor()))
+                .toList();
+
+        for (Stone stoneOfGroup : adjacentGroup) {
+            group.addAll(findGroup(stoneOfGroup, visited)); // Pass the visited set recursively
+        }
+        return group;
+    }
+
+    public void removeDeadStones(){
+        // check the liberties of pieces and remove the pieces that do not have liberties
+        for (int i = 0; i < board.length; i++) {
+            for (int j = 0; j < board.length; j++) {
+                if (board[i][j] != null){
+                    boolean isStoneOrGroupAlive = isStoneOrGroupAlive(board[i][j]);
+                    if (!isStoneOrGroupAlive){
+                        // remove dead stones
+                        // add them to the other player's captured stones
+                    }
                 }
             }
         }
-        return false;
-    }
-
-    public void checkBoardState(){
-        // check the liberties of pieces and remove the pieces that do not have liberties
     }
 
     public void countScore(){

@@ -52,25 +52,15 @@ public class GoBoard {
         return false;
     }
 
-    public boolean isStoneOrGroupAlive(Stone stoneToCheck){
-        List<Stone> adjacentStones = getAdjacentStones(stoneToCheck);
-        if (adjacentStones.contains(null)){ // if one of the adjacent stones is null, the stone or group is alive
-            return true;
-        } else{
-            // Check the colors of stones around
-            List<PieceColor> adjacentStonesColors = adjacentStones.stream().map(Stone::getColor).distinct().toList();
-            if (!adjacentStonesColors.contains(stoneToCheck.getColor())){
-                // the stone is dead because all stones around are of different colors
-                return false;
-            } else{
-                // Stone belongs to group. Find adjacent group stones
-                List<Stone> adjacentGroupStones = adjacentStones.stream().filter(stoneAround -> stoneAround.getColor().equals(stoneToCheck.getColor())).toList();
-                for (Stone groupStone : adjacentGroupStones) {
-                    return isStoneOrGroupAlive(groupStone);
-                }
-            }
-        }
-        return false;
+    public boolean isGroupAlive(Stone startingStone){
+       List<Stone> group = findGroup(startingStone, null);
+       for (Stone stoneOfGroup : group){
+           List<Stone> adjacentStones = getAdjacentStones(stoneOfGroup);
+           if (adjacentStones.contains(null)){
+              return true;
+           }
+       }
+       return false;
     }
 
     private List<Stone> getAdjacentStones(Stone stoneToCheck) {
@@ -130,8 +120,11 @@ public class GoBoard {
         for (int i = 0; i < board.length; i++) {
             for (int j = 0; j < board.length; j++) {
                 if (board[i][j] != null){
-                    boolean isStoneOrGroupAlive = isStoneOrGroupAlive(board[i][j]);
+                    boolean isStoneOrGroupAlive = isGroupAlive(board[i][j]);
                     if (!isStoneOrGroupAlive){
+                        List<Stone> group = findGroup(board[i][j],null);
+                        board[i][j] = null;
+                        // todo: add removed stones to other player's captured stones
                         // remove dead stones
                         // add them to the other player's captured stones
                     }

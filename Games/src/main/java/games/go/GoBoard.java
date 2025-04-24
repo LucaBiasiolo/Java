@@ -164,4 +164,13 @@ public class GoBoard {
     public Stone getStoneWithBoardCoordinates(int row, int column){
         return getStoneWithMatrixCoordinates(row-1,column-1);
     }
+
+    public boolean isStonePlaceable(int row, int column, PieceColor playerColor) {
+       if (board[row][column] == null) {
+           List<Stone> adjacentStones = getAdjacentStonesByMatrixCoordinates(row, column);
+           List<PieceColor> adjacentStonesColors = adjacentStones.stream().map(Stone::getColor).distinct().toList();
+           return adjacentStonesColors.contains(playerColor) || adjacentStones.contains(null);
+       }
+       return false;
+    }
 }

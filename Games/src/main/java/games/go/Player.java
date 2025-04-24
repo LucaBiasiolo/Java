@@ -15,7 +15,8 @@ public class Player {
     }
 
     private void placeStoneWithMatrixCoordinates(GoBoard board, int row, int column){
-        if (board.getBoard()[row][column] == null){
+        // todo: check that player doesn't insert stones in places without liberties
+        if(board.isStonePlaceable(row, column, playerColor)){
             board.getBoard()[row][column] = new Stone(playerColor);
         } else{
             System.err.println("Intersection already occupied by another stone");

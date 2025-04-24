@@ -55,7 +55,8 @@ public class GoBoard {
     public boolean isGroupAlive(Stone startingStone){
        List<Stone> group = findGroup(startingStone, null);
        for (Stone stoneOfGroup : group){
-           List<Stone> adjacentStones = getAdjacentStones(stoneOfGroup);
+           MatrixCoordinates stoneOfGroupCoordinates = getStoneMatrixCoordinates(stoneOfGroup);
+           List<Stone> adjacentStones = getAdjacentStonesByMatrixCoordinates(stoneOfGroupCoordinates.getRowIndex(), stoneOfGroupCoordinates.getColumnIndex());
            if (adjacentStones.contains(null)){
               return true;
            }
@@ -63,15 +64,11 @@ public class GoBoard {
        return false;
     }
 
-    private List<Stone> getAdjacentStones(Stone stoneToCheck) {
-        MatrixCoordinates stoneToCheckCoordinates = getStoneMatrixCoordinates(stoneToCheck);
-        int stoneToCheckRowIndex = stoneToCheckCoordinates.getRowIndex();
-        int stoneToCheckColumnIndex = stoneToCheckCoordinates.getColumnIndex();
-
-        Stone upperStone = getStoneWithMatrixCoordinates(stoneToCheckRowIndex -1, stoneToCheckColumnIndex);
-        Stone lowerStone = getStoneWithMatrixCoordinates(stoneToCheckRowIndex +1, stoneToCheckColumnIndex);
-        Stone rightStone = getStoneWithMatrixCoordinates(stoneToCheckRowIndex, stoneToCheckColumnIndex +1);
-        Stone leftStone = getStoneWithMatrixCoordinates(stoneToCheckRowIndex, stoneToCheckColumnIndex -1);
+    private List<Stone> getAdjacentStonesByMatrixCoordinates(int row, int column) {
+        Stone upperStone = getStoneWithMatrixCoordinates(row -1, column);
+        Stone lowerStone = getStoneWithMatrixCoordinates(row +1, column);
+        Stone rightStone = getStoneWithMatrixCoordinates(row, column +1);
+        Stone leftStone = getStoneWithMatrixCoordinates(row, column -1);
 
         List<Stone> adjacentStones = new ArrayList<>();
         adjacentStones.add(upperStone);
@@ -80,14 +77,14 @@ public class GoBoard {
         adjacentStones.add(rightStone);
 
         // edge cases: stone in the perimeter of the board or in one of the four edges of the grid
-        if (stoneToCheckRowIndex == 0){
+        if (row == 0){
             adjacentStones.remove(upperStone);
-        } else if (stoneToCheckRowIndex == board.length -1){
+        } else if (row == board.length -1){
             adjacentStones.remove(lowerStone);
         }
-        if (stoneToCheckColumnIndex == 0){
+        if (column == 0){
             adjacentStones.remove(leftStone);
-        } else if (stoneToCheckColumnIndex == board.length-1){
+        } else if (column == board.length-1){
             adjacentStones.remove(rightStone);
         }
         return adjacentStones;
@@ -104,7 +101,9 @@ public class GoBoard {
         visited.add(startingStone);
         group.add(startingStone);
 
-        List<Stone> adjacentStones = getAdjacentStones(startingStone).stream().filter(Objects::nonNull).toList();
+        MatrixCoordinates startingStoneCoordinatest = getStoneMatrixCoordinates(startingStone);
+        List<Stone> adjacentStones = getAdjacentStonesByMatrixCoordinates(startingStoneCoordinatest.getRowIndex(), startingStoneCoordinatest.getColumnIndex())
+                .stream().filter(Objects::nonNull).toList();
         List<Stone> adjacentGroup = adjacentStones.stream()
                 .filter(adjacentStone -> adjacentStone.getColor().equals(startingStone.getColor()))
                 .toList();

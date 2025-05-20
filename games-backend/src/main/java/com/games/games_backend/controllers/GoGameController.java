@@ -17,4 +17,19 @@ public class GoGameController {
     public GoGame save(@RequestBody GoGame goGame){
         return goGameService.save(goGame);
     }
+
+    @GetMapping
+    public Iterable<GoGame> loadGames(){
+        return goGameService.loadGames();
+    }
+
+    @GetMapping("/{id}")
+    public GoGame loadGoGameById(@PathVariable("id") Long gameId){
+        return goGameService.loadGoGameById(gameId);
+    }
+
+    @DeleteMapping("/{id}")
+    public void deleteGoGameById(@PathVariable("id") Long gameId){
+        goGameService.deleteGoGameById(gameId);
+    }
 }

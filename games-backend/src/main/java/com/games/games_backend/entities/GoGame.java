@@ -1,14 +1,17 @@
 package com.games.games_backend.entities;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Entity
-@Table(name="go_games")
+@Table(name="go_game")
 @Getter
 @Setter
 @ToString
@@ -19,11 +22,13 @@ public class GoGame {
     @Column(name="id")
     private Long id;
 
-    @Column(name="board_dimension")
-    private int boardDimension;
+    @Column(name="moves")
+    @OneToMany(mappedBy = "game", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    private List<Move> moves = new ArrayList<>();
 
-    @Column(name="moves_log")
-    private String movesLog;
+    @OneToOne(mappedBy = "game")
+    private GoBoard goBoard;
 
     @Column(name="komi")
     private double komi;
@@ -34,6 +39,6 @@ public class GoGame {
     @Column(name="white_captures")
     private int whiteCaptures;
 
-    @Column(name ="created_timestamp")
-    private Date createdTimestamp;
+    @Column(name ="created_at")
+    private Date createdAt;
 }

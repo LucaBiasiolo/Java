@@ -14,8 +14,8 @@ public class GoGameController {
     private GoGameService goGameService;
 
     @PostMapping
-    public GoGame save(@RequestBody GoGame goGame){
-        return goGameService.save(goGame);
+    public GoGame save(@RequestBody GoGame game){
+        return goGameService.save(game);
     }
 
     @GetMapping

@@ -1,6 +1,7 @@
 package com.games.games_backend.services;
 
 import com.games.games_backend.entities.GoGame;
+import com.games.games_backend.entities.Move;
 import com.games.games_backend.repositories.GoGameRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,6 +15,9 @@ public class GoGameService {
     private GoGameRepository goGameRepository;
 
     public GoGame save(GoGame goGame) {
+        for (Move move : goGame.getMoves()){
+            move.setGame(goGame);
+        }
         return goGameRepository.save(goGame);
     }
 

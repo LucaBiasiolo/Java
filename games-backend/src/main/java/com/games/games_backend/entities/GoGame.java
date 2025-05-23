@@ -27,7 +27,8 @@ public class GoGame {
     @JsonManagedReference
     private List<Move> moves = new ArrayList<>();
 
-    @OneToOne(mappedBy = "game")
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name="go_board_id")
     private GoBoard goBoard;
 
     @Column(name="komi")

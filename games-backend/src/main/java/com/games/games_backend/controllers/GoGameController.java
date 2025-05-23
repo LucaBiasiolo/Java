@@ -19,8 +19,8 @@ public class GoGameController {
     }
 
     @GetMapping
-    public Iterable<GoGame> loadGames(){
-        return goGameService.loadGames();
+    public Iterable<GoGame> findGamesOrderedByCreatedAtDesc(){
+        return goGameService.findGamesOrderedByCreatedAtDesc();
     }
 
     @GetMapping("/{id}")

@@ -21,8 +21,8 @@ public class GoGameService {
         return goGameRepository.save(goGame);
     }
 
-    public Iterable<GoGame> loadGames() {
-        return goGameRepository.findAll();
+    public Iterable<GoGame> findGamesOrderedByCreatedAtDesc() {
+        return goGameRepository.findAllByOrderByCreatedAtDesc();
     }
 
     public GoGame loadGoGameById(long gameId) {

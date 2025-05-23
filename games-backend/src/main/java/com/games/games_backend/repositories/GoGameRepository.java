@@ -6,4 +6,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface GoGameRepository extends CrudRepository<GoGame, Long> {
+
+    Iterable<GoGame> findAllByOrderByCreatedAtDesc();
 }

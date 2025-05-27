@@ -34,7 +34,11 @@ public class GoGameService {
 
     public GoGame loadGoGameById(long gameId) {
         Optional<GoGame> goGame = goGameRepository.findById(gameId);
-        return goGame.orElse(null);
+        if (goGame.isPresent()) {
+            goGame.get().getGoBoard().setBoard(goBoardService.parseBoardCsv(goGame.get().getGoBoard().getBoardCsv(), goGame.get().getGoBoard().getBoardDimension()));
+            return goGame.get();
+        }
+        return null;
     }
 
     public void deleteGoGameById(long gameId){

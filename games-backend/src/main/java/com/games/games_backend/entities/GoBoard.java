@@ -18,6 +18,9 @@ public class GoBoard {
     @Column(name="board_dimension")
     private Integer boardDimension;
 
+    @Transient
+    private Stone[][] board;
+
     @Column(name="board_csv")
     private String boardCsv;
 }

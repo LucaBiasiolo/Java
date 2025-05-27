@@ -4,11 +4,13 @@ import lombok.Getter;
 
 @Getter
 public enum PieceColor {
-    BLACK("Black"),WHITE("White");
+    BLACK("BLACK"),WHITE("BLACK");
 
     private String description;
 
     PieceColor(String description) {
         this.description = description;
     }
+
+
 }

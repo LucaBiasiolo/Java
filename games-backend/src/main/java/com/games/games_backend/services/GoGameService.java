@@ -13,11 +13,14 @@ public class GoGameService {
 
     @Autowired
     private GoGameRepository goGameRepository;
+    @Autowired
+    private GoBoardService goBoardService;
 
     public GoGame save(GoGame goGame) {
         for (Move move : goGame.getMoves()){
             move.setGame(goGame);
         }
+        goGame.getGoBoard().setBoardCsv(goBoardService.translateBoardIntoCsv(goGame.getGoBoard()));
         return goGameRepository.save(goGame);
     }
 

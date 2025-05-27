@@ -12,7 +12,7 @@ public class Stone {
     @Enumerated(EnumType.STRING)
     private PieceColor color;
 
-    Stone(PieceColor color) {
+    public Stone(PieceColor color) {
         this.color = color;
     }
 

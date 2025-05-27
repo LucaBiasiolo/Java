@@ -23,7 +23,33 @@ public class GoBoardService {
                     }
                 }
             }
+            boardCsv.append("\n");
         }
         return boardCsv.toString();
+    }
+
+    public Stone[][] parseBoardCsv(String boardCsv, Integer boardDimension) {
+        Stone[][] boardObject = new Stone[boardDimension][boardDimension];
+        String[][] boardString = new String[boardDimension][boardDimension];
+
+        String[] boardRows = boardCsv.split("\n");
+
+        for (int i =0; i<boardDimension; i++){
+            String[] rowIntersections = boardRows[i].split(",", -1);
+            for (int j=0; j<boardDimension; j++) {
+                boardString[i][j] = rowIntersections[j];
+            }
+        }
+
+        for (int i=0; i<boardDimension; i++){
+            for (int j=0; j<boardDimension; j++){
+                if (boardString[i][j].equals("⚪")){
+                    boardObject[i][j] = new Stone(PieceColor.WHITE);
+                } else if (boardString[i][j].equals("⚫")){
+                    boardObject[i][j] = new Stone(PieceColor.BLACK);
+                }
+            }
+        }
+        return boardObject;
     }
 }

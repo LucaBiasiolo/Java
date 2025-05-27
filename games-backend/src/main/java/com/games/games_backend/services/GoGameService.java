@@ -25,7 +25,11 @@ public class GoGameService {
     }
 
     public Iterable<GoGame> findGamesOrderedByCreatedAtDesc() {
-        return goGameRepository.findAllByOrderByCreatedAtDesc();
+        Iterable<GoGame> gamesOrderedByCreatedAtDesc = goGameRepository.findAllByOrderByCreatedAtDesc();
+        for (GoGame game : gamesOrderedByCreatedAtDesc){
+            game.getGoBoard().setBoard(goBoardService.parseBoardCsv(game.getGoBoard().getBoardCsv(), game.getGoBoard().getBoardDimension()));
+        }
+        return gamesOrderedByCreatedAtDesc;
     }
 
     public GoGame loadGoGameById(long gameId) {

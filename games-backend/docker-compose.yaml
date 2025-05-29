@@ -1,0 +1,25 @@
+name: games
+services:
+  backend:
+    build: .
+    ports:
+      - "8080:8080"
+    environment:
+      - DB_URL=jdbc:mysql://host.docker.internal:3306/games
+    networks:
+      - games
+
+  frontend:
+    build:
+      context: C:\Users\acer\Desktop\Programmazione\JavaScript-TypeScrigpt\games\
+      dockerfile: Dockerfile
+    ports:
+      - "4200:4200"
+    volumes:
+      - /app/node_modules
+      - C:\Users\acer\Desktop\Programmazione\JavaScript-TypeScript\games\:/app
+    networks:
+      - games
+
+networks:
+  games:

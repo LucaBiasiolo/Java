@@ -11,7 +11,7 @@
 	<groupId>com.games</groupId>
 	<artifactId>games-backend</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<packaging>war</packaging>
+	<packaging>jar</packaging>
 	<name>games-backend</name>
 	<description>Backend for games webapp</description>
 	<url/>
